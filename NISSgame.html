@@ -1021,8 +1021,8 @@
         function statsHtml() {
             return `
         <div class="card stats-card">
-          <div class="board-head"><div class="live-dot"></div><div class="board-title">📊 即時答錯率</div></div>
-          <div class="board-sub">依目前所有玩家作答結果統計，每 2 秒自動更新</div>
+          <div class="board-head"><div class="live-dot"></div><div class="board-title">📊 答錯率排行</div></div>
+          <div class="board-sub">依答錯百分比由高到低排序，每 2 秒自動更新</div>
           <div id="stats-list"></div>
         </div>
       `;
@@ -1033,19 +1033,27 @@
             if (!el) return;
             computeQuestionStats();
             const stats = state.questionStats;
-            el.innerHTML = QUESTIONS.map(q => {
+            const rows = QUESTIONS.map(q => {
                 const s = stats[q.id] || { attempts: 0, wrong: 0 };
                 const pct = s.attempts > 0 ? Math.round((s.wrong / s.attempts) * 100) : 0;
-                const cls = pct >= 50 ? 'high' : (pct >= 25 ? 'mid' : 'low');
-                const typeLabel = q.type === 'mc' ? '選擇題' : '是非題';
+                return { id: q.id, type: q.type, pct: pct, attempts: s.attempts, wrong: s.wrong };
+            }).sort((a, b) => b.pct - a.pct || b.attempts - a.attempts);
+
+            if (rows.every(r => r.attempts === 0)) {
+                el.innerHTML = `<div class="stat-empty">🎯 還沒有人開始作答</div>`;
+                return;
+            }
+
+            el.innerHTML = rows.map((r, i) => {
+                const cls = r.pct >= 50 ? 'high' : (r.pct >= 25 ? 'mid' : 'low');
+                const typeLabel = r.type === 'mc' ? '選擇題' : '是非題';
                 return `
           <div class="stat-q-row">
             <div class="stat-q-top">
-              <span class="qid-tag">${q.id.toUpperCase()}・${typeLabel}</span>
-              <span class="wrongpct ${cls}">${s.attempts > 0 ? pct + '% 答錯 (' + s.wrong + '/' + s.attempts + ')' : '尚無作答'}</span>
+              <span class="qid-tag">#${i + 1}　${r.id.toUpperCase()}・${typeLabel}</span>
+              <span class="wrongpct ${cls}">${r.attempts > 0 ? r.pct + '% (' + r.wrong + '/' + r.attempts + ')' : '尚無作答'}</span>
             </div>
-            <div class="stat-q-text">${escapeHtml(q.text)}</div>
-            <div class="wrongbar-track"><div class="wrongbar-fill" style="width:${pct}%"></div></div>
+            <div class="wrongbar-track"><div class="wrongbar-fill" style="width:${r.pct}%"></div></div>
           </div>
         `;
             }).join('');
