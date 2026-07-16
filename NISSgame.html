@@ -899,7 +899,9 @@
             try {
                 const res = await fetch(apiUrl({ action: 'list' }));
                 if (!res.ok) throw new Error('HTTP ' + res.status);
-                return await res.json();
+                const data = await res.json();
+                console.log('[感控問答擂台] 排行榜原始資料:', data);
+                return data;
             } catch (e) {
                 console.error('讀取排行榜失敗:', e.message);
                 return state.leaderboard || {};
@@ -1028,7 +1030,9 @@
         function statsHtml() {
             return `
         <div class="card stats-card">
-          <div class="board-head"><div class="live-dot"></div><div class="board-title">📊 答錯率排行</div></div>
+          <div class="board-head"><div class="live-dot"></div><div class="board-title">📊 答錯率排行</div>
+            <button class="btn-toggle to-open" id="manualRefreshBtn" style="margin-left:auto; padding:6px 14px; font-size:0.72rem;">🔄 手動重新整理</button>
+          </div>
           <div class="board-sub">依答錯百分比由高到低排序，每 2 秒自動更新</div>
           <div id="stats-list"></div>
         </div>
@@ -1038,6 +1042,8 @@
         function renderStatsList() {
             const el = document.getElementById('stats-list');
             if (!el) return;
+            const refreshBtn = document.getElementById('manualRefreshBtn');
+            if (refreshBtn) refreshBtn.onclick = refreshLeaderboard;
             computeQuestionStats();
             const stats = state.questionStats;
             const rows = QUESTIONS.map(q => {
