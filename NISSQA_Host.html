@@ -97,7 +97,6 @@
             border: none;
             border-radius: 28px;
             padding: 28px;
-            min-height: 640px;
             box-shadow: 0 20px 45px -18px rgba(59,10,99,0.55);
             position: relative;
             overflow: hidden;
@@ -849,7 +848,7 @@
            後，把下面的網址換成你自己的 Web App 網址（結尾是 /exec）。
            ===================================================================== */
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEJaUPK5WnOauCcXmz0yYlV3alPNa447UC04tNAdwAaJKotixd3Sc6yXCn8jq5Me8ljw/exec";
- 
+
         /* 房間代碼：同一份 HTML 部署給不同場次/單位使用時，改這個字串即可
            讓彼此的排行榜互相獨立，不會混在一起。 */
         const ROOM_ID = "default-room";
@@ -1046,20 +1045,24 @@
                             <p class="eyebrow">📋 題目總覽</p>
                             <h2>全部問題列表</h2>
                             <div class="qlist-wrap">
-                              ${QUESTIONS.map((q, i) => `
+                              ${QUESTIONS.map((q, i) => {
+                        const s = (state.stats && state.stats[q.id]) || {};
+                        const wrongRate = s.total > 0 ? Math.round((s.wrong / s.total) * 100) : 0;
+                        return `
                                 <div class="qlist-row">
                                   <div class="qlist-top">
                                     <span class="qlist-idx">#${i + 1}　${q.id.toUpperCase()}</span>
                                     <span class="qlist-type ${q.type === 'choice' ? 'choice' : ''}">${q.type === 'choice' ? '選擇題' : '是非題'}</span>
-                                    <span class="qlist-points">${q.points} 分</span>
+                                    <div class="stat-bar-pct">答錯率 : ${wrongRate}%</div>
                                   </div>
                                   <div class="qlist-text">${escapeHtml(q.text)}</div>
                                   ${q.type === 'choice'
-                            ? `<div class="qlist-options">${q.options.map((opt, idx) => `<div class="qlist-opt ${idx === q.correctIndex ? 'correct' : ''}">${String.fromCharCode(65 + idx)}. ${escapeHtml(opt)}${idx === q.correctIndex ? ' ✓ 正解' : ''}</div>`).join('')}</div>`
-                            : `<div class="qlist-answer">✓ 正確答案：${q.answer ? '是 / 正確' : '否 / 錯誤'}</div>`
-                        }
+                                ? `<div class="qlist-options">${q.options.map((opt, idx) => `<div class="qlist-opt ${idx === q.correctIndex ? 'correct' : ''}">${String.fromCharCode(65 + idx)}. ${escapeHtml(opt)}${idx === q.correctIndex ? ' ✓ 正解' : ''}</div>`).join('')}</div>`
+                                : `<div class="qlist-answer">✓ 正確答案：${q.answer ? '是 / 正確' : '否 / 錯誤'}</div>`
+                            }
                                 </div>
-                              `).join('')}
+                              `;
+                    }).join('')}
                             </div>
                             <div class="foot-link">
                               <button id="resetBoardBtn">主辦人選項：清空排行榜與統計</button>
