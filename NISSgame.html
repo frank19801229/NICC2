@@ -573,231 +573,6 @@
             filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
         }
 
-        /* ---------- 選擇題按鈕 ---------- */
-        .mc-answers {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .mc-btn {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-align: left;
-            padding: 15px 18px;
-            border-radius: 16px;
-            border: 2.5px solid var(--line);
-            background: #FBFAFF;
-            font-family: 'Noto Sans TC', sans-serif;
-            font-weight: 700;
-            font-size: 0.98rem;
-            color: var(--ink);
-            cursor: pointer;
-            transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease, background .12s ease;
-        }
-
-            .mc-btn .opt-tag {
-                flex-shrink: 0;
-                width: 30px;
-                height: 30px;
-                border-radius: 50%;
-                background: var(--purple);
-                color: #fff;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                font-family: 'Baloo 2', sans-serif;
-                font-weight: 800;
-                font-size: 0.85rem;
-            }
-
-            .mc-btn:hover:not(:disabled) {
-                border-color: var(--pink);
-                transform: translateY(-1px);
-            }
-
-            .mc-btn:disabled {
-                cursor: not-allowed;
-            }
-
-            .mc-btn.correct-pick {
-                background: linear-gradient(135deg, #34E89E, var(--green));
-                color: #fff;
-                border-color: transparent;
-            }
-
-                .mc-btn.correct-pick .opt-tag {
-                    background: rgba(255,255,255,0.3);
-                }
-
-            .mc-btn.wrong-pick {
-                background: linear-gradient(135deg, #FF7A7A, var(--coral));
-                color: #fff;
-                border-color: transparent;
-            }
-
-                .mc-btn.wrong-pick .opt-tag {
-                    background: rgba(255,255,255,0.3);
-                }
-
-            .mc-btn.dim-pick {
-                opacity: 0.5;
-            }
-
-        /* ---------- 加入作答 開關 ---------- */
-        .room-toggle-row {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            margin-top: 16px;
-            padding: 12px 14px;
-            border-radius: 14px;
-            background: #FBFAFF;
-            border: 1.5px solid var(--line);
-            flex-wrap: wrap;
-        }
-
-        .room-status-badge {
-            font-family: 'Baloo 2', sans-serif;
-            font-weight: 800;
-            font-size: 0.78rem;
-            padding: 6px 14px;
-            border-radius: 999px;
-        }
-
-            .room-status-badge.open {
-                background: rgba(46,204,113,0.15);
-                color: var(--green);
-            }
-
-            .room-status-badge.closed {
-                background: rgba(255,92,92,0.15);
-                color: var(--coral);
-            }
-
-        .btn-toggle {
-            font-family: 'Baloo 2', sans-serif;
-            font-weight: 700;
-            font-size: 0.85rem;
-            padding: 9px 18px;
-            border-radius: 12px;
-            border: none;
-            cursor: pointer;
-            color: #fff;
-            transition: filter .12s ease, transform .12s ease;
-        }
-
-            .btn-toggle:active {
-                transform: scale(0.96);
-            }
-
-            .btn-toggle.to-close {
-                background: linear-gradient(135deg, var(--coral), var(--pink-dark));
-            }
-
-            .btn-toggle.to-open {
-                background: linear-gradient(135deg, var(--green), #22B36B);
-            }
-
-        .join-closed-msg {
-            text-align: center;
-            color: var(--coral);
-            font-size: 0.82rem;
-            font-weight: 600;
-            margin-top: 10px;
-        }
-
-        /* ---------- 即時答錯率（長條圖） ---------- */
-        .stats-card .board-title {
-            font-size: 1rem;
-        }
-
-        .stat-bar-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 8px 2px;
-        }
-
-        .stat-bar-rank {
-            font-family: 'Baloo 2', sans-serif;
-            font-weight: 800;
-            color: var(--slate);
-            font-size: 0.78rem;
-            width: 24px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .stat-bar-label {
-            font-family: 'Baloo 2', sans-serif;
-            font-size: 0.78rem;
-            font-weight: 700;
-            color: var(--ink);
-            width: 68px;
-            flex-shrink: 0;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .stat-bar-track {
-            flex: 1;
-            height: 20px;
-            border-radius: 999px;
-            background: rgba(139,123,168,0.15);
-            overflow: hidden;
-            position: relative;
-        }
-
-        .stat-bar-fill {
-            height: 100%;
-            border-radius: 999px;
-            transition: width .5s cubic-bezier(.34,1.3,.4,1);
-        }
-
-            .stat-bar-fill.low {
-                background: linear-gradient(90deg, #34E89E, var(--green));
-            }
-
-            .stat-bar-fill.mid {
-                background: linear-gradient(90deg, var(--yellow), var(--orange));
-            }
-
-            .stat-bar-fill.high {
-                background: linear-gradient(90deg, var(--orange), var(--coral));
-            }
-
-        .stat-bar-pct {
-            font-family: 'Baloo 2', sans-serif;
-            font-weight: 800;
-            font-size: 0.88rem;
-            width: 46px;
-            text-align: right;
-            flex-shrink: 0;
-        }
-
-            .stat-bar-pct.high {
-                color: var(--coral);
-            }
-
-            .stat-bar-pct.mid {
-                color: var(--orange);
-            }
-
-            .stat-bar-pct.low {
-                color: var(--green);
-            }
-
-        .stat-empty {
-            color: var(--slate);
-            font-size: 0.85rem;
-            text-align: center;
-            padding: 20px 0;
-        }
-
         @media(max-width:575px) {
             .answers {
                 gap: 10px;
@@ -831,7 +606,7 @@
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzG13hKl3dtfZYw2zp7vZXpRT7CWQQEK_RVdZo7IO3KbEc04YTBVueV6lYj2TOefMyj4Q/exec";
 
         /* 房間代碼：同一份 HTML 部署給不同場次/單位使用時，改這個字串即可
-           讓彼此的排行榜互相獨立，不會混在一起。 */ 
+           讓彼此的排行榜互相獨立，不會混在一起。 */
         const ROOM_ID = "default-room";
 
         function sanitizeKey(s) {
@@ -844,38 +619,19 @@
         }
 
         const QUESTIONS = [
-            { id: 'q1', type: 'tf', text: '戴手套可以取代洗手；只要手套沒有破損，就可以持續戴著照護不同病人或不同照護步驟。', answer: false, points: 10 },
-            { id: 'q2', type: 'tf', text: '本院洗手種類包含一般性洗手、消毒性洗手與外科刷手；一般性洗手可清除大部分暫時性細菌。', answer: true, points: 20 },
-            { id: 'q3', type: 'tf', text: 'WHO 提出的「洗手五時機」包括：接觸病人前、執行無菌/清潔操作前、暴觸體液後、接觸病人後、接觸病人週遭環境後。', answer: true, points: 10 },
-            {
-                id: 'q4', type: 'mc', text: '依 WHO「手部衛生五時機」建議，下列何者「不」包含在五時機之內？', points: 15,
-                options: ['接觸病人前', '執行無菌/清潔操作前', '接觸病人後', '下班離開醫院前'],
-                correctIndex: 3
-            },
-            { id: 'q5', type: 'tf', text: '病人手部有明顯髒污，或照護疑似困難梭狀桿菌（C. diff）感染病人後，只要用酒精性乾洗手液消毒即可，不需要用肥皂及清水洗手。', answer: false, points: 20 },
-            { id: 'q6', type: 'tf', text: '穿脫個人防護裝備（PPE）時，脫除的原則順序為：手套 → 護目鏡/面罩 → 隔離衣 → 口罩，脫除後應立即洗手。', answer: true, points: 20 },
-            { id: 'q7', type: 'tf', text: '發生針扎（尖銳物品扎傷）後，正確處置的第一步是立即擠出傷口血液，再以肥皂和大量清水沖洗傷口。', answer: true, points: 15 },
-            {
-                id: 'q8', type: 'mc', text: '穿著個人防護裝備（PPE）時，下列「穿上」的順序何者正確？', points: 20,
-                options: ['隔離衣 → 口罩 → 護目鏡/面罩 → 手套', '手套 → 隔離衣 → 口罩 → 護目鏡/面罩', '口罩 → 手套 → 護目鏡/面罩 → 隔離衣', '護目鏡/面罩 → 手套 → 隔離衣 → 口罩'],
-                correctIndex: 0
-            },
-            { id: 'q9', type: 'tf', text: '空氣傳染防護（Airborne Precautions）只要配戴外科口罩即可，不需要配戴 N95 等級呼吸防護具。', answer: false, points: 20 },
-            { id: 'q10', type: 'tf', text: '留置導尿管期間應盡量維持密閉式引流系統，且集尿袋應低於膀胱位置，以防止尿液逆流。', answer: true, points: 15 },
-            { id: 'q11', type: 'tf', text: '使用後的針具應立即將針頭回套針帽（re-cap），以避免刺傷他人。', answer: false, points: 20 },
-            {
-                id: 'q12', type: 'mc', text: '發生針扎（尖銳物品扎傷）意外後，下列處理步驟何者正確？', points: 20,
-                options: ['立即將針頭回套針帽，再通報主管', '以肥皂及大量清水沖洗傷口，並依規定通報', '用力擠壓傷口至大量出血後直接包紮，不需通報', '先消毒工作區域環境，再處理自己的傷口'],
-                correctIndex: 1
-            },
-            { id: 'q13', type: 'tf', text: '置放中心靜脈導管（CVC）時應採最大無菌屏障（無菌長袍、無菌手套、口罩、髮帽及大範圍無菌單）。', answer: true, points: 15 },
-            { id: 'q14', type: 'tf', text: '外科手術部位感染（SSI）監測期通常為術後30天，若有植入物則依手術類別可延長至90天或1年。', answer: true, points: 15 },
-            { id: 'q15', type: 'tf', text: '照護不同病人之間，只要沒有明顯髒污，就不需要進行手部衛生。', answer: false, points: 10 }
+            { id: 'q1', text: '戴手套可以取代洗手；只要手套沒有破損，就可以持續戴著照護不同病人或不同照護步驟。', answer: false, points: 10 },
+            { id: 'q2', text: '本院洗手種類包含一般性洗手、消毒性洗手與外科刷手；一般性洗手可清除大部分暫時性細菌。', answer: true, points: 20 },
+            { id: 'q3', text: 'WHO 提出的「洗手五時機」包括：接觸病人前、執行無菌/清潔操作前、暴觸體液後、接觸病人後、接觸病人週遭環境後。', answer: true, points: 10 },
+            { id: 'q4', text: '病人手部有明顯髒污，或照護疑似困難梭狀桿菌（C. diff）感染病人後，只要用酒精性乾洗手液消毒即可，不需要用肥皂及清水洗手。', answer: false, points: 20 },
+            { id: 'q5', text: '穿脫個人防護裝備（PPE）時，脫除的原則順序為：手套 → 護目鏡/面罩 → 隔離衣 → 口罩，脫除後應立即洗手。', answer: true, points: 20 },
+            { id: 'q6', text: '發生針扎（尖銳物品扎傷）後，正確處置的第一步是立即擠出傷口血液，再以肥皂和大量清水沖洗傷口。', answer: true, points: 15 },
+            { id: 'q7', text: '空氣傳染防護（Airborne Precautions）只要配戴外科口罩即可，不需要配戴 N95 等級呼吸防護具。', answer: false, points: 20 },
+            { id: 'q8', text: '留置導尿管期間應盡量維持密閉式引流系統，且集尿袋應低於膀胱位置，以防止尿液逆流。', answer: true, points: 15 },
+            { id: 'q9', text: '使用後的針具應立即將針頭回套針帽（re-cap），以避免刺傷他人。', answer: false, points: 20 },
+            { id: 'q10', text: '置放中心靜脈導管（CVC）時應採最大無菌屏障（無菌長袍、無菌手套、口罩、髮帽及大範圍無菌單）。', answer: true, points: 15 },
+            { id: 'q11', text: '外科手術部位感染（SSI）監測期通常為術後30天，若有植入物則依手術類別可延長至90天或1年。', answer: true, points: 15 },
+            { id: 'q12', text: '照護不同病人之間，只要沒有明顯髒污，就不需要進行手部衛生。', answer: false, points: 10 }
         ];
-
-        // 保留的特殊 playerId，用來在同一份排行榜資料裡儲存「加入作答」開關狀態，
-        // 不會被當作一般玩家顯示在排行榜或統計裡。
-        const CONTROL_KEY = '__room_control__';
 
         let state = {
             screen: 'login',
@@ -888,9 +644,7 @@
             total: 0,
             feedback: null,
             locked: false,
-            leaderboard: {},
-            answers: {},        // { qid: true/false（是否答對） }
-            questionStats: {}   // { qid: { attempts, wrong } }
+            leaderboard: {}
         };
 
         let pollTimer = null;
@@ -899,9 +653,7 @@
             try {
                 const res = await fetch(apiUrl({ action: 'list' }));
                 if (!res.ok) throw new Error('HTTP ' + res.status);
-                const data = await res.json();
-                console.log('[感控問答擂台] 排行榜原始資料:', data);
-                return data;
+                return await res.json();
             } catch (e) {
                 console.error('讀取排行榜失敗:', e.message);
                 return state.leaderboard || {};
@@ -918,13 +670,11 @@
                     score: state.score,
                     correct: state.correct,
                     total: state.total,
-                    finished: !!finished,
-                    answers: JSON.stringify(state.answers)
+                    finished: !!finished
                 }));
                 if (res.ok) {
                     state.leaderboard = await res.json();
                     renderBoardList();
-                    renderStatsList();
                 }
             } catch (e) {
                 console.error('更新分數失敗:', e.message);
@@ -934,7 +684,6 @@
         async function refreshLeaderboard() {
             state.leaderboard = await loadLeaderboard();
             renderBoardList();
-            renderStatsList();
         }
 
         function startPolling() {
@@ -944,54 +693,7 @@
 
         function sortedEntries() {
             return Object.entries(state.leaderboard)
-                .filter(([id]) => id !== CONTROL_KEY)
                 .sort((a, b) => (b[1].score - a[1].score) || (b[1].correct - a[1].correct));
-        }
-
-        /* ---------- 加入作答 開啟/關閉 ---------- */
-        function isRoomOpen() {
-            const c = state.leaderboard[CONTROL_KEY];
-            if (!c) return true; // 尚未設定過時，預設為開放
-            return c.score !== 0;
-        }
-
-        async function setRoomOpen(open) {
-            try {
-                const res = await fetch(apiUrl({
-                    action: 'update',
-                    playerId: CONTROL_KEY,
-                    name: '__ROOM_CONTROL__',
-                    score: open ? 1 : 0,
-                    correct: 0,
-                    total: 0,
-                    finished: false,
-                    answers: '{}'
-                }));
-                if (res.ok) {
-                    state.leaderboard = await res.json();
-                }
-            } catch (e) {
-                console.error('切換加入作答狀態失敗:', e.message);
-                alert('切換失敗，請確認網路連線後再試一次。');
-            }
-            render();
-        }
-
-        /* ---------- 即時答錯率統計 ---------- */
-        function computeQuestionStats() {
-            const stats = {};
-            QUESTIONS.forEach(q => { stats[q.id] = { attempts: 0, wrong: 0 }; });
-            Object.entries(state.leaderboard).forEach(([id, e]) => {
-                if (id === CONTROL_KEY || !e || !e.answers) return;
-                let parsed;
-                try { parsed = JSON.parse(e.answers); } catch (err) { return; }
-                Object.entries(parsed).forEach(([qid, wasCorrect]) => {
-                    if (!stats[qid]) stats[qid] = { attempts: 0, wrong: 0 };
-                    stats[qid].attempts += 1;
-                    if (!wasCorrect) stats[qid].wrong += 1;
-                });
-            });
-            state.questionStats = stats;
         }
 
         function boardHtml() {
@@ -1027,50 +729,6 @@
             }).join('');
         }
 
-        function statsHtml() {
-            return `
-        <div class="card stats-card">
-          <div class="board-head"><div class="live-dot"></div><div class="board-title">📊 答錯率排行</div>
-            <button class="btn-toggle to-open" id="manualRefreshBtn" style="margin-left:auto; padding:6px 14px; font-size:0.72rem;">🔄 手動重新整理</button>
-          </div>
-          <div class="board-sub">依答錯百分比由高到低排序，每 2 秒自動更新</div>
-          <div id="stats-list"></div>
-        </div>
-      `;
-        }
-
-        function renderStatsList() {
-            const el = document.getElementById('stats-list');
-            if (!el) return;
-            const refreshBtn = document.getElementById('manualRefreshBtn');
-            if (refreshBtn) refreshBtn.onclick = refreshLeaderboard;
-            computeQuestionStats();
-            const stats = state.questionStats;
-            const rows = QUESTIONS.map(q => {
-                const s = stats[q.id] || { attempts: 0, wrong: 0 };
-                const pct = s.attempts > 0 ? Math.round((s.wrong / s.attempts) * 100) : 0;
-                return { id: q.id, type: q.type, pct: pct, attempts: s.attempts, wrong: s.wrong };
-            }).sort((a, b) => b.pct - a.pct || b.attempts - a.attempts);
-
-            if (rows.every(r => r.attempts === 0)) {
-                el.innerHTML = `<div class="stat-empty">🎯 還沒有人開始作答</div>`;
-                return;
-            }
-
-            el.innerHTML = rows.map((r, i) => {
-                const cls = r.pct >= 50 ? 'high' : (r.pct >= 25 ? 'mid' : 'low');
-                const title = r.attempts > 0 ? `${r.wrong}/${r.attempts} 人答錯` : '尚無作答';
-                return `
-          <div class="stat-bar-row" title="${title}">
-            <div class="stat-bar-rank">#${i + 1}</div>
-            <div class="stat-bar-label">${r.id.toUpperCase()}</div>
-            <div class="stat-bar-track"><div class="stat-bar-fill ${cls}" style="width:${r.pct}%"></div></div>
-            <div class="stat-bar-pct ${cls}">${r.attempts > 0 ? r.pct + '%' : '—'}</div>
-          </div>
-        `;
-            }).join('');
-        }
-
         function escapeHtml(s) {
             return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         }
@@ -1078,34 +736,26 @@
         function render() {
             const app = document.getElementById('app');
             if (state.screen === 'login') {
-                const roomOpen = isRoomOpen();
                 app.innerHTML = `
           <div class="row g-3">
             <div class="col-lg-8">
               <div class="card">
                 <p class="eyebrow">🎮 開始作答</p>
                 <h2>輸入你的姓名加入擂台</h2>
-                <p class="sub">共 ${QUESTIONS.length} 題（是非題／選擇題混合），題目依序出現，答對加分、答錯扣分（最低 0 分，不會變成負數），全部作答完畢會統計總分並即時顯示在排行榜上！</p>
+                <p class="sub">共 ${QUESTIONS.length} 題是非題，題目依序出現，答對加分、答錯扣分（最低 0 分，不會變成負數），全部作答完畢會統計總分並即時顯示在排行榜上！</p>
                 <label for="nameInput">姓名 / 暱稱</label>
-                <input id="nameInput" type="text" placeholder="例如：王小明（護理站A）" maxlength="20" ${roomOpen ? '' : 'disabled'}>
-                <button class="btn btn-primary btn-block" id="joinBtn" ${roomOpen ? '' : 'disabled'}>${roomOpen ? '🚀 加入作答' : '🔒 目前暫停加入'}</button>
-                ${roomOpen ? '' : '<div class="join-closed-msg">主辦人已關閉加入作答，請稍候再試</div>'}
-                <div class="room-toggle-row">
-                  <span class="room-status-badge ${roomOpen ? 'open' : 'closed'}">${roomOpen ? '🟢 開放加入中' : '🔴 已關閉加入'}</span>
-                  <button class="btn-toggle ${roomOpen ? 'to-close' : 'to-open'}" id="toggleRoomBtn">${roomOpen ? '關閉加入作答' : '開啟加入作答'}</button>
-                </div>
+                <input id="nameInput" type="text" placeholder="例如：王小明（護理站A）" maxlength="20">
+                <button class="btn btn-primary btn-block" id="joinBtn">🚀 加入作答</button>
                 <div class="foot-link"><button id="resetBoardBtn">主辦人選項：清空排行榜</button></div>
               </div>
             </div>
-            <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
+            <div class="col-lg-4">${boardHtml()}</div>
           </div>
         `;
                 document.getElementById('joinBtn').onclick = onJoin;
                 document.getElementById('nameInput').addEventListener('keydown', e => { if (e.key === 'Enter') onJoin(); });
                 document.getElementById('resetBoardBtn').onclick = onResetBoard;
-                document.getElementById('toggleRoomBtn').onclick = () => setRoomOpen(!roomOpen);
                 renderBoardList();
-                renderStatsList();
             }
             else if (state.screen === 'game') {
                 const q = state.questions[state.currentIndex];
@@ -1127,19 +777,22 @@
                   <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
                 </div>
                 <div class="qcard">
-                  <div class="qpoints">⭐ ${q.type === 'mc' ? '選擇題' : '是非題'}・本題配分：${q.points} 分</div>
+                  <div class="qpoints">⭐ 本題配分：${q.points} 分</div>
                   <div class="qtext">${escapeHtml(q.text)}</div>
                 </div>
-                ${questionAnswersHtml(q)}
+                <div class="answers">
+                  <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
+                  <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
+                </div>
                 <div class="feedback ${state.feedback ? (state.feedback.ok ? 'ok' : 'no') : ''}">${state.feedback ? state.feedback.text : ''}</div>
               </div>
             </div>
-            <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
+            <div class="col-lg-4">${boardHtml()}</div>
           </div>
         `;
-                bindAnswerHandlers(q);
+                document.getElementById('btnTrue').onclick = () => answer(true);
+                document.getElementById('btnFalse').onclick = () => answer(false);
                 renderBoardList();
-                renderStatsList();
             }
             else if (state.screen === 'end') {
                 const entries = sortedEntries();
@@ -1160,56 +813,18 @@
                 <button class="btn btn-primary btn-block" id="restartBtn">🔁 換人 / 重新開始</button>
               </div>
             </div>
-            <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
+            <div class="col-lg-4">${boardHtml()}</div>
           </div>
         `;
                 document.getElementById('restartBtn').onclick = () => {
-                    state = { screen: 'login', playerId: '', name: '', questions: [], currentIndex: 0, score: 0, correct: 0, total: 0, feedback: null, locked: false, leaderboard: state.leaderboard, answers: {}, questionStats: state.questionStats };
+                    state = { screen: 'login', playerId: '', name: '', questions: [], currentIndex: 0, score: 0, correct: 0, total: 0, feedback: null, locked: false, leaderboard: state.leaderboard };
                     render();
                 };
                 renderBoardList();
-                renderStatsList();
-            }
-        }
-
-        function questionAnswersHtml(q) {
-            if (q.type === 'mc') {
-                const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
-                return `
-          <div class="answers mc-answers">
-            ${q.options.map((opt, i) => `
-              <button class="mc-btn" data-idx="${i}" ${state.locked ? 'disabled' : ''}>
-                <span class="opt-tag">${letters[i]}</span><span>${escapeHtml(opt)}</span>
-              </button>
-            `).join('')}
-          </div>
-        `;
-            }
-            return `
-        <div class="answers">
-          <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
-          <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
-        </div>
-      `;
-        }
-
-        function bindAnswerHandlers(q) {
-            if (q.type === 'mc') {
-                document.querySelectorAll('.mc-btn').forEach(btn => {
-                    btn.onclick = () => answer(parseInt(btn.dataset.idx, 10));
-                });
-            } else {
-                document.getElementById('btnTrue').onclick = () => answer(true);
-                document.getElementById('btnFalse').onclick = () => answer(false);
             }
         }
 
         function onJoin() {
-            if (!isRoomOpen()) {
-                alert('主辦人目前已關閉加入作答，請稍後再試。');
-                render();
-                return;
-            }
             const input = document.getElementById('nameInput');
             const name = (input.value || '').trim();
             if (!name) {
@@ -1226,7 +841,6 @@
             state.total = 0;
             state.feedback = null;
             state.locked = false;
-            state.answers = {};
             state.screen = 'game';
             updateMyEntry(false);
             render();
@@ -1236,44 +850,24 @@
             if (state.locked) return;
             state.locked = true;
             const q = state.questions[state.currentIndex];
-            const isCorrect = q.type === 'mc' ? (val === q.correctIndex) : (val === q.answer);
+            const isCorrect = (val === q.answer);
             const delta = isCorrect ? q.points : -q.points;
             const beforeScore = state.score;
             state.score = Math.max(0, state.score + delta);
             const actualDelta = state.score - beforeScore; // 若扣分會觸底，顯示實際扣掉的分數
             state.total += 1;
             if (isCorrect) state.correct += 1;
-            state.answers[q.id] = isCorrect;
-
-            let correctLabel;
-            if (q.type === 'mc') {
-                const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
-                correctLabel = `正確答案：${letters[q.correctIndex]}. ${q.options[q.correctIndex]}`;
-            } else {
-                correctLabel = `正確答案：${q.answer ? '是' : '否'}`;
-            }
-
             state.feedback = {
                 ok: isCorrect,
-                text: isCorrect ? `✓ 答對了！+${q.points} 分` : `✗ 答錯了，${actualDelta} 分（最低 0 分）・${correctLabel}`
+                text: isCorrect ? `✓ 答對了！+${q.points} 分` : `✗ 答錯了，${actualDelta} 分（最低 0 分）`
             };
 
             const dial = document.getElementById('dial');
             const scoreNum = document.getElementById('scoreNum');
             if (dial) dial.classList.add(isCorrect ? 'flash-correct' : 'flash-wrong');
             if (scoreNum) scoreNum.textContent = state.score;
-
-            if (q.type === 'mc') {
-                document.querySelectorAll('.mc-btn').forEach((btn, i) => {
-                    btn.disabled = true;
-                    if (i === q.correctIndex) btn.classList.add('correct-pick');
-                    else if (i === val) btn.classList.add('wrong-pick');
-                    else btn.classList.add('dim-pick');
-                });
-            } else {
-                document.getElementById('btnTrue').disabled = true;
-                document.getElementById('btnFalse').disabled = true;
-            }
+            document.getElementById('btnTrue').disabled = true;
+            document.getElementById('btnFalse').disabled = true;
             document.querySelector('.feedback').textContent = state.feedback.text;
             document.querySelector('.feedback').className = 'feedback ' + (isCorrect ? 'ok' : 'no');
 
@@ -1288,11 +882,11 @@
                     state.screen = 'end';
                 }
                 render();
-            }, 1600);
+            }, 1200);
         }
 
         async function onResetBoard() {
-            if (!confirm('確定要清空所有玩家的排行榜資料嗎？（加入作答開關會恢復為「開放」）此動作無法復原。')) return;
+            if (!confirm('確定要清空所有玩家的排行榜資料嗎？此動作無法復原。')) return;
             try {
                 const res = await fetch(apiUrl({ action: 'reset' }));
                 state.leaderboard = res.ok ? await res.json() : {};
