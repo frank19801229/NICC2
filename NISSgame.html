@@ -1062,7 +1062,7 @@
             state.locked = true;
             const q = state.questions[state.currentIndex];
             const isCorrect = q.type === 'choice' ? (selected === q.correctIndex) : (selected === q.answer);
-            const delta = isCorrect ? q.points : -q.points;
+            const delta = isCorrect ? q.points : -0;
             state.score = Math.max(0, state.score + delta);
             state.total += 1;
             if (isCorrect) state.correct += 1;
