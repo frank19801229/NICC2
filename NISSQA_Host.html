@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -7,6 +6,7 @@
     <title>感控問答擂台</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+
 
         @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
 
@@ -299,6 +299,12 @@
             .qlist-type.choice {
                 background: var(--pink);
             }
+
+        .qlist-top .stat-bar-pct {
+            margin-left: auto;
+            width: auto;
+            font-size: 0.8rem;
+        }
 
         .qlist-points {
             margin-left: auto;
@@ -960,12 +966,12 @@
 
         function boardHtml() {
             return `
-                <div class="card">
-                  <div class="board-head"><div class="live-dot"></div><div class="board-title">🔥 即時排行榜</div></div>
-                  <div class="board-sub">依分數排序，每 2 秒自動更新</div>
-                  <div id="lb-list"></div>
-                </div>
-              `;
+                    <div class="card">
+                      <div class="board-head"><div class="live-dot"></div><div class="board-title">🔥 即時排行榜</div></div>
+                      <div class="board-sub">依分數排序，每 2 秒自動更新</div>
+                      <div id="lb-list"></div>
+                    </div>
+                  `;
         }
 
         function renderBoardList() {
@@ -981,13 +987,13 @@
                 const isMe = id === state.playerId;
                 const rankDisplay = medals[i] || (i + 1);
                 return `
-                  <div class="lb-row ${isMe ? 'me' : ''}">
-                    <div class="lb-rank">${rankDisplay}</div>
-                    <div class="lb-name">${escapeHtml(e.name)}${isMe ? ' (你)' : ''}</div>
-                    <div class="lb-correct">✓ ${e.correct}/${e.total}</div>
-                    <div class="lb-score">${e.score}</div>
-                  </div>
-                `;
+                      <div class="lb-row ${isMe ? 'me' : ''}">
+                        <div class="lb-rank">${rankDisplay}</div>
+                        <div class="lb-name">${escapeHtml(e.name)}${isMe ? ' (你)' : ''}</div>
+                        <div class="lb-correct">✓ ${e.correct}/${e.total}</div>
+                        <div class="lb-score">${e.score}</div>
+                      </div>
+                    `;
             }).join('');
         }
 
@@ -997,12 +1003,12 @@
 
         function statsHtml() {
             return `
-                <div class="card mt-3">
-                  <div class="board-head"><div class="live-dot" style="background:var(--coral)"></div><div class="board-title">📊 各題答錯率</div></div>
-                  <div class="board-sub">依答錯率高到低排序，每 2 秒自動更新</div>
-                  <div id="stats-list"></div>
-                </div>
-              `;
+                    <div class="card mt-3">
+                      <div class="board-head"><div class="live-dot" style="background:var(--coral)"></div><div class="board-title">📊 各題答錯率</div></div>
+                      <div class="board-sub">依答錯率高到低排序，每 2 秒自動更新</div>
+                      <div id="stats-list"></div>
+                    </div>
+                  `;
         }
 
         function renderStatsList() {
@@ -1026,49 +1032,54 @@
                 const shortText = e.text.length > 15 ? e.text.slice(0, 15) + '…' : e.text;
                 const barColor = e.wrongRate >= 50 ? 'var(--coral)' : (e.wrongRate >= 25 ? 'var(--orange)' : 'var(--green)');
                 return `
-                  <div class="stat-bar-row" title="${escapeHtml(e.text)}（共 ${e.total} 人次作答）">
-                    <div class="stat-bar-label">${escapeHtml(shortText)}</div>
-                    <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${e.wrongRate}%; background:${barColor};"></div></div>
-                    <div class="stat-bar-pct">${e.wrongRate}%</div>
-                  </div>
-                `;
+                      <div class="stat-bar-row" title="${escapeHtml(e.text)}（共 ${e.total} 人次作答）">
+                        <div class="stat-bar-label">${escapeHtml(shortText)}</div>
+                        <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${e.wrongRate}%; background:${barColor};"></div></div>
+                        <div class="stat-bar-pct">${e.wrongRate}%</div>
+                      </div>
+                    `;
             }).join('');
+        }
+
+        function wrongRateFor(qid) {
+            const s = (state.stats || {})[qid];
+            return (s && s.total > 0) ? Math.round((s.wrong / s.total) * 100) : 0;
         }
 
         function render() {
             const app = document.getElementById('app');
             if (state.screen === 'login') {
                 app.innerHTML = `
-                  <div class="row g-3">
-                    <div class="col-lg-8">
-                      <div class="card">
-                        <p class="eyebrow">📋 題目總覽</p>
-                        <h2>全部問題列表</h2>
-                        <div class="qlist-wrap">
-                          ${QUESTIONS.map((q, i) => `
-                            <div class="qlist-row">
-                              <div class="qlist-top">
-                                <span class="qlist-idx">#${i + 1}　${q.id.toUpperCase()}</span>
-                                <span class="qlist-type ${q.type === 'choice' ? 'choice' : ''}">${q.type === 'choice' ? '選擇題' : '是非題'}</span>
-                                <span class="qlist-points">${q.points} 分</span>
-                              </div>
-                              <div class="qlist-text">${escapeHtml(q.text)}</div>
-                              ${q.type === 'choice'
+                      <div class="row g-3">
+                        <div class="col-lg-9">
+                          <div class="card">
+                            <p class="eyebrow">📋 題目總覽</p>
+                            <h2>全部問題列表</h2>
+                            <div class="qlist-wrap">
+                              ${QUESTIONS.map((q, i) => `
+                                <div class="qlist-row">
+                                  <div class="qlist-top">
+                                    <span class="qlist-idx">#${i + 1}　${q.id.toUpperCase()}</span>
+                                    <span class="qlist-type ${q.type === 'choice' ? 'choice' : ''}">${q.type === 'choice' ? '選擇題' : '是非題'}</span>
+                                    <div class="stat-bar-pct">答錯率 : ${wrongRateFor(q.id)}%</div>
+                                  </div>
+                                  <div class="qlist-text">${escapeHtml(q.text)}</div>
+                                  ${q.type === 'choice'
                             ? `<div class="qlist-options">${q.options.map((opt, idx) => `<div class="qlist-opt ${idx === q.correctIndex ? 'correct' : ''}">${String.fromCharCode(65 + idx)}. ${escapeHtml(opt)}${idx === q.correctIndex ? ' ✓ 正解' : ''}</div>`).join('')}</div>`
                             : `<div class="qlist-answer">✓ 正確答案：${q.answer ? '是 / 正確' : '否 / 錯誤'}</div>`
                         }
+                                </div>
+                              `).join('')}
                             </div>
-                          `).join('')}
+                            <div class="foot-link">
+                              <button id="resetBoardBtn">主辦人選項：清空排行榜與統計</button>
+                              <button id="toggleRegBtn">主辦人選項：${state.registrationOpen ? '🔒 關閉作答' : '🔓 開啟作答'}</button>
+                            </div>
+                          </div>
                         </div>
-                        <div class="foot-link">
-                          <button id="resetBoardBtn">主辦人選項：清空排行榜與統計</button>
-                          <button id="toggleRegBtn">主辦人選項：${state.registrationOpen ? '🔒 關閉作答' : '🔓 開啟作答'}</button>
-                        </div>
+                        <div class="col-lg-3">${boardHtml()}${statsHtml()}</div>
                       </div>
-                    </div>
-                    <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
-                  </div>
-                `;
+                    `;
                 document.getElementById('resetBoardBtn').onclick = onResetBoard;
                 document.getElementById('toggleRegBtn').onclick = onToggleRegistration;
                 renderBoardList();
@@ -1079,39 +1090,39 @@
                 const pct = Math.round((state.currentIndex / state.questions.length) * 100);
                 const answersHtml = q.type === 'choice'
                     ? `<div class="choice-list">${q.options.map((opt, idx) => `
-                          <button class="choice-btn" id="choiceBtn${idx}" ${state.locked ? 'disabled' : ''}><span class="choice-letter">${String.fromCharCode(65 + idx)}</span>${escapeHtml(opt)}</button>
-                        `).join('')}</div>`
+                              <button class="choice-btn" id="choiceBtn${idx}" ${state.locked ? 'disabled' : ''}><span class="choice-letter">${String.fromCharCode(65 + idx)}</span>${escapeHtml(opt)}</button>
+                            `).join('')}</div>`
                     : `<div class="answers">
-                          <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
-                          <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
-                        </div>`;
+                              <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
+                              <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
+                            </div>`;
                 app.innerHTML = `
-                  <div class="row g-3">
-                    <div class="col-lg-8">
-                      <div class="card">
-                        <div class="dial-zone">
-                          <div class="dial" id="dial">
-                            <div class="dial-inner">
-                              <div class="dial-score" id="scoreNum">${state.score}</div>
-                              <div class="dial-label">目前分數</div>
+                      <div class="row g-3">
+                        <div class="col-lg-8">
+                          <div class="card">
+                            <div class="dial-zone">
+                              <div class="dial" id="dial">
+                                <div class="dial-inner">
+                                  <div class="dial-score" id="scoreNum">${state.score}</div>
+                                  <div class="dial-label">目前分數</div>
+                                </div>
+                              </div>
                             </div>
+                            <div class="progress-wrap">
+                              第 ${state.currentIndex + 1} / ${state.questions.length} 題　<span class="name-chip">👤 ${escapeHtml(state.name)}</span>
+                              <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+                            </div>
+                            <div class="qcard">
+                              <div class="qpoints">⭐ 本題配分：${q.points} 分　${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
+                              <div class="qtext">${escapeHtml(q.text)}</div>
+                            </div>
+                            ${answersHtml}
+                            <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
                           </div>
                         </div>
-                        <div class="progress-wrap">
-                          第 ${state.currentIndex + 1} / ${state.questions.length} 題　<span class="name-chip">👤 ${escapeHtml(state.name)}</span>
-                          <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-                        </div>
-                        <div class="qcard">
-                          <div class="qpoints">⭐ 本題配分：${q.points} 分　${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
-                          <div class="qtext">${escapeHtml(q.text)}</div>
-                        </div>
-                        ${answersHtml}
-                        <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
+                        <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
                       </div>
-                    </div>
-                    <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
-                  </div>
-                `;
+                    `;
                 if (q.type === 'choice') {
                     q.options.forEach((opt, idx) => {
                         document.getElementById('choiceBtn' + idx).onclick = () => answer(idx);
@@ -1127,24 +1138,24 @@
                 const entries = sortedEntries();
                 const myRank = entries.findIndex(([id]) => id === state.playerId) + 1;
                 app.innerHTML = `
-                  <div class="row g-3">
-                    <div class="col-lg-8">
-                      <div class="card">
-                        <span class="trophy">🏆</span>
-                        <p class="eyebrow text-center">作答完成</p>
-                        <h2 class="text-center">${escapeHtml(state.name)}，你的結果出爐了！</h2>
-                        <p class="sub text-center">${myRank > 0 ? `目前排名第 ${myRank} 名` : ''}</p>
-                        <div class="end-stats">
-                          <div class="stat"><div class="num">${state.score}</div><div class="lbl">總分</div></div>
-                          <div class="stat"><div class="num">${state.correct}/${state.total}</div><div class="lbl">答對題數</div></div>
-                          <div class="stat"><div class="num">${myRank > 0 ? ('#' + myRank) : '-'}</div><div class="lbl">目前排名</div></div>
+                      <div class="row g-3">
+                        <div class="col-lg-8">
+                          <div class="card">
+                            <span class="trophy">🏆</span>
+                            <p class="eyebrow text-center">作答完成</p>
+                            <h2 class="text-center">${escapeHtml(state.name)}，你的結果出爐了！</h2>
+                            <p class="sub text-center">${myRank > 0 ? `目前排名第 ${myRank} 名` : ''}</p>
+                            <div class="end-stats">
+                              <div class="stat"><div class="num">${state.score}</div><div class="lbl">總分</div></div>
+                              <div class="stat"><div class="num">${state.correct}/${state.total}</div><div class="lbl">答對題數</div></div>
+                              <div class="stat"><div class="num">${myRank > 0 ? ('#' + myRank) : '-'}</div><div class="lbl">目前排名</div></div>
+                            </div>
+                            <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
+                          </div>
                         </div>
-                        <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
+                        <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
                       </div>
-                    </div>
-                    <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
-                  </div>
-                `;
+                    `;
                 renderBoardList();
                 renderStatsList();
             }
