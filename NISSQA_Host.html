@@ -300,12 +300,6 @@
                 background: var(--pink);
             }
 
-        .qlist-top .stat-bar-pct {
-            margin-left: auto;
-            width: auto;
-            font-size: 0.8rem;
-        }
-
         .qlist-points {
             margin-left: auto;
             font-family: 'Baloo 2', sans-serif;
@@ -1041,17 +1035,12 @@
             }).join('');
         }
 
-        function wrongRateFor(qid) {
-            const s = (state.stats || {})[qid];
-            return (s && s.total > 0) ? Math.round((s.wrong / s.total) * 100) : 0;
-        }
-
         function render() {
             const app = document.getElementById('app');
             if (state.screen === 'login') {
                 app.innerHTML = `
                       <div class="row g-3">
-                        <div class="col-lg-9">
+                        <div class="col-lg-8">
                           <div class="card">
                             <p class="eyebrow">📋 題目總覽</p>
                             <h2>全部問題列表</h2>
@@ -1061,7 +1050,7 @@
                                   <div class="qlist-top">
                                     <span class="qlist-idx">#${i + 1}　${q.id.toUpperCase()}</span>
                                     <span class="qlist-type ${q.type === 'choice' ? 'choice' : ''}">${q.type === 'choice' ? '選擇題' : '是非題'}</span>
-                                    <div class="stat-bar-pct">答錯率 : ${wrongRateFor(q.id)}%</div>
+                                    <span class="qlist-points">${q.points} 分</span>
                                   </div>
                                   <div class="qlist-text">${escapeHtml(q.text)}</div>
                                   ${q.type === 'choice'
@@ -1077,7 +1066,7 @@
                             </div>
                           </div>
                         </div>
-                        <div class="col-lg-3">${boardHtml()}${statsHtml()}</div>
+                        <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
                       </div>
                     `;
                 document.getElementById('resetBoardBtn').onclick = onResetBoard;
