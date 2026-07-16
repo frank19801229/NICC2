@@ -635,6 +635,12 @@
                 color: #fff;
             }
 
+            .choice-btn.selected {
+                background: #F3EEFF;
+                border-color: var(--purple);
+                color: var(--ink);
+            }
+
         .choice-letter {
             display: inline-flex;
             align-items: center;
@@ -729,7 +735,7 @@
            Google Apps Script 設定 — 請依照 README.md 的步驟部署好 Apps Script
            後，把下面的網址換成你自己的 Web App 網址（結尾是 /exec）。
            ===================================================================== */
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEJaUPK5WnOauCcXmz0yYlV3alPNa447UC04tNAdwAaJKotixd3Sc6yXCn8jq5Me8ljw/exec";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzP0VzopuiocUa4287E5SG-lPFvp0wUXfMzB9Ry0JYD5p_SGcDcH2NPo_XWB3sSyxQLyw/exec";
 
         /* 房間代碼：同一份 HTML 部署給不同場次/單位使用時，改這個字串即可
            讓彼此的排行榜互相獨立，不會混在一起。 */
@@ -984,7 +990,7 @@
                   <div class="qtext">${escapeHtml(q.text)}</div>
                 </div>
                 ${answersHtml}
-                <div class="feedback ${state.feedback ? (state.feedback.ok ? 'ok' : 'no') : ''}">${state.feedback ? state.feedback.text : ''}</div>
+                <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
               </div>
             </div>
             <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
@@ -1017,16 +1023,12 @@
                   <div class="stat"><div class="num">${state.correct}/${state.total}</div><div class="lbl">答對題數</div></div>
                   <div class="stat"><div class="num">${myRank > 0 ? ('#' + myRank) : '-'}</div><div class="lbl">目前排名</div></div>
                 </div>
-                <button class="btn btn-primary btn-block" id="restartBtn">🔁 換人 / 重新開始</button>
+                <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
               </div>
             </div>
             <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
           </div>
         `;
-                document.getElementById('restartBtn').onclick = () => {
-                    state = { screen: 'login', playerId: '', name: '', questions: [], currentIndex: 0, score: 0, correct: 0, total: 0, feedback: null, locked: false, leaderboard: state.leaderboard, stats: state.stats, registrationOpen: state.registrationOpen };
-                    render();
-                };
                 renderBoardList();
                 renderStatsList();
             }
@@ -1060,19 +1062,11 @@
             const q = state.questions[state.currentIndex];
             const isCorrect = q.type === 'choice' ? (selected === q.correctIndex) : (selected === q.answer);
             const delta = isCorrect ? q.points : -q.points;
-            const beforeScore = state.score;
             state.score = Math.max(0, state.score + delta);
-            const actualDelta = state.score - beforeScore; // 若扣分會觸底，顯示實際扣掉的分數
             state.total += 1;
             if (isCorrect) state.correct += 1;
-            state.feedback = {
-                ok: isCorrect,
-                text: isCorrect ? `✓ 答對了！+${q.points} 分` : `✗ 答錯了，${actualDelta} 分（最低 0 分）`
-            };
 
-            const dial = document.getElementById('dial');
             const scoreNum = document.getElementById('scoreNum');
-            if (dial) dial.classList.add(isCorrect ? 'flash-correct' : 'flash-wrong');
             if (scoreNum) scoreNum.textContent = state.score;
 
             if (q.type === 'choice') {
@@ -1080,15 +1074,14 @@
                     const btn = document.getElementById('choiceBtn' + idx);
                     if (!btn) return;
                     btn.disabled = true;
-                    if (idx === q.correctIndex) btn.classList.add('correct');
-                    else if (idx === selected) btn.classList.add('wrong-selected');
+                    if (idx === selected) btn.classList.add('selected');
                 });
             } else {
                 document.getElementById('btnTrue').disabled = true;
                 document.getElementById('btnFalse').disabled = true;
             }
-            document.querySelector('.feedback').textContent = state.feedback.text;
-            document.querySelector('.feedback').className = 'feedback ' + (isCorrect ? 'ok' : 'no');
+            const fz = document.getElementById('feedbackZone');
+            if (fz) fz.textContent = '📮 已送出，前往下一題…';
 
             logAnswerStat(q.id, isCorrect);
 
@@ -1098,12 +1091,11 @@
             setTimeout(() => {
                 state.currentIndex += 1;
                 state.locked = false;
-                state.feedback = null;
                 if (state.currentIndex >= state.questions.length) {
                     state.screen = 'end';
                 }
                 render();
-            }, 1200);
+            }, 500);
         }
 
         async function onResetBoard() {
