@@ -10,19 +10,19 @@
         @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
 
         :root {
-            --pink: #FF3D81;
-            --pink-dark: #E01E68;
-            --orange: #FF8C42;
-            --purple: #7C3AED;
-            --purple-dark: #5B21B6;
-            --cyan: #22D3EE;
-            --yellow: #FFD23F;
-            --green: #2ECC71;
-            --coral: #FF5C5C;
-            --ink: #2A1B3D;
-            --slate: #0E7490;
+            --pink: #FF1E75;
+            --pink-dark: #D80053;
+            --orange: #FF7014;
+            --purple: #6D28D9;
+            --purple-dark: #4C1D95;
+            --cyan: #06B6D4;
+            --yellow: #FBBF24;
+            --green: #10B981;
+            --coral: #EF4444;
+            --ink: #110A1C;
+            --slate: #1E3A8A; /* 提升為高對比度的深靛藍，色彩鮮明 */
             --card: #FFFFFF;
-            --line: #F0E6FF;
+            --line: #E5D5FF;
         }
 
         * {
@@ -36,6 +36,7 @@
             color: var(--ink);
             background: #FFE8C2;
             overflow-x: hidden;
+            font-size: 16px; /* 確保全局基底足夠大 */
         }
 
         #bgCanvas {
@@ -66,7 +67,7 @@
         }
 
             .brand .mascot {
-                font-size: 2.1rem;
+                font-size: 2.3rem;
                 filter: drop-shadow(0 4px 10px rgba(0,0,0,0.35));
                 animation: bounce 2.4s ease-in-out infinite;
             }
@@ -83,23 +84,23 @@
 
         .brand h1 {
             font-family: 'Baloo 2', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 800;
             letter-spacing: 0.02em;
             margin: 0;
-            color: #5B21B6;
-            text-shadow: 0 2px 0 rgba(255,255,255,0.6), 0 4px 14px rgba(91,33,182,0.25);
+            color: #4C1D95;
+            text-shadow: 0 2px 0 rgba(255,255,255,0.8), 0 4px 14px rgba(76,29,149,0.3);
         }
 
         .brand .badge-live {
             font-family: 'Baloo 2', sans-serif;
-            font-size: 0.875rem;
+            font-size: 0.95rem; /* 大於 14px */
             font-weight: 700;
             background: linear-gradient(135deg, var(--yellow), var(--orange));
-            color: #4a2600;
-            padding: 4px 12px;
+            color: #3f1e00;
+            padding: 5px 14px;
             border-radius: 999px;
-            box-shadow: 0 4px 10px rgba(255,140,66,0.5);
+            box-shadow: 0 4px 12px rgba(255,112,20,0.4);
         }
 
         /* ---------- 卡片 ---------- */
@@ -111,6 +112,7 @@
             box-shadow: 0 20px 45px -18px rgba(59,10,99,0.55);
             position: relative;
             overflow: hidden;
+            border: 2px solid rgba(109, 40, 217, 0.08);
         }
 
             .card::before {
@@ -121,13 +123,13 @@
                 width: 140px;
                 height: 140px;
                 border-radius: 50%;
-                background: radial-gradient(circle, rgba(255,61,129,0.18), transparent 70%);
+                background: radial-gradient(circle, rgba(255,30,117,0.22), transparent 70%);
             }
 
         .eyebrow {
             font-family: 'Baloo 2', sans-serif;
-            font-size: 0.875rem;
-            font-weight: 700;
+            font-size: 0.95rem; /* 大於 14px */
+            font-weight: 800;
             letter-spacing: 0.1em;
             text-transform: uppercase;
             color: var(--pink);
@@ -136,7 +138,7 @@
 
         h2 {
             font-family: 'Baloo 2', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.7rem;
             font-weight: 800;
             margin: 0 0 8px;
             color: var(--ink);
@@ -145,16 +147,16 @@
         p.sub {
             color: var(--slate);
             margin: 0 0 22px;
-            line-height: 1.7;
-            font-size: 0.95rem;
+            line-height: 1.75;
+            font-size: 1rem; /* 鮮明且好讀 */
         }
 
         label {
             display: block;
-            font-size: 0.875rem;
+            font-size: 0.95rem; /* 大於 14px */
             color: var(--slate);
-            font-weight: 600;
-            margin-bottom: 6px;
+            font-weight: 700;
+            margin-bottom: 8px;
         }
 
         input[type=text] {
@@ -166,13 +168,13 @@
             font-family: inherit;
             background: #FBFAFF;
             color: var(--ink);
-            transition: border-color .15s ease, box-shadow .15s ease;
+            transition: border-color .15s ease, box-shadow .15s ease, background-color .15s ease;
         }
 
             input[type=text]:focus {
                 outline: none;
                 border-color: var(--pink);
-                box-shadow: 0 0 0 4px rgba(255,61,129,0.18);
+                box-shadow: 0 0 0 5px rgba(255,30,117,0.25);
                 background: #fff;
             }
 
@@ -182,25 +184,26 @@
             border: none;
             cursor: pointer;
             font-family: 'Baloo 2', sans-serif;
-            font-weight: 700;
-            font-size: 1.05rem;
+            font-weight: 800;
+            font-size: 1.1rem;
             border-radius: 16px;
             padding: 15px 22px;
-            transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+            transition: transform .12s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow .12s ease, filter .12s ease;
         }
 
             .btn:active {
-                transform: scale(0.96);
+                transform: scale(0.95);
             }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--pink), var(--purple));
             color: #fff;
-            box-shadow: 0 10px 24px -8px rgba(255,61,129,0.65);
+            box-shadow: 0 10px 24px -8px rgba(255,30,117,0.65);
         }
 
             .btn-primary:hover {
-                filter: brightness(1.08);
+                filter: brightness(1.1);
+                box-shadow: 0 12px 28px -6px rgba(255,30,117,0.8);
             }
 
         .btn-block {
@@ -211,33 +214,40 @@
         .btn-ghost {
             background: transparent;
             color: var(--slate);
-            border: 2px solid var(--line);
-            font-weight: 600;
-            font-size: 0.9rem;
+            border: 2.5px solid var(--line);
+            font-weight: 700;
+            font-size: 0.95rem; /* 大於 14px */
         }
 
             .btn-ghost:hover {
                 border-color: var(--pink);
                 color: var(--pink);
+                background: rgba(255,30,117,0.05);
             }
 
         .foot-link {
-            margin-top: 18px;
+            margin-top: 22px;
             text-align: center;
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 8px 16px;
+            gap: 10px 20px;
         }
 
             .foot-link button {
                 background: none;
                 border: none;
                 color: var(--slate);
-                font-size: 0.875rem;
+                font-size: 0.95rem; /* 大於 14px */
+                font-weight: 600;
                 text-decoration: underline;
                 cursor: pointer;
                 font-family: inherit;
+                transition: color 0.15s ease;
+            }
+
+            .foot-link button:hover {
+                color: var(--pink);
             }
 
         /* ---------- 分數圓盤 ---------- */
@@ -250,8 +260,8 @@
 
         .dial {
             position: relative;
-            width: 150px;
-            height: 150px;
+            width: 155px;
+            height: 155px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -259,7 +269,8 @@
             border-radius: 50%;
             background: conic-gradient(var(--cyan) 0deg, var(--pink) 180deg, var(--yellow) 360deg);
             padding: 7px;
-            box-shadow: 0 12px 28px -10px rgba(124,58,237,0.55);
+            box-shadow: 0 12px 28px -10px rgba(109,40,217,0.55);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
             .dial::after {
@@ -277,46 +288,56 @@
         }
 
         .dial.flash-correct {
-            animation: pulseGood .7s ease-out;
+            animation: pulseGood .7s ease-out, dialJump .5s ease-out;
         }
 
         .dial.flash-wrong {
-            animation: pulseBad .7s ease-out;
+            animation: pulseBad .7s ease-out, dialShake .5s ease-out;
+        }
+
+        @keyframes dialJump {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.15); }
+        }
+
+        @keyframes dialShake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-8px) rotate(-3deg); }
+            75% { transform: translateX(8px) rotate(3deg); }
         }
 
         @keyframes pulseGood {
             0% {
-                box-shadow: 0 0 0 0 rgba(46,204,113,0.55);
+                box-shadow: 0 0 0 0 rgba(16,185,129,0.7);
             }
-
             100% {
-                box-shadow: 0 0 0 30px rgba(46,204,113,0);
+                box-shadow: 0 0 0 35px rgba(16,185,129,0);
             }
         }
 
         @keyframes pulseBad {
             0% {
-                box-shadow: 0 0 0 0 rgba(255,92,92,0.55);
+                box-shadow: 0 0 0 0 rgba(239,68,68,0.7);
             }
-
             100% {
-                box-shadow: 0 0 0 30px rgba(255,92,92,0);
+                box-shadow: 0 0 0 35px rgba(239,68,68,0);
             }
         }
 
         .dial-score {
             font-family: 'Baloo 2', sans-serif;
-            font-size: 2.5rem;
+            font-size: 2.7rem;
             font-weight: 800;
             color: var(--ink);
+            transition: color 0.15s ease;
         }
 
         .dial-label {
-            font-size: 0.875rem;
+            font-size: 0.95rem; /* 大於 14px */
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: var(--slate);
-            font-weight: 600;
+            font-weight: 700;
         }
 
         .flash-correct .dial-score {
@@ -329,70 +350,72 @@
 
         .progress-wrap {
             font-family: 'Baloo 2', sans-serif;
-            font-size: 0.875rem;
-            color: #7C3AED;
+            font-size: 0.95rem; /* 大於 14px */
+            color: #6D28D9;
             text-align: center;
             margin-bottom: 18px;
-            font-weight: 700;
+            font-weight: 800;
         }
 
             .progress-wrap .name-chip {
                 display: inline-block;
-                background: rgba(124,58,237,0.12);
-                padding: 3px 12px;
+                background: rgba(109,40,217,0.15);
+                padding: 4px 14px;
                 border-radius: 999px;
                 margin-left: 4px;
-                color: #5B21B6;
+                color: #4C1D95;
             }
 
         .progress-bar-track {
-            height: 12px;
+            height: 14px;
             border-radius: 999px;
             background: var(--line);
             overflow: hidden;
             margin-top: 8px;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .progress-bar-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--yellow), var(--orange));
-            transition: width .35s ease;
+            transition: width .35s cubic-bezier(0.4, 0, 0.2, 1);
             border-radius: 999px;
         }
 
         /* ---------- 題目卡 ---------- */
         .qcard {
-            background: linear-gradient(180deg, #FBFAFF, #F3EEFF);
-            border: 2px solid var(--line);
+            background: linear-gradient(180deg, #FBFAFF, #F5EFFF);
+            border: 2.5px solid var(--line);
             border-radius: 22px;
             padding: 26px;
             margin-bottom: 22px;
+            box-shadow: 0 8px 20px rgba(109,40,217,0.05);
         }
 
         .qpoints {
             display: inline-block;
             font-family: 'Baloo 2', sans-serif;
-            font-weight: 700;
-            font-size: 0.875rem;
+            font-weight: 800;
+            font-size: 0.95rem; /* 大於 14px */
             color: #fff;
             background: linear-gradient(135deg, var(--purple), var(--pink));
             border-radius: 999px;
-            padding: 5px 16px;
+            padding: 6px 18px;
             margin-bottom: 16px;
-            box-shadow: 0 6px 14px -4px rgba(124,58,237,0.5);
+            box-shadow: 0 6px 14px -4px rgba(109,40,217,0.5);
         }
 
         .qtext {
-            font-size: 1.12rem;
-            line-height: 1.75;
-            font-weight: 600;
+            font-size: 1.18rem;
+            line-height: 1.8;
+            font-weight: 700;
             color: var(--ink);
         }
 
         .answers {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 14px;
+            gap: 16px;
         }
 
         .ans-btn {
@@ -401,28 +424,29 @@
             border: none;
             font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
-            font-size: 1.15rem;
+            font-size: 1.2rem;
             cursor: pointer;
             color: #fff;
-            transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+            transition: transform .12s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow .12s ease, filter .12s ease;
         }
 
             .ans-btn.true {
-                background: linear-gradient(135deg, #34E89E, var(--green));
-                box-shadow: 0 10px 22px -8px rgba(46,204,113,0.6);
+                background: linear-gradient(135deg, #10B981, #059669);
+                box-shadow: 0 10px 22px -8px rgba(16,185,129,0.6);
             }
 
             .ans-btn.false {
-                background: linear-gradient(135deg, #FF7A7A, var(--coral));
-                box-shadow: 0 10px 22px -8px rgba(255,92,92,0.6);
+                background: linear-gradient(135deg, #F87171, var(--coral));
+                box-shadow: 0 10px 22px -8px rgba(239,68,68,0.6);
             }
 
             .ans-btn:hover {
-                filter: brightness(1.06);
+                filter: brightness(1.08);
+                box-shadow: 0 12px 24px -5px rgba(0,0,0,0.2);
             }
 
             .ans-btn:active {
-                transform: scale(0.95);
+                transform: scale(0.94);
             }
 
             .ans-btn:disabled {
@@ -434,10 +458,10 @@
         .feedback {
             text-align: center;
             font-family: 'Baloo 2', sans-serif;
-            font-size: 1rem;
-            min-height: 24px;
-            margin-top: 16px;
-            font-weight: 700;
+            font-size: 1.05rem;
+            min-height: 26px;
+            margin-top: 18px;
+            font-weight: 800;
         }
 
             .feedback.ok {
@@ -457,66 +481,71 @@
         }
 
         .live-dot {
-            width: 9px;
-            height: 9px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
             background: var(--green);
-            box-shadow: 0 0 0 3px rgba(46,204,113,0.25);
+            box-shadow: 0 0 0 4px rgba(16,185,129,0.25);
             animation: blink 1.6s infinite;
         }
 
         @keyframes blink {
             0%,100% {
                 opacity: 1;
+                transform: scale(1);
             }
 
             50% {
-                opacity: 0.3;
+                opacity: 0.4;
+                transform: scale(0.9);
             }
         }
 
         .board-title {
             font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
-            font-size: 1rem;
+            font-size: 1.05rem;
             color: var(--ink);
         }
 
         .board-sub {
-            font-size: 0.875rem;
+            font-size: 0.95rem; /* 大於 14px */
             color: var(--slate);
-            margin: 0 0 16px 17px;
+            margin: 0 0 16px 18px;
+            font-weight: 600;
         }
 
         .lb-row {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 11px 10px;
+            padding: 12px 10px;
             border-radius: 14px;
-            margin-bottom: 7px;
+            margin-bottom: 8px;
             background: #FBFAFF;
             border: 1.5px solid var(--line);
+            transition: transform 0.2s ease;
         }
 
             .lb-row.me {
-                background: linear-gradient(135deg, rgba(255,61,129,0.10), rgba(124,58,237,0.10));
-                border: 1.5px solid var(--pink);
+                background: linear-gradient(135deg, rgba(255,30,117,0.12), rgba(109,40,217,0.12));
+                border: 2px solid var(--pink);
+                transform: scale(1.02);
             }
 
         .lb-rank {
             font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
             color: var(--slate);
-            font-size: 0.95rem;
-            width: 26px;
+            font-size: 1rem;
+            width: 28px;
             flex-shrink: 0;
             text-align: center;
         }
 
         .lb-name {
             flex: 1;
-            font-size: 0.875rem;
+            font-size: 0.95rem; /* 大於 14px */
             font-weight: 700;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -526,20 +555,20 @@
 
         .lb-correct {
             font-family: 'Baloo 2', sans-serif;
-            font-size: 0.875rem;
-            font-weight: 700;
+            font-size: 0.95rem; /* 大於 14px */
+            font-weight: 800;
             color: var(--green);
-            background: rgba(46,204,113,0.15);
-            padding: 3px 9px;
+            background: rgba(16,185,129,0.15);
+            padding: 3px 10px;
             border-radius: 20px;
             flex-shrink: 0;
         }
 
         .lb-score {
             font-family: 'Baloo 2', sans-serif;
-            font-size: 0.95rem;
+            font-size: 1.05rem;
             font-weight: 800;
-            width: 46px;
+            width: 48px;
             text-align: right;
             flex-shrink: 0;
             color: var(--purple);
@@ -547,9 +576,10 @@
 
         .lb-empty {
             color: var(--slate);
-            font-size: 0.875rem;
+            font-size: 0.95rem; /* 大於 14px */
             text-align: center;
-            padding: 20px 0;
+            padding: 24px 0;
+            font-weight: 600;
         }
 
         /* ---------- 結算畫面 ---------- */
@@ -561,8 +591,8 @@
         }
 
         .stat {
-            background: linear-gradient(180deg,#FBFAFF,#F3EEFF);
-            border: 2px solid var(--line);
+            background: linear-gradient(180deg,#FBFAFF,#F5EFFF);
+            border: 2.5px solid var(--line);
             border-radius: 16px;
             padding: 18px 8px;
             text-align: center;
@@ -570,29 +600,35 @@
 
             .stat .num {
                 font-family: 'Baloo 2', sans-serif;
-                font-size: 1.6rem;
+                font-size: 1.7rem;
                 font-weight: 800;
                 color: var(--purple);
             }
 
             .stat .lbl {
-                font-size: 0.875rem;
+                font-size: 0.95rem; /* 大於 14px */
                 color: var(--slate);
                 margin-top: 4px;
-                font-weight: 600;
+                font-weight: 700;
             }
 
         .trophy {
-            font-size: 3.2rem;
+            font-size: 3.5rem;
             text-align: center;
             display: block;
             margin-bottom: 6px;
             filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
+            animation: zoomAward 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) infinite alternate;
+        }
+
+        @keyframes zoomAward {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.08) rotate(3deg); }
         }
 
         .closed-msg {
             background: #FFF4E5;
-            border: 2px dashed var(--orange);
+            border: 2.5px dashed var(--orange);
             border-radius: 16px;
             padding: 18px;
             text-align: center;
@@ -600,6 +636,7 @@
             color: #9A5B00;
             margin-bottom: 6px;
             font-family: 'Baloo 2', sans-serif;
+            font-size: 1rem;
         }
 
         /* ---------- 選擇題按鈕 ---------- */
@@ -614,22 +651,24 @@
             align-items: center;
             text-align: left;
             width: 100%;
-            padding: 15px 18px;
+            padding: 16px 18px;
             border-radius: 16px;
             border: 2.5px solid var(--line);
             background: #FBFAFF;
             font-family: 'Noto Sans TC', sans-serif;
             font-weight: 700;
-            font-size: 0.97rem;
+            font-size: 1.05rem;
             color: var(--ink);
             cursor: pointer;
-            transition: all .12s ease;
+            transition: all .15s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
         }
 
             .choice-btn:hover:not(:disabled) {
                 border-color: var(--purple);
-                background: #F3EEFF;
+                background: #F5EFFF;
                 transform: translateY(-2px);
+                box-shadow: 0 6px 12px rgba(109,40,217,0.15);
             }
 
             .choice-btn:disabled {
@@ -637,19 +676,19 @@
             }
 
             .choice-btn.correct {
-                background: linear-gradient(135deg, #34E89E, var(--green));
-                border-color: var(--green);
+                background: linear-gradient(135deg, #10B981, #059669);
+                border-color: #059669;
                 color: #fff;
             }
 
             .choice-btn.wrong-selected {
-                background: linear-gradient(135deg, #FF7A7A, var(--coral));
+                background: linear-gradient(135deg, #F87171, var(--coral));
                 border-color: var(--coral);
                 color: #fff;
             }
 
             .choice-btn.selected {
-                background: #F3EEFF;
+                background: #F5EFFF;
                 border-color: var(--purple);
                 color: var(--ink);
             }
@@ -658,16 +697,21 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            width: 26px;
-            height: 26px;
+            width: 28px;
+            height: 28px;
             border-radius: 50%;
             background: var(--purple);
             color: #fff;
             font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
-            font-size: 0.875rem;
+            font-size: 0.95rem; /* 大於 14px */
             margin-right: 12px;
             flex-shrink: 0;
+            transition: transform 0.2s ease;
+        }
+
+        .choice-btn:hover:not(:disabled) .choice-letter {
+            transform: scale(1.1);
         }
 
         .choice-btn.correct .choice-letter,
@@ -680,13 +724,13 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            margin-bottom: 11px;
+            margin-bottom: 12px;
         }
 
         .stat-bar-label {
-            width: 108px;
+            width: 110px;
             flex-shrink: 0;
-            font-size: 0.875rem;
+            font-size: 0.95rem; /* 大於 14px */
             font-weight: 700;
             color: var(--ink);
             overflow: hidden;
@@ -701,6 +745,7 @@
             border-radius: 999px;
             background: var(--line);
             overflow: hidden;
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
         }
 
         .stat-bar-fill {
@@ -710,26 +755,26 @@
         }
 
         .stat-bar-pct {
-            width: 40px;
+            width: 42px;
             text-align: right;
             font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
-            font-size: 0.875rem;
+            font-size: 0.95rem; /* 大於 14px */
             flex-shrink: 0;
         }
 
         @media(max-width:575px) {
             .answers {
-                gap: 10px;
+                gap: 12px;
             }
 
             .ans-btn {
-                font-size: 1rem;
+                font-size: 1.1rem;
                 padding: 18px 6px;
             }
 
             h2 {
-                font-size: 1.35rem;
+                font-size: 1.45rem;
             }
         }
     </style>
@@ -746,9 +791,10 @@
     </div>
     <script>
         /* =====================================================================
-           背景動畫（吉卜力風格）— 暖色天空漸層 + 緩慢飄動的雲朵 +
-           漂浮的金色光點（類似龍貓煤球精靈/蒲公英絨毛）+ 遠山剪影
+           背景動畫與互動式粒子系統（整合點擊答題特殊爆破特效）
            ===================================================================== */
+        const gameParticles = []; // 用於存放互動產生的爆裂粒子
+
         (function setupBackgroundCanvas() {
             const canvas = document.getElementById('bgCanvas');
             if (!canvas || !canvas.getContext) return;
@@ -788,6 +834,31 @@
                     warm: Math.random() < 0.6
                 });
             }
+
+            // 提供全域函數，當玩家答題時呼叫，觸發滿屏/中心煙火粒子
+            window.spawnAnswerSplash = function(isCorrect) {
+                const centerX = w / 2;
+                const centerY = h / 2.5;
+                const count = isCorrect ? 35 : 20;
+
+                for (let i = 0; i < count; i++) {
+                    const angle = Math.random() * Math.PI * 2;
+                    const speed = 2 + Math.random() * 6;
+                    gameParticles.push({
+                        x: centerX,
+                        y: centerY,
+                        vx: Math.cos(angle) * speed,
+                        vy: Math.sin(angle) * speed - (isCorrect ? 2 : 0), // 答對的往上飄動更明顯
+                        r: isCorrect ? (3 + Math.random() * 5) : (4 + Math.random() * 4),
+                        alpha: 1,
+                        decay: 0.015 + Math.random() * 0.02,
+                        color: isCorrect 
+                            ? (Math.random() < 0.5 ? '255, 221, 63' : '16, 185, 129') // 金色與翡翠綠
+                            : '239, 68, 68', // 警示紅
+                        isStar: isCorrect && Math.random() < 0.4
+                    });
+                }
+            };
 
             function drawSky() {
                 const grad = ctx.createLinearGradient(0, 0, 0, h);
@@ -849,6 +920,45 @@
                 ctx.restore();
             }
 
+            // 繪製與更新答題爆發粒子
+            function updateAndDrawGameParticles() {
+                for (let i = gameParticles.length - 1; i >= 0; i--) {
+                    const p = gameParticles[i];
+                    p.x += p.vx;
+                    p.y += p.vy;
+                    p.vy += 0.1; // 重力微調
+                    p.alpha -= p.decay;
+
+                    if (p.alpha <= 0) {
+                        gameParticles.splice(i, 1);
+                        continue;
+                    }
+
+                    ctx.save();
+                    ctx.globalAlpha = p.alpha;
+                    ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
+                    ctx.shadowColor = `rgba(${p.color}, 0.8)`;
+                    ctx.shadowBlur = p.isStar ? 10 : 4;
+
+                    if (p.isStar) {
+                        // 繪製閃亮星星
+                        ctx.beginPath();
+                        for (let j = 0; j < 5; j++) {
+                            ctx.lineTo(Math.sin((j * 72 * Math.PI) / 180) * p.r + p.x, -Math.cos((j * 72 * Math.PI) / 180) * p.r + p.y);
+                            ctx.lineTo(Math.sin(((j * 72 + 36) * Math.PI) / 180) * (p.r / 2) + p.x, -Math.cos(((j * 72 + 36) * Math.PI) / 180) * (p.r / 2) + p.y);
+                        }
+                        ctx.closePath();
+                        ctx.fill();
+                    } else {
+                        // 繪製圓形氣泡
+                        ctx.beginPath();
+                        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                    ctx.restore();
+                }
+            }
+
             function tick() {
                 drawSky();
                 drawHills();
@@ -863,19 +973,16 @@
                     s.wobble += s.wobbleSpeed;
                     if (s.y < -0.05) { s.y = 1.05; s.x = Math.random(); }
                 });
+                updateAndDrawGameParticles();
                 requestAnimationFrame(tick);
             }
             tick();
         })();
 
         /* =====================================================================
-           Google Apps Script 設定 — 請依照 README.md 的步驟部署好 Apps Script
-           後，把下面的網址換成你自己的 Web App 網址（結尾是 /exec）。
+           Google Apps Script 設定
            ===================================================================== */
         const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzP0VzopuiocUa4287E5SG-lPFvp0wUXfMzB9Ry0JYD5p_SGcDcH2NPo_XWB3sSyxQLyw/exec";
-
-        /* 房間代碼：同一份 HTML 部署給不同場次/單位使用時，改這個字串即可
-           讓彼此的排行榜互相獨立，不會混在一起。 */
         const ROOM_ID = "default-room";
 
         function sanitizeKey(s) {
@@ -1119,11 +1226,11 @@
                   </div>
                 </div>
                 <div class="progress-wrap">
-                  第 ${state.currentIndex + 1} / ${state.questions.length} 題　<span class="name-chip">👤 ${escapeHtml(state.name)}</span>
+                  第 ${state.currentIndex + 1} / ${state.questions.length} 題 <span class="name-chip">👤 ${escapeHtml(state.name)}</span>
                   <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
                 </div>
                 <div class="qcard">
-                  <div class="qpoints">⭐ 本題配分：${q.points} 分　${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
+                  <div class="qpoints">⭐ 本題配分：${q.points} 分 ${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
                   <div class="qtext">${escapeHtml(q.text)}</div>
                 </div>
                 ${answersHtml}
@@ -1160,7 +1267,7 @@
                   <div class="stat"><div class="num">${state.correct}/${state.total}</div><div class="lbl">答對題數</div></div>
                   <div class="stat"><div class="num">${myRank > 0 ? ('#' + myRank) : '-'}</div><div class="lbl">目前排名</div></div>
                 </div>
-                <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
+                <p class="sub text-center" style="margin:0; font-weight: 700;">🎉 感謝作答，本次題組已全部完成！</p>
               </div>
             </div>
             <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
@@ -1203,6 +1310,18 @@
             state.total += 1;
             if (isCorrect) state.correct += 1;
 
+            // 觸發 Canvas 背景爆裂特效與圓盤特效
+            if (window.spawnAnswerSplash) {
+                window.spawnAnswerSplash(isCorrect);
+            }
+
+            const dial = document.getElementById('dial');
+            if (dial) {
+                dial.classList.remove('flash-correct', 'flash-wrong');
+                void dial.offsetWidth; // 強制重繪以重啟 CSS Animation
+                dial.classList.add(isCorrect ? 'flash-correct' : 'flash-wrong');
+            }
+
             const scoreNum = document.getElementById('scoreNum');
             if (scoreNum) scoreNum.textContent = state.score;
 
@@ -1211,14 +1330,26 @@
                     const btn = document.getElementById('choiceBtn' + idx);
                     if (!btn) return;
                     btn.disabled = true;
-                    if (idx === selected) btn.classList.add('selected');
+                    if (idx === selected) {
+                        btn.classList.add(isCorrect ? 'correct' : 'wrong-selected');
+                    } else if (idx === q.correctIndex) {
+                        btn.classList.add('correct'); // 自動揭曉正確解答
+                    }
                 });
             } else {
                 document.getElementById('btnTrue').disabled = true;
                 document.getElementById('btnFalse').disabled = true;
+                if (q.answer === true) {
+                    document.getElementById('btnTrue').style.filter = 'brightness(1.15)';
+                } else {
+                    document.getElementById('btnFalse').style.filter = 'brightness(1.15)';
+                }
             }
             const fz = document.getElementById('feedbackZone');
-            if (fz) fz.textContent = '📮 已送出，前往下一題…';
+            if (fz) {
+                fz.textContent = isCorrect ? '🎉 答對了！加分！' : '❌ 答錯了！別灰心，加油！';
+                fz.className = `feedback ${isCorrect ? 'ok' : 'no'}`;
+            }
 
             logAnswerStat(q.id, isCorrect);
 
@@ -1232,7 +1363,7 @@
                     state.screen = 'end';
                 }
                 render();
-            }, 500);
+            }, 1100); // 延長到 1.1 秒，讓玩家有充足時間觀看粒子特效與對錯答案回饋
         }
 
         async function onResetBoard() {
