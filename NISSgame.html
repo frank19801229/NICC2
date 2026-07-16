@@ -20,7 +20,7 @@
             --green: #2ECC71;
             --coral: #FF5C5C;
             --ink: #2A1B3D;
-            --slate: #8B7BA8;
+            --slate: #0E7490;
             --card: #FFFFFF;
             --line: #F0E6FF;
         }
@@ -34,14 +34,26 @@
             min-height: 100vh;
             font-family: 'Noto Sans TC', sans-serif;
             color: var(--ink);
-            background: radial-gradient(circle at 15% 0%, rgba(255,61,129,0.35), transparent 45%), radial-gradient(circle at 90% 10%, rgba(34,211,238,0.30), transparent 40%), radial-gradient(circle at 50% 100%, rgba(255,210,63,0.25), transparent 45%), linear-gradient(160deg, #3B0A63 0%, #6D28D9 45%, #9333EA 100%);
-            background-attachment: fixed;
+            background: #FFE8C2;
+            overflow-x: hidden;
+        }
+
+        #bgCanvas {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            display: block;
+            z-index: -1;
+            pointer-events: none;
         }
 
         .wrap {
             max-width: 1120px;
             margin: 0 auto;
             padding: 22px 16px 60px;
+            position: relative;
+            z-index: 1;
         }
 
         /* ---------- 頂部品牌列 ---------- */
@@ -75,13 +87,13 @@
             font-weight: 800;
             letter-spacing: 0.02em;
             margin: 0;
-            color: #fff;
-            text-shadow: 0 3px 0 rgba(0,0,0,0.25);
+            color: #5B21B6;
+            text-shadow: 0 2px 0 rgba(255,255,255,0.6), 0 4px 14px rgba(91,33,182,0.25);
         }
 
         .brand .badge-live {
             font-family: 'Baloo 2', sans-serif;
-            font-size: 0.7rem;
+            font-size: 0.875rem;
             font-weight: 700;
             background: linear-gradient(135deg, var(--yellow), var(--orange));
             color: #4a2600;
@@ -114,7 +126,7 @@
 
         .eyebrow {
             font-family: 'Baloo 2', sans-serif;
-            font-size: 0.78rem;
+            font-size: 0.875rem;
             font-weight: 700;
             letter-spacing: 0.1em;
             text-transform: uppercase;
@@ -139,7 +151,7 @@
 
         label {
             display: block;
-            font-size: 0.85rem;
+            font-size: 0.875rem;
             color: var(--slate);
             font-weight: 600;
             margin-bottom: 6px;
@@ -222,7 +234,7 @@
                 background: none;
                 border: none;
                 color: var(--slate);
-                font-size: 0.75rem;
+                font-size: 0.875rem;
                 text-decoration: underline;
                 cursor: pointer;
                 font-family: inherit;
@@ -300,7 +312,7 @@
         }
 
         .dial-label {
-            font-size: 0.7rem;
+            font-size: 0.875rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
             color: var(--slate);
@@ -317,25 +329,26 @@
 
         .progress-wrap {
             font-family: 'Baloo 2', sans-serif;
-            font-size: 0.85rem;
-            color: #fff;
+            font-size: 0.875rem;
+            color: #7C3AED;
             text-align: center;
             margin-bottom: 18px;
-            font-weight: 600;
+            font-weight: 700;
         }
 
             .progress-wrap .name-chip {
                 display: inline-block;
-                background: rgba(255,255,255,0.18);
+                background: rgba(124,58,237,0.12);
                 padding: 3px 12px;
                 border-radius: 999px;
                 margin-left: 4px;
+                color: #5B21B6;
             }
 
         .progress-bar-track {
             height: 12px;
             border-radius: 999px;
-            background: rgba(255,255,255,0.25);
+            background: var(--line);
             overflow: hidden;
             margin-top: 8px;
         }
@@ -360,7 +373,7 @@
             display: inline-block;
             font-family: 'Baloo 2', sans-serif;
             font-weight: 700;
-            font-size: 0.78rem;
+            font-size: 0.875rem;
             color: #fff;
             background: linear-gradient(135deg, var(--purple), var(--pink));
             border-radius: 999px;
@@ -470,7 +483,7 @@
         }
 
         .board-sub {
-            font-size: 0.72rem;
+            font-size: 0.875rem;
             color: var(--slate);
             margin: 0 0 16px 17px;
         }
@@ -503,7 +516,7 @@
 
         .lb-name {
             flex: 1;
-            font-size: 0.87rem;
+            font-size: 0.875rem;
             font-weight: 700;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -513,7 +526,7 @@
 
         .lb-correct {
             font-family: 'Baloo 2', sans-serif;
-            font-size: 0.72rem;
+            font-size: 0.875rem;
             font-weight: 700;
             color: var(--green);
             background: rgba(46,204,113,0.15);
@@ -534,7 +547,7 @@
 
         .lb-empty {
             color: var(--slate);
-            font-size: 0.85rem;
+            font-size: 0.875rem;
             text-align: center;
             padding: 20px 0;
         }
@@ -563,7 +576,7 @@
             }
 
             .stat .lbl {
-                font-size: 0.72rem;
+                font-size: 0.875rem;
                 color: var(--slate);
                 margin-top: 4px;
                 font-weight: 600;
@@ -652,7 +665,7 @@
             color: #fff;
             font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
-            font-size: 0.78rem;
+            font-size: 0.875rem;
             margin-right: 12px;
             flex-shrink: 0;
         }
@@ -673,7 +686,7 @@
         .stat-bar-label {
             width: 108px;
             flex-shrink: 0;
-            font-size: 0.72rem;
+            font-size: 0.875rem;
             font-weight: 700;
             color: var(--ink);
             overflow: hidden;
@@ -701,7 +714,7 @@
             text-align: right;
             font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
-            font-size: 0.78rem;
+            font-size: 0.875rem;
             flex-shrink: 0;
         }
 
@@ -722,6 +735,7 @@
     </style>
 </head>
 <body>
+    <canvas id="bgCanvas"></canvas>
     <div class="wrap">
         <div class="brand">
             <span class="mascot">🧼</span>
@@ -732,10 +746,133 @@
     </div>
     <script>
         /* =====================================================================
+           背景動畫（吉卜力風格）— 暖色天空漸層 + 緩慢飄動的雲朵 +
+           漂浮的金色光點（類似龍貓煤球精靈/蒲公英絨毛）+ 遠山剪影
+           ===================================================================== */
+        (function setupBackgroundCanvas() {
+            const canvas = document.getElementById('bgCanvas');
+            if (!canvas || !canvas.getContext) return;
+            const ctx = canvas.getContext('2d');
+            let w = 0, h = 0, dpr = Math.min(window.devicePixelRatio || 1, 2);
+
+            function resize() {
+                w = window.innerWidth;
+                h = window.innerHeight;
+                canvas.width = w * dpr;
+                canvas.height = h * dpr;
+                ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const clouds = [];
+            for (let i = 0; i < 6; i++) {
+                clouds.push({
+                    x: Math.random(),
+                    y: 0.06 + Math.random() * 0.34,
+                    scale: 0.7 + Math.random() * 1.3,
+                    speed: 0.00006 + Math.random() * 0.00009,
+                    opacity: 0.38 + Math.random() * 0.32
+                });
+            }
+
+            const spores = [];
+            for (let i = 0; i < 46; i++) {
+                spores.push({
+                    x: Math.random(),
+                    y: Math.random(),
+                    r: 1.4 + Math.random() * 2.6,
+                    speedY: 0.00012 + Math.random() * 0.00022,
+                    wobble: Math.random() * Math.PI * 2,
+                    wobbleSpeed: 0.008 + Math.random() * 0.016,
+                    warm: Math.random() < 0.6
+                });
+            }
+
+            function drawSky() {
+                const grad = ctx.createLinearGradient(0, 0, 0, h);
+                grad.addColorStop(0, '#FFE8C2');
+                grad.addColorStop(0.35, '#FFD1E3');
+                grad.addColorStop(0.7, '#DCCBFF');
+                grad.addColorStop(1, '#B7DCEA');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, 0, w, h);
+            }
+
+            function drawHills() {
+                ctx.fillStyle = 'rgba(122,168,116,0.5)';
+                ctx.beginPath();
+                ctx.moveTo(0, h);
+                ctx.bezierCurveTo(w * 0.2, h - 60, w * 0.4, h - 6, w * 0.65, h - 55);
+                ctx.bezierCurveTo(w * 0.85, h - 85, w * 0.95, h - 35, w, h - 60);
+                ctx.lineTo(w, h);
+                ctx.closePath();
+                ctx.fill();
+
+                ctx.fillStyle = 'rgba(88,140,92,0.48)';
+                ctx.beginPath();
+                ctx.moveTo(0, h);
+                ctx.bezierCurveTo(w * 0.15, h - 26, w * 0.5, h + 8, w * 0.75, h - 22);
+                ctx.bezierCurveTo(w * 0.9, h - 34, w * 0.97, h - 8, w, h - 18);
+                ctx.lineTo(w, h);
+                ctx.closePath();
+                ctx.fill();
+            }
+
+            function drawCloud(c) {
+                const cx = c.x * w, cy = c.y * h, s = c.scale;
+                ctx.save();
+                ctx.globalAlpha = c.opacity;
+                ctx.filter = 'blur(7px)';
+                ctx.fillStyle = '#FFFFFF';
+                const puffs = [[0, 0, 30 * s], [30 * s, -7 * s, 22 * s], [-28 * s, -5 * s, 21 * s], [14 * s, 9 * s, 19 * s], [-12 * s, 10 * s, 17 * s]];
+                puffs.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(cx + p[0], cy + p[1], p[2], 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                ctx.restore();
+            }
+
+            function drawSpore(s) {
+                const sx = s.x * w + Math.sin(s.wobble) * 12;
+                const sy = s.y * h;
+                const glow = s.warm ? '255,214,138' : '255,255,255';
+                ctx.save();
+                ctx.globalAlpha = 0.5 + Math.sin(s.wobble) * 0.28;
+                ctx.fillStyle = `rgba(${glow},1)`;
+                ctx.shadowColor = `rgba(${glow},0.95)`;
+                ctx.shadowBlur = 7;
+                ctx.beginPath();
+                ctx.arc(sx, sy, s.r, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.restore();
+            }
+
+            function tick() {
+                drawSky();
+                drawHills();
+                clouds.forEach(c => {
+                    drawCloud(c);
+                    c.x += c.speed;
+                    if (c.x > 1.3) c.x = -0.3;
+                });
+                spores.forEach(s => {
+                    drawSpore(s);
+                    s.y -= s.speedY;
+                    s.wobble += s.wobbleSpeed;
+                    if (s.y < -0.05) { s.y = 1.05; s.x = Math.random(); }
+                });
+                requestAnimationFrame(tick);
+            }
+            tick();
+        })();
+
+        /* =====================================================================
            Google Apps Script 設定 — 請依照 README.md 的步驟部署好 Apps Script
            後，把下面的網址換成你自己的 Web App 網址（結尾是 /exec）。
            ===================================================================== */
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEJaUPK5WnOauCcXmz0yYlV3alPNa447UC04tNAdwAaJKotixd3Sc6yXCn8jq5Me8ljw/exec";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzP0VzopuiocUa4287E5SG-lPFvp0wUXfMzB9Ry0JYD5p_SGcDcH2NPo_XWB3sSyxQLyw/exec";
 
         /* 房間代碼：同一份 HTML 部署給不同場次/單位使用時，改這個字串即可
            讓彼此的排行榜互相獨立，不會混在一起。 */
