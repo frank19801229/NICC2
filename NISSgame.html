@@ -212,6 +212,10 @@
         .foot-link {
             margin-top: 18px;
             text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px 16px;
         }
 
             .foot-link button {
@@ -573,6 +577,128 @@
             filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
         }
 
+        .closed-msg {
+            background: #FFF4E5;
+            border: 2px dashed var(--orange);
+            border-radius: 16px;
+            padding: 18px;
+            text-align: center;
+            font-weight: 700;
+            color: #9A5B00;
+            margin-bottom: 6px;
+            font-family: 'Baloo 2', sans-serif;
+        }
+
+        /* ---------- 選擇題按鈕 ---------- */
+        .choice-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .choice-btn {
+            display: flex;
+            align-items: center;
+            text-align: left;
+            width: 100%;
+            padding: 15px 18px;
+            border-radius: 16px;
+            border: 2.5px solid var(--line);
+            background: #FBFAFF;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-weight: 700;
+            font-size: 0.97rem;
+            color: var(--ink);
+            cursor: pointer;
+            transition: all .12s ease;
+        }
+
+            .choice-btn:hover:not(:disabled) {
+                border-color: var(--purple);
+                background: #F3EEFF;
+                transform: translateY(-2px);
+            }
+
+            .choice-btn:disabled {
+                cursor: not-allowed;
+            }
+
+            .choice-btn.correct {
+                background: linear-gradient(135deg, #34E89E, var(--green));
+                border-color: var(--green);
+                color: #fff;
+            }
+
+            .choice-btn.wrong-selected {
+                background: linear-gradient(135deg, #FF7A7A, var(--coral));
+                border-color: var(--coral);
+                color: #fff;
+            }
+
+        .choice-letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--purple);
+            color: #fff;
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 800;
+            font-size: 0.78rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .choice-btn.correct .choice-letter,
+        .choice-btn.wrong-selected .choice-letter {
+            background: rgba(255,255,255,0.35);
+        }
+
+        /* ---------- 答錯率長條圖 ---------- */
+        .stat-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 11px;
+        }
+
+        .stat-bar-label {
+            width: 108px;
+            flex-shrink: 0;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--ink);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: help;
+        }
+
+        .stat-bar-track {
+            flex: 1;
+            height: 14px;
+            border-radius: 999px;
+            background: var(--line);
+            overflow: hidden;
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width .4s ease;
+        }
+
+        .stat-bar-pct {
+            width: 40px;
+            text-align: right;
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 800;
+            font-size: 0.78rem;
+            flex-shrink: 0;
+        }
+
         @media(max-width:575px) {
             .answers {
                 gap: 10px;
@@ -603,7 +729,7 @@
            Google Apps Script 設定 — 請依照 README.md 的步驟部署好 Apps Script
            後，把下面的網址換成你自己的 Web App 網址（結尾是 /exec）。
            ===================================================================== */
-        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzG13hKl3dtfZYw2zp7vZXpRT7CWQQEK_RVdZo7IO3KbEc04YTBVueV6lYj2TOefMyj4Q/exec";
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzP0VzopuiocUa4287E5SG-lPFvp0wUXfMzB9Ry0JYD5p_SGcDcH2NPo_XWB3sSyxQLyw/exec";
 
         /* 房間代碼：同一份 HTML 部署給不同場次/單位使用時，改這個字串即可
            讓彼此的排行榜互相獨立，不會混在一起。 */
@@ -619,18 +745,23 @@
         }
 
         const QUESTIONS = [
-            { id: 'q1', text: '戴手套可以取代洗手；只要手套沒有破損，就可以持續戴著照護不同病人或不同照護步驟。', answer: false, points: 10 },
-            { id: 'q2', text: '本院洗手種類包含一般性洗手、消毒性洗手與外科刷手；一般性洗手可清除大部分暫時性細菌。', answer: true, points: 20 },
-            { id: 'q3', text: 'WHO 提出的「洗手五時機」包括：接觸病人前、執行無菌/清潔操作前、暴觸體液後、接觸病人後、接觸病人週遭環境後。', answer: true, points: 10 },
-            { id: 'q4', text: '病人手部有明顯髒污，或照護疑似困難梭狀桿菌（C. diff）感染病人後，只要用酒精性乾洗手液消毒即可，不需要用肥皂及清水洗手。', answer: false, points: 20 },
-            { id: 'q5', text: '穿脫個人防護裝備（PPE）時，脫除的原則順序為：手套 → 護目鏡/面罩 → 隔離衣 → 口罩，脫除後應立即洗手。', answer: true, points: 20 },
-            { id: 'q6', text: '發生針扎（尖銳物品扎傷）後，正確處置的第一步是立即擠出傷口血液，再以肥皂和大量清水沖洗傷口。', answer: true, points: 15 },
-            { id: 'q7', text: '空氣傳染防護（Airborne Precautions）只要配戴外科口罩即可，不需要配戴 N95 等級呼吸防護具。', answer: false, points: 20 },
-            { id: 'q8', text: '留置導尿管期間應盡量維持密閉式引流系統，且集尿袋應低於膀胱位置，以防止尿液逆流。', answer: true, points: 15 },
-            { id: 'q9', text: '使用後的針具應立即將針頭回套針帽（re-cap），以避免刺傷他人。', answer: false, points: 20 },
-            { id: 'q10', text: '置放中心靜脈導管（CVC）時應採最大無菌屏障（無菌長袍、無菌手套、口罩、髮帽及大範圍無菌單）。', answer: true, points: 15 },
-            { id: 'q11', text: '外科手術部位感染（SSI）監測期通常為術後30天，若有植入物則依手術類別可延長至90天或1年。', answer: true, points: 15 },
-            { id: 'q12', text: '照護不同病人之間，只要沒有明顯髒污，就不需要進行手部衛生。', answer: false, points: 10 }
+            { id: 'q1', type: 'boolean', text: '戴手套可以取代洗手；只要手套沒有破損，就可以持續戴著照護不同病人或不同照護步驟。', answer: false, points: 10 },
+            { id: 'q2', type: 'boolean', text: '本院洗手種類包含一般性洗手、消毒性洗手與外科刷手；一般性洗手可清除大部分暫時性細菌。', answer: true, points: 20 },
+            { id: 'q3', type: 'boolean', text: 'WHO 提出的「洗手五時機」包括：接觸病人前、執行無菌/清潔操作前、暴觸體液後、接觸病人後、接觸病人週遭環境後。', answer: true, points: 10 },
+            { id: 'q4', type: 'boolean', text: '病人手部有明顯髒污，或照護疑似困難梭狀桿菌（C. diff）感染病人後，只要用酒精性乾洗手液消毒即可，不需要用肥皂及清水洗手。', answer: false, points: 20 },
+            { id: 'q5', type: 'boolean', text: '穿脫個人防護裝備（PPE）時，脫除的原則順序為：手套 → 護目鏡/面罩 → 隔離衣 → 口罩，脫除後應立即洗手。', answer: true, points: 20 },
+            { id: 'q6', type: 'boolean', text: '發生針扎（尖銳物品扎傷）後，正確處置的第一步是立即擠出傷口血液，再以肥皂和大量清水沖洗傷口。', answer: true, points: 15 },
+            { id: 'q7', type: 'boolean', text: '空氣傳染防護（Airborne Precautions）只要配戴外科口罩即可，不需要配戴 N95 等級呼吸防護具。', answer: false, points: 20 },
+            { id: 'q8', type: 'boolean', text: '留置導尿管期間應盡量維持密閉式引流系統，且集尿袋應低於膀胱位置，以防止尿液逆流。', answer: true, points: 15 },
+            { id: 'q9', type: 'boolean', text: '使用後的針具應立即將針頭回套針帽（re-cap），以避免刺傷他人。', answer: false, points: 20 },
+            { id: 'q10', type: 'boolean', text: '置放中心靜脈導管（CVC）時應採最大無菌屏障（無菌長袍、無菌手套、口罩、髮帽及大範圍無菌單）。', answer: true, points: 15 },
+            { id: 'q11', type: 'boolean', text: '外科手術部位感染（SSI）監測期通常為術後30天，若有植入物則依手術類別可延長至90天或1年。', answer: true, points: 15 },
+            { id: 'q12', type: 'boolean', text: '照護不同病人之間，只要沒有明顯髒污，就不需要進行手部衛生。', answer: false, points: 10 },
+            { id: 'mc1', type: 'choice', text: '依照 WHO 洗手五時機，下列何者「不」包括在內？', options: ['接觸病人前', '用餐前', '暴觸體液後', '接觸病人週遭環境後'], correctIndex: 1, points: 20 },
+            { id: 'mc2', type: 'choice', text: '使用酒精性乾洗手液時，建議至少搓揉多久才能達到有效殺菌效果？', options: ['5 秒', '10 秒', '20～30 秒', '2 分鐘'], correctIndex: 2, points: 15 },
+            { id: 'mc3', type: 'choice', text: '執行「接觸傳染防護」（Contact Precautions）時，最需要加強穿戴的防護裝備是？', options: ['N95 口罩', '手套與隔離衣', '護目鏡', '鉛衣'], correctIndex: 1, points: 15 },
+            { id: 'mc4', type: 'choice', text: '發生針扎意外，除了立即處理傷口，接下來「最優先」該做的是？', options: ['自行上網查資料', '立即通報並依院內感染管制流程處理', '先觀察一週再說', '直接請假回家休息'], correctIndex: 1, points: 20 },
+            { id: 'mc5', type: 'choice', text: '下列何者「不是」正確的醫療廢棄物分類方式？', options: ['尖銳物品丟入利器盒', '被血液污染的紗布視為感染性事業廢棄物', '將針具與一般垃圾混合丟棄', '生物性廢棄物依規定滅菌後處理'], correctIndex: 2, points: 20 }
         ];
 
         let state = {
@@ -644,46 +775,59 @@
             total: 0,
             feedback: null,
             locked: false,
-            leaderboard: {}
+            leaderboard: {},
+            stats: {},
+            registrationOpen: true
         };
 
         let pollTimer = null;
+        let lastKnownRegOpen = null;
 
-        async function loadLeaderboard() {
+        async function fetchState(action, extraParams) {
             try {
-                const res = await fetch(apiUrl({ action: 'list' }));
+                const res = await fetch(apiUrl(Object.assign({ action: action }, extraParams || {})));
                 if (!res.ok) throw new Error('HTTP ' + res.status);
-                return await res.json();
+                const data = await res.json();
+                state.leaderboard = data.leaderboard || {};
+                state.stats = data.stats || {};
+                state.registrationOpen = (data.registrationOpen !== false);
+                return data;
             } catch (e) {
-                console.error('讀取排行榜失敗:', e.message);
-                return state.leaderboard || {};
+                console.error('與伺服器溝通失敗:', e.message);
+                return null;
             }
         }
 
         async function updateMyEntry(finished) {
             if (!state.playerId) return;
-            try {
-                const res = await fetch(apiUrl({
-                    action: 'update',
-                    playerId: sanitizeKey(state.playerId),
-                    name: state.name,
-                    score: state.score,
-                    correct: state.correct,
-                    total: state.total,
-                    finished: !!finished
-                }));
-                if (res.ok) {
-                    state.leaderboard = await res.json();
-                    renderBoardList();
-                }
-            } catch (e) {
-                console.error('更新分數失敗:', e.message);
-            }
+            await fetchState('update', {
+                playerId: sanitizeKey(state.playerId),
+                name: state.name,
+                score: state.score,
+                correct: state.correct,
+                total: state.total,
+                finished: !!finished
+            });
+            renderBoardList();
+            renderStatsList();
+        }
+
+        function logAnswerStat(questionId, isCorrect) {
+            fetchState('logAnswer', { questionId: questionId, correct: !!isCorrect }).then(() => {
+                renderStatsList();
+            });
         }
 
         async function refreshLeaderboard() {
-            state.leaderboard = await loadLeaderboard();
+            await fetchState('list');
             renderBoardList();
+            renderStatsList();
+            if (state.screen === 'login' && state.registrationOpen !== lastKnownRegOpen) {
+                lastKnownRegOpen = state.registrationOpen;
+                render();
+            } else {
+                lastKnownRegOpen = state.registrationOpen;
+            }
         }
 
         function startPolling() {
@@ -733,6 +877,46 @@
             return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         }
 
+        function statsHtml() {
+            return `
+        <div class="card mt-3">
+          <div class="board-head"><div class="live-dot" style="background:var(--coral)"></div><div class="board-title">📊 各題答錯率</div></div>
+          <div class="board-sub">依答錯率高到低排序，每 2 秒自動更新</div>
+          <div id="stats-list"></div>
+        </div>
+      `;
+        }
+
+        function renderStatsList() {
+            const el = document.getElementById('stats-list');
+            if (!el) return;
+            const qMap = {};
+            QUESTIONS.forEach(q => { qMap[q.id] = q; });
+            const entries = Object.entries(state.stats || {})
+                .map(([qid, s]) => ({
+                    qid,
+                    total: s.total || 0,
+                    wrongRate: s.total > 0 ? Math.round((s.wrong / s.total) * 100) : 0,
+                    text: qMap[qid] ? qMap[qid].text : qid
+                }))
+                .sort((a, b) => b.wrongRate - a.wrongRate);
+            if (entries.length === 0) {
+                el.innerHTML = `<div class="lb-empty">📭 還沒有作答資料</div>`;
+                return;
+            }
+            el.innerHTML = entries.map(e => {
+                const shortText = e.text.length > 15 ? e.text.slice(0, 15) + '…' : e.text;
+                const barColor = e.wrongRate >= 50 ? 'var(--coral)' : (e.wrongRate >= 25 ? 'var(--orange)' : 'var(--green)');
+                return `
+          <div class="stat-bar-row" title="${escapeHtml(e.text)}（共 ${e.total} 人次作答）">
+            <div class="stat-bar-label">${escapeHtml(shortText)}</div>
+            <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${e.wrongRate}%; background:${barColor};"></div></div>
+            <div class="stat-bar-pct">${e.wrongRate}%</div>
+          </div>
+        `;
+            }).join('');
+        }
+
         function render() {
             const app = document.getElementById('app');
             if (state.screen === 'login') {
@@ -742,24 +926,43 @@
               <div class="card">
                 <p class="eyebrow">🎮 開始作答</p>
                 <h2>輸入你的姓名加入擂台</h2>
-                <p class="sub">共 ${QUESTIONS.length} 題是非題，題目依序出現，答對加分、答錯扣分（最低 0 分，不會變成負數），全部作答完畢會統計總分並即時顯示在排行榜上！</p>
-                <label for="nameInput">姓名 / 暱稱</label>
-                <input id="nameInput" type="text" placeholder="例如：王小明（護理站A）" maxlength="20">
-                <button class="btn btn-primary btn-block" id="joinBtn">🚀 加入作答</button>
-                <div class="foot-link"><button id="resetBoardBtn">主辦人選項：清空排行榜</button></div>
+                <p class="sub">共 ${QUESTIONS.length} 題，包含是非題與選擇題，答對加分、答錯扣分（最低 0 分，不會變成負數），全部作答完畢會統計總分並即時顯示在排行榜上！</p>
+                ${state.registrationOpen ? `
+                  <label for="nameInput">姓名 / 暱稱</label>
+                  <input id="nameInput" type="text" placeholder="例如：王小明（護理站A）" maxlength="20">
+                  <button class="btn btn-primary btn-block" id="joinBtn">🚀 加入作答</button>
+                ` : `
+                  <div class="closed-msg">🚫 目前尚未開放加入作答，請稍候主辦人開放後再試一次</div>
+                `}
+                <div class="foot-link">
+                  <button id="resetBoardBtn">主辦人選項：清空排行榜與統計</button>
+                  <button id="toggleRegBtn">主辦人選項：${state.registrationOpen ? '🔒 關閉加入作答' : '🔓 開啟加入作答'}</button>
+                </div>
               </div>
             </div>
-            <div class="col-lg-4">${boardHtml()}</div>
+            <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
           </div>
         `;
-                document.getElementById('joinBtn').onclick = onJoin;
-                document.getElementById('nameInput').addEventListener('keydown', e => { if (e.key === 'Enter') onJoin(); });
+                if (state.registrationOpen) {
+                    document.getElementById('joinBtn').onclick = onJoin;
+                    document.getElementById('nameInput').addEventListener('keydown', e => { if (e.key === 'Enter') onJoin(); });
+                }
                 document.getElementById('resetBoardBtn').onclick = onResetBoard;
+                document.getElementById('toggleRegBtn').onclick = onToggleRegistration;
                 renderBoardList();
+                renderStatsList();
             }
             else if (state.screen === 'game') {
                 const q = state.questions[state.currentIndex];
                 const pct = Math.round((state.currentIndex / state.questions.length) * 100);
+                const answersHtml = q.type === 'choice'
+                    ? `<div class="choice-list">${q.options.map((opt, idx) => `
+                  <button class="choice-btn" id="choiceBtn${idx}" ${state.locked ? 'disabled' : ''}><span class="choice-letter">${String.fromCharCode(65 + idx)}</span>${escapeHtml(opt)}</button>
+                `).join('')}</div>`
+                    : `<div class="answers">
+                  <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
+                  <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
+                </div>`;
                 app.innerHTML = `
           <div class="row g-3">
             <div class="col-lg-8">
@@ -777,22 +980,26 @@
                   <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
                 </div>
                 <div class="qcard">
-                  <div class="qpoints">⭐ 本題配分：${q.points} 分</div>
+                  <div class="qpoints">⭐ 本題配分：${q.points} 分　${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
                   <div class="qtext">${escapeHtml(q.text)}</div>
                 </div>
-                <div class="answers">
-                  <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
-                  <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
-                </div>
+                ${answersHtml}
                 <div class="feedback ${state.feedback ? (state.feedback.ok ? 'ok' : 'no') : ''}">${state.feedback ? state.feedback.text : ''}</div>
               </div>
             </div>
-            <div class="col-lg-4">${boardHtml()}</div>
+            <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
           </div>
         `;
-                document.getElementById('btnTrue').onclick = () => answer(true);
-                document.getElementById('btnFalse').onclick = () => answer(false);
+                if (q.type === 'choice') {
+                    q.options.forEach((opt, idx) => {
+                        document.getElementById('choiceBtn' + idx).onclick = () => answer(idx);
+                    });
+                } else {
+                    document.getElementById('btnTrue').onclick = () => answer(true);
+                    document.getElementById('btnFalse').onclick = () => answer(false);
+                }
                 renderBoardList();
+                renderStatsList();
             }
             else if (state.screen === 'end') {
                 const entries = sortedEntries();
@@ -813,14 +1020,15 @@
                 <button class="btn btn-primary btn-block" id="restartBtn">🔁 換人 / 重新開始</button>
               </div>
             </div>
-            <div class="col-lg-4">${boardHtml()}</div>
+            <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
           </div>
         `;
                 document.getElementById('restartBtn').onclick = () => {
-                    state = { screen: 'login', playerId: '', name: '', questions: [], currentIndex: 0, score: 0, correct: 0, total: 0, feedback: null, locked: false, leaderboard: state.leaderboard };
+                    state = { screen: 'login', playerId: '', name: '', questions: [], currentIndex: 0, score: 0, correct: 0, total: 0, feedback: null, locked: false, leaderboard: state.leaderboard, stats: state.stats, registrationOpen: state.registrationOpen };
                     render();
                 };
                 renderBoardList();
+                renderStatsList();
             }
         }
 
@@ -846,11 +1054,11 @@
             render();
         }
 
-        function answer(val) {
+        function answer(selected) {
             if (state.locked) return;
             state.locked = true;
             const q = state.questions[state.currentIndex];
-            const isCorrect = (val === q.answer);
+            const isCorrect = q.type === 'choice' ? (selected === q.correctIndex) : (selected === q.answer);
             const delta = isCorrect ? q.points : -q.points;
             const beforeScore = state.score;
             state.score = Math.max(0, state.score + delta);
@@ -866,10 +1074,23 @@
             const scoreNum = document.getElementById('scoreNum');
             if (dial) dial.classList.add(isCorrect ? 'flash-correct' : 'flash-wrong');
             if (scoreNum) scoreNum.textContent = state.score;
-            document.getElementById('btnTrue').disabled = true;
-            document.getElementById('btnFalse').disabled = true;
+
+            if (q.type === 'choice') {
+                q.options.forEach((opt, idx) => {
+                    const btn = document.getElementById('choiceBtn' + idx);
+                    if (!btn) return;
+                    btn.disabled = true;
+                    if (idx === q.correctIndex) btn.classList.add('correct');
+                    else if (idx === selected) btn.classList.add('wrong-selected');
+                });
+            } else {
+                document.getElementById('btnTrue').disabled = true;
+                document.getElementById('btnFalse').disabled = true;
+            }
             document.querySelector('.feedback').textContent = state.feedback.text;
             document.querySelector('.feedback').className = 'feedback ' + (isCorrect ? 'ok' : 'no');
+
+            logAnswerStat(q.id, isCorrect);
 
             const isLast = (state.currentIndex + 1) >= state.questions.length;
             updateMyEntry(isLast);
@@ -886,18 +1107,20 @@
         }
 
         async function onResetBoard() {
-            if (!confirm('確定要清空所有玩家的排行榜資料嗎？此動作無法復原。')) return;
-            try {
-                const res = await fetch(apiUrl({ action: 'reset' }));
-                state.leaderboard = res.ok ? await res.json() : {};
-            } catch (e) {
-                console.error('清空排行榜失敗:', e.message);
-            }
+            if (!confirm('確定要清空所有玩家的排行榜與答錯率統計資料嗎？此動作無法復原。')) return;
+            await fetchState('reset');
+            render();
+        }
+
+        async function onToggleRegistration() {
+            const newOpen = !state.registrationOpen;
+            await fetchState('setRegistration', { open: newOpen });
             render();
         }
 
         (async function init() {
-            state.leaderboard = await loadLeaderboard();
+            await fetchState('list');
+            lastKnownRegOpen = state.registrationOpen;
             render();
             startPolling();
         })();
