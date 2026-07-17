@@ -168,6 +168,209 @@
             }
         }
 
+        /* ---------- 互動角色：泡泡好夥伴 ---------- */
+        .mascot-buddy {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 4px;
+        }
+
+        .buddy-body {
+            position: relative;
+            width: 84px;
+            height: 84px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 34% 28%, #ffffff, #BFF6FF 42%, #4FD1E8 100%);
+            box-shadow: 0 12px 22px -8px rgba(34,211,238,0.65), inset -6px -6px 14px rgba(0,0,0,0.08);
+            animation: buddyBob 2.6s ease-in-out infinite;
+        }
+
+        @keyframes buddyBob {
+            0%,100% {
+                transform: translateY(0) rotate(-3deg);
+            }
+
+            50% {
+                transform: translateY(-9px) rotate(3deg);
+            }
+        }
+
+        .buddy-body.cheer {
+            animation: buddyCheer .6s ease;
+        }
+
+        @keyframes buddyCheer {
+            0% {
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+
+            30% {
+                transform: translateY(-26px) rotate(-14deg) scale(1.15);
+            }
+
+            60% {
+                transform: translateY(-8px) rotate(10deg) scale(1.05);
+            }
+
+            100% {
+                transform: translateY(0) rotate(0deg) scale(1);
+            }
+        }
+
+        .buddy-eye {
+            position: absolute;
+            top: 36%;
+            width: 9px;
+            height: 13px;
+            background: var(--ink);
+            border-radius: 50%;
+            animation: buddyBlink 4.2s ease-in-out infinite;
+        }
+
+            .buddy-eye.left {
+                left: 28%;
+            }
+
+            .buddy-eye.right {
+                right: 28%;
+            }
+
+        @keyframes buddyBlink {
+            0%,90%,100% {
+                transform: scaleY(1);
+            }
+
+            94%,96% {
+                transform: scaleY(0.15);
+            }
+        }
+
+        .buddy-cheek {
+            position: absolute;
+            top: 52%;
+            width: 10px;
+            height: 6px;
+            background: rgba(255,105,150,0.6);
+            border-radius: 50%;
+            filter: blur(1px);
+        }
+
+            .buddy-cheek.left {
+                left: 16%;
+            }
+
+            .buddy-cheek.right {
+                right: 16%;
+            }
+
+        .buddy-mouth {
+            position: absolute;
+            top: 56%;
+            left: 50%;
+            width: 16px;
+            height: 8px;
+            border-bottom: 3px solid var(--ink);
+            border-radius: 0 0 16px 16px;
+            transform: translateX(-50%);
+        }
+
+        .buddy-shine {
+            position: absolute;
+            top: 12%;
+            left: 20%;
+            width: 16px;
+            height: 11px;
+            background: rgba(255,255,255,0.9);
+            border-radius: 50%;
+            filter: blur(1px);
+            transform: rotate(-20deg);
+        }
+
+        .buddy-body.big {
+            width: 116px;
+            height: 116px;
+            margin: 0 auto 10px;
+        }
+
+        .buddy-body.big .buddy-eye {
+            width: 12px;
+            height: 17px;
+        }
+
+        .buddy-body.big .buddy-mouth {
+            width: 22px;
+            height: 11px;
+            border-bottom-width: 4px;
+        }
+
+        /* ---------- 互動角色：搗蛋小病菌 ---------- */
+        .germ-squad {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            display: flex;
+            gap: 6px;
+            z-index: 2;
+        }
+
+        .germ {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            position: relative;
+            background: radial-gradient(circle at 35% 30%, #9AE6B4, #2ECC71 75%);
+            box-shadow: 0 4px 8px -3px rgba(46,204,113,0.65);
+            animation: germWiggle 1.7s ease-in-out infinite;
+        }
+
+            .germ::before, .germ::after {
+                content: '';
+                position: absolute;
+                width: 4px;
+                height: 4px;
+                background: #2ECC71;
+                border-radius: 50%;
+            }
+
+            .germ::before {
+                top: -3px;
+                left: 3px;
+            }
+
+            .germ::after {
+                bottom: -3px;
+                right: 3px;
+            }
+
+            .germ:nth-child(2) {
+                animation-delay: .3s;
+            }
+
+            .germ:nth-child(3) {
+                animation-delay: .6s;
+            }
+
+        @keyframes germWiggle {
+            0%,100% {
+                transform: rotate(-10deg);
+            }
+
+            50% {
+                transform: rotate(10deg);
+            }
+        }
+
+        .germ.flee {
+            animation: germFlee .55s ease forwards !important;
+        }
+
+        @keyframes germFlee {
+            to {
+                transform: translate(60px, -46px) scale(0.25) rotate(35deg);
+                opacity: 0;
+            }
+        }
+
         /* ---------- 互動特效：漣漪與點擊粒子 ---------- */
         .ripple-fx {
             position: absolute;
@@ -524,6 +727,7 @@
             border-radius: 22px;
             padding: 26px;
             margin-bottom: 22px;
+            position: relative;
         }
 
         .qpoints {
@@ -1195,6 +1399,32 @@
             return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         }
 
+        function buddyHtml(big) {
+            return `
+                <div class="mascot-buddy">
+                  <div class="buddy-body${big ? ' big' : ''}">
+                    <span class="buddy-shine"></span>
+                    <span class="buddy-eye left"></span>
+                    <span class="buddy-eye right"></span>
+                    <span class="buddy-cheek left"></span>
+                    <span class="buddy-cheek right"></span>
+                    <span class="buddy-mouth"></span>
+                  </div>
+                </div>
+            `;
+        }
+
+        function cheerBuddy() {
+            const body = document.querySelector('.buddy-body');
+            if (!body) return;
+            body.classList.add('cheer');
+            body.addEventListener('animationend', () => body.classList.remove('cheer'), { once: true });
+        }
+
+        function fleeGerms() {
+            document.querySelectorAll('.germ-squad .germ').forEach(g => g.classList.add('flee'));
+        }
+
         function render() {
             const app = document.getElementById('app');
             if (state.screen === 'login') {
@@ -1202,6 +1432,7 @@
                                               <div class="row g-3">
                                                 <div class="col-lg-8">
                                                   <div class="card">
+                                                    ${buddyHtml(false)}
                                                     <p class="eyebrow">🎮 開始作答</p>
                                                     <h2>輸入你的姓名與職稱 加入擂台</h2>
                                                     ${state.registrationOpen ? `
@@ -1237,6 +1468,7 @@
                                               <div class="row g-3">
                                                 <div class="col-lg-8">
                                                   <div class="card">
+                                                    ${buddyHtml(false)}
                                                     <div class="dial-zone">
                                                       <div class="dial" id="dial">
                                                         <div class="dial-inner">
@@ -1250,11 +1482,12 @@
                                                       <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
                                                     </div>
                                                     <div class="qcard">
+                                                      <div class="germ-squad"><span class="germ"></span><span class="germ"></span><span class="germ"></span></div>
                                                       <div class="qpoints">⭐ 本題配分：${q.points} 分　${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
                                                       <div class="qtext">${escapeHtml(q.text)}</div>
                                                     </div>
                                                     ${answersHtml}
-                                                    <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
+                                                    <div class="feedback" id="feedbackZone">${state.locked ? '🫧 好夥伴努力清潔中，前往下一題…' : ''}</div>
                                                   </div>
                                                 </div>
                                                 <div class="col-lg-4">${boardHtml()}</div>
@@ -1277,6 +1510,7 @@
                                               <div class="row g-3">
                                                 <div class="col-lg-8">
                                                   <div class="card">
+                                                    ${buddyHtml(true)}
                                                     <span class="trophy">🏆</span>
                                                     <p class="eyebrow text-center">作答完成</p>
                                                     <h2 class="text-center">${escapeHtml(state.name)}，你的結果出爐了！</h2>
@@ -1293,6 +1527,8 @@
                                               </div>
                                             `;
                 renderBoardList();
+                cheerBuddy();
+                setTimeout(cheerBuddy, 700);
             }
         }
 
@@ -1343,12 +1579,18 @@
                 document.getElementById('btnFalse').disabled = true;
             }
             const fz = document.getElementById('feedbackZone');
-            if (fz) fz.textContent = '📮 已送出，前往下一題…';
+            if (fz) fz.textContent = '🫧 好夥伴努力清潔中，前往下一題…';
 
-            logAnswerStat(q.id, isCorrect);
+            // 角色互動反應：每次作答都會有相同的動畫，不會透露對錯
+            cheerBuddy();
+            fleeGerms();
 
             const isLast = (state.currentIndex + 1) >= state.questions.length;
-            updateMyEntry(isLast);
+
+            // 不再每題都 postback，只有在整組題目全部答完時才送出一次結果
+            if (isLast) {
+                updateMyEntry(true);
+            }
 
             setTimeout(() => {
                 state.currentIndex += 1;
