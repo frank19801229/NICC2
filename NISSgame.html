@@ -6,225 +6,129 @@
     <title>感控問答擂台</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Orbitron:wght@600;700;800;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
 
         :root {
-            --pink: #FF2E9A;
-            --pink-dark: #C4157A;
-            --orange: #FF9D3D;
-            --purple: #8B2CF5;
-            --purple-dark: #5B12B8;
-            --cyan: #2DE8FF;
-            --cyan-dark: #00B8D9;
-            --yellow: #FFE45E;
-            --green: #2FE88A;
-            --coral: #FF4D6D;
-            --ink: #1A0E2E;
-            --slate: #9A8FC2;
-            --card: rgba(20, 10, 40, 0.55);
-            --card-solid: #16092C;
-            --line: rgba(255,255,255,0.14);
-            --glass-hi: rgba(255,255,255,0.08);
-            --gold: #FFD34D;
-            --silver: #D9E2F1;
-            --bronze: #E7A15E;
-            --text-light: #F4EEFF;
+            --mint: #14C1A0;
+            --mint-dark: #0EA187;
+            --mint-pale: #E3FBF4;
+            --sky: #3EC1E8;
+            --sky-pale: #E4F7FC;
+            --sun: #FFC93C;
+            --sun-pale: #FFF6DD;
+            --coral: #FF6B6B;
+            --coral-pale: #FFE9E9;
+            --purple: #8B7CF6;
+            --ink: #1F2A37;
+            --slate: #7C8A96;
+            --card: #FFFFFF;
+            --line: #E7F3EF;
+            --bg-base: #F3FBF9;
         }
 
         * {
             box-sizing: border-box;
         }
 
-        html, body {
+        body {
             margin: 0;
             min-height: 100vh;
-        }
-
-        body {
             font-family: 'Noto Sans TC', sans-serif;
-            color: var(--text-light);
+            color: var(--ink);
             background:
-                radial-gradient(circle at 12% 8%, rgba(255,46,154,0.45), transparent 42%),
-                radial-gradient(circle at 88% 6%, rgba(45,232,255,0.38), transparent 40%),
-                radial-gradient(circle at 20% 92%, rgba(139,44,245,0.4), transparent 45%),
-                radial-gradient(circle at 82% 88%, rgba(255,228,94,0.22), transparent 40%),
-                linear-gradient(160deg, #0A0318 0%, #1B0A3D 40%, #2E0A52 70%, #3D0E5C 100%);
+                radial-gradient(circle at 10% -5%, rgba(20,193,160,0.16), transparent 42%),
+                radial-gradient(circle at 92% 8%, rgba(62,193,232,0.18), transparent 40%),
+                radial-gradient(circle at 50% 105%, rgba(255,201,60,0.16), transparent 45%),
+                var(--bg-base);
             background-attachment: fixed;
-            position: relative;
-            overflow-x: hidden;
-        }
-
-        /* 動態極光流動層 */
-        body::before {
-            content: '';
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            background:
-                radial-gradient(circle at 30% 20%, rgba(255,46,154,0.18), transparent 35%),
-                radial-gradient(circle at 70% 70%, rgba(45,232,255,0.16), transparent 35%);
-            background-size: 200% 200%;
-            animation: auroraDrift 18s ease-in-out infinite;
-            mix-blend-mode: screen;
-        }
-
-        /* 細緻網格光暈紋理，增添賽博感 */
-        body::after {
-            content: '';
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
-            background-image:
-                linear-gradient(rgba(255,255,255,0.035) 1px, transparent 1px),
-                linear-gradient(90deg, rgba(255,255,255,0.035) 1px, transparent 1px);
-            background-size: 42px 42px;
-            mask-image: radial-gradient(circle at 50% 30%, rgba(0,0,0,0.9), transparent 75%);
-            opacity: 0.6;
-        }
-
-        @keyframes auroraDrift {
-            0%, 100% { background-position: 0% 0%, 100% 100%; }
-            50% { background-position: 100% 60%, 0% 40%; }
-        }
-
-        #bg-particles {
-            position: fixed;
-            inset: 0;
-            z-index: 0;
-            pointer-events: none;
         }
 
         .wrap {
             max-width: 1120px;
             margin: 0 auto;
             padding: 22px 16px 60px;
-            position: relative;
-            z-index: 1;
         }
 
         /* ---------- 頂部品牌列 ---------- */
         .brand {
             display: flex;
             align-items: center;
-            gap: 14px;
-            margin-bottom: 26px;
+            gap: 12px;
+            margin-bottom: 22px;
             justify-content: center;
         }
 
             .brand .mascot {
                 font-size: 2.1rem;
-                filter: drop-shadow(0 0 14px rgba(45,232,255,0.75)) drop-shadow(0 4px 10px rgba(0,0,0,0.4));
+                filter: drop-shadow(0 4px 10px rgba(20,193,160,0.35));
                 animation: bounce 2.4s ease-in-out infinite;
-                display: inline-block;
             }
 
         @keyframes bounce {
             0%,100% {
-                transform: translateY(0) rotate(-4deg) scale(1);
+                transform: translateY(0) rotate(-4deg);
             }
 
             50% {
-                transform: translateY(-8px) rotate(4deg) scale(1.06);
+                transform: translateY(-6px) rotate(4deg);
             }
         }
 
         .brand h1 {
-            font-family: 'Orbitron', 'Baloo 2', sans-serif;
+            font-family: 'Baloo 2', sans-serif;
             font-size: 1.5rem;
             font-weight: 800;
-            letter-spacing: 0.04em;
+            letter-spacing: 0.02em;
             margin: 0;
-            background: linear-gradient(90deg, #FF6FC6, var(--cyan), var(--yellow), #FF6FC6);
-            background-size: 300% auto;
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            animation: shineText 5s linear infinite;
-            filter: drop-shadow(0 2px 14px rgba(255,46,154,0.35));
-        }
-
-        @keyframes shineText {
-            to { background-position: 300% center; }
+            color: var(--ink);
         }
 
         .brand .badge-live {
             font-family: 'Baloo 2', sans-serif;
             font-size: 1.3rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--yellow), var(--orange));
-            color: #3a1d00;
-            padding: 4px 14px;
+            background: linear-gradient(135deg, var(--sun), #FFB020);
+            color: #6B4400;
+            padding: 4px 12px;
             border-radius: 999px;
-            box-shadow: 0 0 18px rgba(255,157,61,0.75), 0 4px 10px rgba(0,0,0,0.35);
-            position: relative;
-            animation: badgePulse 2.2s ease-in-out infinite;
+            box-shadow: 0 6px 14px -6px rgba(255,176,32,0.6);
         }
 
-        @keyframes badgePulse {
-            0%, 100% { box-shadow: 0 0 12px rgba(255,157,61,0.6), 0 4px 10px rgba(0,0,0,0.35); }
-            50% { box-shadow: 0 0 26px rgba(255,157,61,0.95), 0 4px 14px rgba(0,0,0,0.4); }
-        }
-
-        /* ---------- 卡片（玻璃霓虹風） ---------- */
+        /* ---------- 卡片 ---------- */
         .card {
-            background: linear-gradient(180deg, rgba(35,16,66,0.72), rgba(18,8,38,0.78));
-            backdrop-filter: blur(18px) saturate(150%);
-            -webkit-backdrop-filter: blur(18px) saturate(150%);
-            border: 1.5px solid var(--line);
+            background: var(--card);
+            border: 1px solid var(--line);
             border-radius: 28px;
             padding: 28px;
-            box-shadow:
-                0 25px 60px -20px rgba(0,0,0,0.65),
-                0 0 0 1px rgba(255,255,255,0.03) inset,
-                0 0 40px -12px rgba(139,44,245,0.45);
+            box-shadow: 0 16px 36px -20px rgba(15,60,50,0.28);
             position: relative;
             overflow: hidden;
-            transition: transform .25s ease, box-shadow .25s ease;
-            transform-style: preserve-3d;
-            will-change: transform;
+            animation: cardIn .35s ease both;
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
             .card::before {
                 content: '';
                 position: absolute;
-                top: -60px;
-                right: -60px;
-                width: 220px;
-                height: 220px;
+                top: -46px;
+                right: -46px;
+                width: 150px;
+                height: 150px;
                 border-radius: 50%;
-                background: radial-gradient(circle, rgba(255,46,154,0.35), transparent 70%);
-                pointer-events: none;
+                background: radial-gradient(circle, rgba(20,193,160,0.14), transparent 70%);
             }
-
-            .card::after {
-                content: '';
-                position: absolute;
-                inset: 0;
-                border-radius: 28px;
-                padding: 1.5px;
-                background: linear-gradient(120deg, rgba(255,46,154,0.55), rgba(45,232,255,0.5), rgba(255,228,94,0.4), rgba(255,46,154,0.55));
-                background-size: 300% 300%;
-                -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
-                -webkit-mask-composite: xor;
-                mask-composite: exclude;
-                animation: borderFlow 8s linear infinite;
-                pointer-events: none;
-            }
-
-        @keyframes borderFlow {
-            to { background-position: 300% 0%; }
-        }
 
         .eyebrow {
-            font-family: 'Orbitron', 'Baloo 2', sans-serif;
+            font-family: 'Baloo 2', sans-serif;
             font-size: 1.4rem;
             font-weight: 700;
-            letter-spacing: 0.12em;
+            letter-spacing: 0.1em;
             text-transform: uppercase;
-            color: var(--green);
-            text-shadow: 0 0 14px rgba(47,232,138,0.65);
+            color: var(--mint-dark);
             margin: 0 0 6px;
         }
 
@@ -233,17 +137,15 @@
             font-size: 1.6rem;
             font-weight: 800;
             margin: 0 0 8px;
-            color: var(--text-light);
-            text-shadow: 0 2px 12px rgba(139,44,245,0.5);
+            color: var(--ink);
         }
 
         p.sub {
-            color: #FF8FCB;
+            color: var(--sky);
             margin: 0 0 22px;
             line-height: 1.7;
             font-size: 1.3rem;
             font-weight: 800;
-            text-shadow: 0 0 10px rgba(255,111,198,0.4);
         }
 
         label {
@@ -252,7 +154,6 @@
             color: var(--slate);
             font-weight: 600;
             margin-bottom: 6px;
-            letter-spacing: 0.03em;
         }
 
         input[type=text] {
@@ -262,20 +163,16 @@
             border: 2.5px solid var(--line);
             font-size: 1.5rem;
             font-family: inherit;
-            background: rgba(10, 4, 24, 0.55);
-            color: var(--text-light);
-            transition: border-color .18s ease, box-shadow .18s ease, background .18s ease;
+            background: var(--bg-base);
+            color: var(--ink);
+            transition: border-color .15s ease, box-shadow .15s ease, background .15s ease;
         }
-
-            input[type=text]::placeholder {
-                color: rgba(244,238,255,0.35);
-            }
 
             input[type=text]:focus {
                 outline: none;
-                border-color: var(--pink);
-                box-shadow: 0 0 0 4px rgba(255,46,154,0.22), 0 0 24px rgba(255,46,154,0.35);
-                background: rgba(10, 4, 24, 0.75);
+                border-color: var(--mint);
+                box-shadow: 0 0 0 4px rgba(20,193,160,0.16);
+                background: #fff;
             }
 
         /* ---------- 按鈕 ---------- */
@@ -288,10 +185,7 @@
             font-size: 1.05rem;
             border-radius: 16px;
             padding: 15px 22px;
-            position: relative;
-            overflow: hidden;
             transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
-            isolation: isolate;
         }
 
             .btn:active {
@@ -299,22 +193,14 @@
             }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--pink), var(--purple) 55%, var(--cyan-dark));
-            background-size: 220% 220%;
+            background: linear-gradient(135deg, var(--mint), var(--sky));
             color: #fff;
-            box-shadow: 0 10px 28px -8px rgba(255,46,154,0.65), 0 0 30px -10px rgba(45,232,255,0.5);
-            animation: gradientShift 6s ease infinite;
-        }
-
-        @keyframes gradientShift {
-            0%,100% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
+            box-shadow: 0 10px 24px -8px rgba(20,193,160,0.55);
         }
 
             .btn-primary:hover {
-                filter: brightness(1.15);
-                box-shadow: 0 14px 34px -8px rgba(255,46,154,0.8), 0 0 40px -6px rgba(45,232,255,0.7);
-                transform: translateY(-2px);
+                filter: brightness(1.06);
+                box-shadow: 0 12px 26px -8px rgba(20,193,160,0.65);
             }
 
         .btn-block {
@@ -324,7 +210,7 @@
         }
 
         .btn-ghost {
-            background: rgba(255,255,255,0.04);
+            background: transparent;
             color: var(--slate);
             border: 2px solid var(--line);
             font-weight: 600;
@@ -332,25 +218,9 @@
         }
 
             .btn-ghost:hover {
-                border-color: var(--pink);
-                color: var(--pink);
-                box-shadow: 0 0 16px rgba(255,46,154,0.3);
+                border-color: var(--mint);
+                color: var(--mint-dark);
             }
-
-        /* 通用漣漪點擊效果 */
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            transform: scale(0);
-            background: rgba(255,255,255,0.55);
-            pointer-events: none;
-            animation: rippleAnim .6s ease-out forwards;
-            mix-blend-mode: overlay;
-        }
-
-        @keyframes rippleAnim {
-            to { transform: scale(3.2); opacity: 0; }
-        }
 
         .foot-link {
             margin-top: 18px;
@@ -388,14 +258,10 @@
             justify-content: center;
             margin-bottom: 8px;
             border-radius: 50%;
-            background: conic-gradient(from 0deg, var(--cyan), var(--pink), var(--yellow), var(--purple), var(--cyan));
+            background: conic-gradient(var(--sky) 0deg, var(--mint) 180deg, var(--sun) 360deg);
             padding: 7px;
-            box-shadow: 0 0 40px -6px rgba(139,44,245,0.75), 0 12px 28px -10px rgba(0,0,0,0.5);
-            animation: dialSpin 7s linear infinite;
-        }
-
-        @keyframes dialSpin {
-            to { background-position: 0 0; filter: hue-rotate(360deg); }
+            box-shadow: 0 14px 30px -12px rgba(20,193,160,0.45);
+            transition: box-shadow .3s ease;
         }
 
             .dial::after {
@@ -403,7 +269,7 @@
                 position: absolute;
                 inset: 7px;
                 border-radius: 50%;
-                background: radial-gradient(circle at 35% 30%, #241246, #120825 70%);
+                background: #fff;
             }
 
         .dial-inner {
@@ -420,46 +286,54 @@
             animation: pulseBad .7s ease-out;
         }
 
-        .dial.flash-neutral {
-            animation: pulseNeutral .6s ease-out;
-        }
-
         @keyframes pulseGood {
-            0% { box-shadow: 0 0 0 0 rgba(47,232,138,0.6), 0 0 40px -6px rgba(139,44,245,0.75); }
-            100% { box-shadow: 0 0 0 34px rgba(47,232,138,0), 0 0 40px -6px rgba(139,44,245,0.75); }
+            0% {
+                box-shadow: 0 0 0 0 rgba(20,193,160,0.55);
+            }
+
+            100% {
+                box-shadow: 0 0 0 30px rgba(20,193,160,0);
+            }
         }
 
         @keyframes pulseBad {
-            0% { box-shadow: 0 0 0 0 rgba(255,77,109,0.6), 0 0 40px -6px rgba(139,44,245,0.75); }
-            100% { box-shadow: 0 0 0 34px rgba(255,77,109,0), 0 0 40px -6px rgba(139,44,245,0.75); }
-        }
+            0% {
+                box-shadow: 0 0 0 0 rgba(255,107,107,0.55);
+            }
 
-        @keyframes pulseNeutral {
-            0% { box-shadow: 0 0 0 0 rgba(45,232,255,0.55), 0 0 40px -6px rgba(139,44,245,0.75); }
-            100% { box-shadow: 0 0 0 30px rgba(45,232,255,0), 0 0 40px -6px rgba(139,44,245,0.75); }
+            100% {
+                box-shadow: 0 0 0 30px rgba(255,107,107,0);
+            }
         }
 
         .dial-score {
-            font-family: 'Orbitron', 'Baloo 2', sans-serif;
+            font-family: 'Baloo 2', sans-serif;
             font-size: 2.7rem;
             font-weight: 800;
-            color: #fff;
-            text-shadow: 0 0 18px rgba(45,232,255,0.7);
+            color: var(--ink);
+            transition: color .2s ease;
         }
 
         .dial-label {
             font-size: 1.3rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            color: var(--cyan);
+            color: var(--slate);
             font-weight: 600;
         }
 
-        /* ---------- 進度列 ---------- */
+        .flash-correct .dial-score {
+            color: var(--mint-dark);
+        }
+
+        .flash-wrong .dial-score {
+            color: var(--coral);
+        }
+
         .progress-wrap {
             font-family: 'Baloo 2', sans-serif;
             font-size: 1.2rem;
-            color: var(--text-light);
+            color: var(--ink);
             text-align: center;
             margin-bottom: 18px;
             font-weight: 600;
@@ -467,9 +341,8 @@
 
             .progress-wrap .name-chip {
                 display: inline-block;
-                background: rgba(255,255,255,0.08);
-                border: 1px solid var(--line);
-                color: var(--cyan);
+                background: var(--mint-pale);
+                color: var(--mint-dark);
                 padding: 3px 12px;
                 border-radius: 999px;
                 margin-left: 4px;
@@ -478,35 +351,25 @@
         .progress-bar-track {
             height: 12px;
             border-radius: 999px;
-            background: rgba(255,255,255,0.08);
+            background: var(--line);
             overflow: hidden;
             margin-top: 8px;
-            border: 1px solid var(--line);
         }
 
         .progress-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--yellow), var(--orange), var(--pink));
-            background-size: 200% 100%;
-            transition: width .5s cubic-bezier(.2,.9,.3,1);
+            background: linear-gradient(90deg, var(--mint), var(--sky));
+            transition: width .35s ease;
             border-radius: 999px;
-            position: relative;
-            box-shadow: 0 0 14px rgba(255,157,61,0.7);
-            animation: shimmerBar 3s linear infinite;
-        }
-
-        @keyframes shimmerBar {
-            to { background-position: -200% 0; }
         }
 
         /* ---------- 題目卡 ---------- */
         .qcard {
-            background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02));
+            background: linear-gradient(180deg, #FBFFFE, var(--mint-pale));
             border: 2px solid var(--line);
             border-radius: 22px;
             padding: 26px;
             margin-bottom: 22px;
-            position: relative;
         }
 
         .qpoints {
@@ -515,18 +378,18 @@
             font-weight: 700;
             font-size: 1.2rem;
             color: #fff;
-            background: linear-gradient(135deg, var(--purple), var(--pink));
+            background: linear-gradient(135deg, var(--sky), var(--mint));
             border-radius: 999px;
             padding: 5px 16px;
             margin-bottom: 16px;
-            box-shadow: 0 0 18px rgba(255,46,154,0.55), 0 6px 14px -4px rgba(0,0,0,0.4);
+            box-shadow: 0 6px 14px -4px rgba(20,193,160,0.45);
         }
 
         .qtext {
             font-size: 1.7rem;
             line-height: 1.75;
             font-weight: 600;
-            color: var(--text-light);
+            color: var(--ink);
         }
 
         .answers {
@@ -544,24 +407,22 @@
             font-size: 1.9rem;
             cursor: pointer;
             color: #fff;
-            position: relative;
-            overflow: hidden;
             transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
         }
 
             .ans-btn.true {
-                background: linear-gradient(135deg, #34E89E, var(--green));
-                box-shadow: 0 10px 26px -8px rgba(47,232,138,0.65), 0 0 26px -8px rgba(47,232,138,0.5);
+                background: linear-gradient(135deg, #3DDCB0, var(--mint));
+                box-shadow: 0 10px 22px -8px rgba(20,193,160,0.55);
             }
 
             .ans-btn.false {
-                background: linear-gradient(135deg, #FF7A7A, var(--coral));
-                box-shadow: 0 10px 26px -8px rgba(255,77,109,0.65), 0 0 26px -8px rgba(255,77,109,0.5);
+                background: linear-gradient(135deg, #FF9494, var(--coral));
+                box-shadow: 0 10px 22px -8px rgba(255,107,107,0.55);
             }
 
             .ans-btn:hover:not(:disabled) {
-                filter: brightness(1.12);
-                transform: translateY(-3px) scale(1.02);
+                filter: brightness(1.06);
+                transform: translateY(-2px);
             }
 
             .ans-btn:active {
@@ -581,12 +442,11 @@
             min-height: 24px;
             margin-top: 16px;
             font-weight: 700;
-            color: var(--cyan);
-            text-shadow: 0 0 10px rgba(45,232,255,0.5);
+            color: var(--mint-dark);
         }
 
             .feedback.ok {
-                color: var(--green);
+                color: var(--mint-dark);
             }
 
             .feedback.no {
@@ -605,8 +465,8 @@
             width: 9px;
             height: 9px;
             border-radius: 50%;
-            background: var(--green);
-            box-shadow: 0 0 0 3px rgba(47,232,138,0.25), 0 0 10px rgba(47,232,138,0.8);
+            background: var(--mint);
+            box-shadow: 0 0 0 3px rgba(20,193,160,0.22);
             animation: blink 1.6s infinite;
         }
 
@@ -624,12 +484,12 @@
             font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
             font-size: 1.2rem;
-            color: var(--text-light);
+            color: var(--ink);
         }
 
         .board-sub {
             font-size: 1rem;
-            color: #FF8FCB;
+            color: var(--slate);
             margin: 0 0 16px 17px;
         }
 
@@ -638,9 +498,8 @@
             font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
             font-size: 1.2rem;
-            color: var(--gold);
+            color: var(--sky);
             margin: -12px 4px 2px 0;
-            text-shadow: 0 0 10px rgba(255,211,77,0.5);
         }
 
         .lb-row {
@@ -650,46 +509,23 @@
             padding: 11px 10px;
             border-radius: 14px;
             margin-bottom: 7px;
-            background: rgba(255,255,255,0.04);
+            background: var(--bg-base);
             border: 1.5px solid var(--line);
-            transition: transform .15s ease, background .15s ease, box-shadow .15s ease;
-            animation: rowIn .35s ease both;
+            transition: transform .12s ease, box-shadow .12s ease;
         }
 
             .lb-row:hover {
-                transform: translateX(3px);
-                background: rgba(255,255,255,0.07);
+                transform: translateY(-1px);
+                box-shadow: 0 8px 16px -10px rgba(15,60,50,0.3);
             }
-
-        @keyframes rowIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
 
             .lb-row.me {
-                background: linear-gradient(135deg, rgba(255,46,154,0.16), rgba(139,44,245,0.16));
-                border: 1.5px solid var(--pink);
-                box-shadow: 0 0 20px -6px rgba(255,46,154,0.5);
-            }
-
-            .lb-row.top1 {
-                border-color: var(--gold);
-                box-shadow: 0 0 22px -4px rgba(255,211,77,0.6);
-                background: linear-gradient(135deg, rgba(255,211,77,0.14), rgba(255,255,255,0.03));
-            }
-
-            .lb-row.top2 {
-                border-color: var(--silver);
-                box-shadow: 0 0 18px -4px rgba(217,226,241,0.45);
-            }
-
-            .lb-row.top3 {
-                border-color: var(--bronze);
-                box-shadow: 0 0 18px -4px rgba(231,161,94,0.45);
+                background: linear-gradient(135deg, rgba(20,193,160,0.10), rgba(62,193,232,0.10));
+                border: 1.5px solid var(--mint);
             }
 
         .lb-rank {
-            font-family: 'Orbitron', 'Baloo 2', sans-serif;
+            font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
             color: var(--slate);
             font-size: 1.2rem;
@@ -705,29 +541,28 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            color: var(--text-light);
+            color: var(--ink);
         }
 
         .lb-correct {
             font-family: 'Baloo 2', sans-serif;
             font-size: 1.2rem;
             font-weight: 700;
-            color: var(--cyan);
-            background: rgba(45,232,255,0.14);
+            color: var(--mint-dark);
+            background: var(--mint-pale);
             padding: 3px 9px;
             border-radius: 20px;
             flex-shrink: 0;
         }
 
         .lb-score {
-            font-family: 'Orbitron', 'Baloo 2', sans-serif;
+            font-family: 'Baloo 2', sans-serif;
             font-size: 1.2rem;
             font-weight: 800;
             width: 46px;
             text-align: right;
             flex-shrink: 0;
-            color: var(--pink);
-            text-shadow: 0 0 8px rgba(255,46,154,0.5);
+            color: var(--purple);
         }
 
         .lb-empty {
@@ -753,7 +588,7 @@
             padding: 0 8px;
             border-radius: 999px;
             border: 1.5px solid var(--line);
-            background: rgba(255,255,255,0.04);
+            background: var(--bg-base);
             color: var(--slate);
             font-family: 'Baloo 2', sans-serif;
             font-size: 0.78rem;
@@ -763,15 +598,14 @@
         }
 
             .lb-page-btn:hover:not(:disabled) {
-                border-color: var(--pink);
-                color: var(--pink);
+                border-color: var(--mint);
+                color: var(--mint-dark);
             }
 
             .lb-page-btn.active {
-                background: linear-gradient(135deg, var(--pink), var(--purple));
+                background: linear-gradient(135deg, var(--mint), var(--sky));
                 border-color: transparent;
                 color: #fff;
-                box-shadow: 0 0 14px rgba(255,46,154,0.55);
             }
 
             .lb-page-btn:disabled {
@@ -796,24 +630,18 @@
         }
 
         .stat {
-            background: linear-gradient(180deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+            background: linear-gradient(180deg, #FBFFFE, var(--mint-pale));
             border: 2px solid var(--line);
             border-radius: 16px;
             padding: 18px 8px;
             text-align: center;
-            transition: transform .15s ease;
         }
 
-            .stat:hover {
-                transform: translateY(-3px);
-            }
-
             .stat .num {
-                font-family: 'Orbitron', 'Baloo 2', sans-serif;
+                font-family: 'Baloo 2', sans-serif;
                 font-size: 1.6rem;
                 font-weight: 800;
-                color: var(--cyan);
-                text-shadow: 0 0 12px rgba(45,232,255,0.55);
+                color: var(--mint-dark);
             }
 
             .stat .lbl {
@@ -828,23 +656,24 @@
             text-align: center;
             display: block;
             margin-bottom: 6px;
-            filter: drop-shadow(0 0 24px rgba(255,211,77,0.8)) drop-shadow(0 6px 12px rgba(0,0,0,0.35));
-            animation: trophyFloat 2.4s ease-in-out infinite;
+            filter: drop-shadow(0 6px 12px rgba(255,201,60,0.45));
+            animation: trophyPop .5s ease both;
         }
 
-        @keyframes trophyFloat {
-            0%,100% { transform: translateY(0) rotate(-3deg); }
-            50% { transform: translateY(-10px) rotate(3deg); }
+        @keyframes trophyPop {
+            0% { transform: scale(0.4) rotate(-8deg); opacity: 0; }
+            70% { transform: scale(1.08) rotate(4deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0); }
         }
 
         .closed-msg {
-            background: rgba(255,157,61,0.12);
-            border: 2px dashed var(--orange);
+            background: var(--sun-pale);
+            border: 2px dashed var(--sun);
             border-radius: 16px;
             padding: 18px;
             text-align: center;
             font-weight: 700;
-            color: var(--orange);
+            color: #8A5A00;
             margin-bottom: 6px;
             font-family: 'Baloo 2', sans-serif;
         }
@@ -864,33 +693,41 @@
             padding: 15px 18px;
             border-radius: 16px;
             border: 2.5px solid var(--line);
-            background: rgba(255,255,255,0.04);
+            background: var(--bg-base);
             font-family: 'Noto Sans TC', sans-serif;
             font-weight: 700;
             font-size: 1.3rem;
-            color: var(--text-light);
+            color: var(--ink);
             cursor: pointer;
-            transition: all .15s ease;
-            position: relative;
-            overflow: hidden;
+            transition: all .12s ease;
         }
 
             .choice-btn:hover:not(:disabled) {
-                border-color: var(--purple);
-                background: rgba(139,44,245,0.14);
+                border-color: var(--sky);
+                background: var(--sky-pale);
                 transform: translateY(-2px);
-                box-shadow: 0 8px 20px -8px rgba(139,44,245,0.5);
             }
 
             .choice-btn:disabled {
                 cursor: not-allowed;
             }
 
+            .choice-btn.correct {
+                background: linear-gradient(135deg, #3DDCB0, var(--mint));
+                border-color: var(--mint);
+                color: #fff;
+            }
+
+            .choice-btn.wrong-selected {
+                background: linear-gradient(135deg, #FF9494, var(--coral));
+                border-color: var(--coral);
+                color: #fff;
+            }
+
             .choice-btn.selected {
-                background: rgba(139,44,245,0.22);
-                border-color: var(--purple);
-                color: var(--text-light);
-                box-shadow: 0 0 20px -4px rgba(139,44,245,0.6);
+                background: var(--sky-pale);
+                border-color: var(--sky);
+                color: var(--ink);
             }
 
         .choice-letter {
@@ -900,14 +737,18 @@
             width: 26px;
             height: 26px;
             border-radius: 50%;
-            background: var(--purple);
+            background: var(--sky);
             color: #fff;
-            font-family: 'Orbitron', 'Baloo 2', sans-serif;
+            font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
             font-size: 0.78rem;
             margin-right: 12px;
             flex-shrink: 0;
-            box-shadow: 0 0 10px rgba(139,44,245,0.6);
+        }
+
+        .choice-btn.correct .choice-letter,
+        .choice-btn.wrong-selected .choice-letter {
+            background: rgba(255,255,255,0.35);
         }
 
         /* ---------- 答錯率長條圖 ---------- */
@@ -923,7 +764,7 @@
             flex-shrink: 0;
             font-size: 0.72rem;
             font-weight: 700;
-            color: var(--text-light);
+            color: var(--ink);
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -934,9 +775,8 @@
             flex: 1;
             height: 14px;
             border-radius: 999px;
-            background: rgba(255,255,255,0.08);
+            background: var(--line);
             overflow: hidden;
-            border: 1px solid var(--line);
         }
 
         .stat-bar-fill {
@@ -953,50 +793,6 @@
             font-size: 0.78rem;
             flex-shrink: 0;
         }
-
-        /* ---------- 3D 卡片傾斜互動 ---------- */
-        .card.tilt {
-            transition: transform .08s ease-out;
-        }
-
-        /* ---------- 畫面切換淡入 ---------- */
-        #app {
-            animation: appFadeIn .45s ease both;
-        }
-
-        @keyframes appFadeIn {
-            from { opacity: 0; transform: translateY(14px) scale(0.99); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        /* ---------- 分數彈跳強調 ---------- */
-        .score-bump {
-            animation: scoreBump .4s ease;
-        }
-
-        @keyframes scoreBump {
-            0% { transform: scale(1); }
-            40% { transform: scale(1.35); }
-            100% { transform: scale(1); }
-        }
-
-        /* ---------- 慶祝彩帶 ---------- */
-        .confetti-piece {
-            position: fixed;
-            top: -20px;
-            z-index: 999;
-            pointer-events: none;
-            border-radius: 2px;
-            animation: confettiFall linear forwards;
-        }
-
-        @keyframes confettiFall {
-            to { transform: translateY(110vh) rotate(720deg); opacity: 0.9; }
-        }
-
-        ::-webkit-scrollbar { width: 10px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(var(--pink), var(--purple)); border-radius: 10px; }
 
         @media(max-width:575px) {
             .answers {
@@ -1015,7 +811,6 @@
     </style>
 </head>
 <body>
-    <canvas id="bg-particles"></canvas>
     <div class="wrap">
         <div class="brand">
             <span class="mascot">🧼</span>
@@ -1139,14 +934,14 @@
 
         function boardHtml() {
             return `
-                                            <div class="card">
-                                              <div class="board-head"><div class="live-dot"></div><div class="board-title">🔥 得分排行榜 (即時)</div></div>
-                                              <div class="board-sub">依分數排序，每 2 秒自動更新</div>
-                                              <div class="board-total-label">總積分</div>
-                                              <div id="lb-list"></div>
-                                              <div id="lb-pagination"></div>
-                                            </div>
-                                          `;
+                <div class="card">
+                  <div class="board-head"><div class="live-dot"></div><div class="board-title">🔥 得分排行榜 (即時)</div></div>
+                  <div class="board-sub">依分數排序，每 2 秒自動更新</div>
+                  <div class="board-total-label">總積分</div>
+                  <div id="lb-list"></div>
+                  <div id="lb-pagination"></div>
+                </div>
+              `;
         }
 
         const LB_PAGE_SIZE = 20;
@@ -1170,20 +965,18 @@
             const pageEntries = entries.slice(startIdx, startIdx + LB_PAGE_SIZE);
 
             const medals = ['🥇', '🥈', '🥉'];
-            const topClass = ['top1', 'top2', 'top3'];
             el.innerHTML = pageEntries.map(([id, e], idx) => {
                 const i = startIdx + idx;
                 const isMe = id === state.playerId;
                 const rankDisplay = medals[i] || (i + 1);
-                const extraClass = [isMe ? 'me' : '', topClass[i] || ''].filter(Boolean).join(' ');
                 return `
-                                              <div class="lb-row ${extraClass}" style="animation-delay:${Math.min(idx * 0.04, 0.4)}s">
-                                                <div class="lb-rank">${rankDisplay}</div>
-                                                <div class="lb-name" title="${escapeHtml(e.name)}">${escapeHtml(e.name)}${isMe ? ' (你)' : ''}</div>
-                                                <div class="lb-correct">✓ ${e.correct}/${e.total}</div>
-                                                <div class="lb-score">${e.score}</div>
-                                              </div>
-                                            `;
+                  <div class="lb-row ${isMe ? 'me' : ''}">
+                    <div class="lb-rank">${rankDisplay}</div>
+                    <div class="lb-name" title="${escapeHtml(e.name)}">${escapeHtml(e.name)}${isMe ? ' (你)' : ''}</div>
+                    <div class="lb-correct">✓ ${e.correct}/${e.total}</div>
+                    <div class="lb-score">${e.score}</div>
+                  </div>
+                `;
             }).join('');
 
             if (pagEl) {
@@ -1217,23 +1010,23 @@
             const app = document.getElementById('app');
             if (state.screen === 'login') {
                 app.innerHTML = `
-                                              <div class="row g-3">
-                                                <div class="col-lg-8">
-                                                  <div class="card">
-                                                    <p class="eyebrow">🎮 開始作答</p>
-                                                    <h2>輸入你的姓名與職稱 加入擂台</h2>
-                                                    ${state.registrationOpen ? `
-                                                      <label for="nameInput">姓名 職稱</label>
-                                                      <input id="nameInput" type="text" placeholder="例如：王小明護理師" maxlength="20">
-                                                      <button class="btn btn-primary btn-block" id="joinBtn">🚀 加入作答</button>
-                                                    ` : `
-                                                      <div class="closed-msg">🚫 目前尚未開放加入作答，請稍候主辦人開放後再試一次</div>
-                                                    `}
-                                                  </div>
-                                                </div>
-                                                <div class="col-lg-4">${boardHtml()}</div>
-                                              </div>
-                                            `;
+                  <div class="row g-3">
+                    <div class="col-lg-8">
+                      <div class="card">
+                        <p class="eyebrow">🎮 開始作答</p>
+                        <h2>輸入你的姓名與職稱 加入擂台</h2>
+                        ${state.registrationOpen ? `
+                          <label for="nameInput">姓名 職稱</label>
+                          <input id="nameInput" type="text" placeholder="例如：王小明護理師" maxlength="20">
+                          <button class="btn btn-primary btn-block" id="joinBtn">🚀 加入作答</button>
+                        ` : `
+                          <div class="closed-msg">🚫 目前尚未開放加入作答，請稍候主辦人開放後再試一次</div>
+                        `}
+                      </div>
+                    </div>
+                    <div class="col-lg-4">${boardHtml()}</div>
+                  </div>
+                `;
                 if (state.registrationOpen) {
                     document.getElementById('joinBtn').onclick = onJoin;
                     document.getElementById('nameInput').addEventListener('keydown', e => { if (e.key === 'Enter') onJoin(); });
@@ -1245,39 +1038,39 @@
                 const pct = Math.round((state.currentIndex / state.questions.length) * 100);
                 const answersHtml = q.type === 'choice'
                     ? `<div class="choice-list">${q.options.map((opt, idx) => `
-                                                      <button class="choice-btn" id="choiceBtn${idx}" ${state.locked ? 'disabled' : ''}><span class="choice-letter">${String.fromCharCode(65 + idx)}</span>${escapeHtml(opt)}</button>
-                                                    `).join('')}</div>`
+                          <button class="choice-btn" id="choiceBtn${idx}" ${state.locked ? 'disabled' : ''}><span class="choice-letter">${String.fromCharCode(65 + idx)}</span>${escapeHtml(opt)}</button>
+                        `).join('')}</div>`
                     : `<div class="answers">
-                                                      <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
-                                                      <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
-                                                    </div>`;
+                          <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
+                          <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
+                        </div>`;
                 app.innerHTML = `
-                                              <div class="row g-3">
-                                                <div class="col-lg-8">
-                                                  <div class="card">
-                                                    <div class="dial-zone">
-                                                      <div class="dial" id="dial">
-                                                        <div class="dial-inner">
-                                                          <div class="dial-score" id="scoreNum">${state.score}</div>
-                                                          <div class="dial-label">目前分數</div>
-                                                        </div>
-                                                      </div>
-                                                    </div>
-                                                    <div class="progress-wrap">
-                                                      第 ${state.currentIndex + 1} / ${state.questions.length} 題　<span class="name-chip">👤 ${escapeHtml(state.name)}</span>
-                                                      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-                                                    </div>
-                                                    <div class="qcard">
-                                                      <div class="qpoints">⭐ 本題配分：${q.points} 分　${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
-                                                      <div class="qtext">${escapeHtml(q.text)}</div>
-                                                    </div>
-                                                    ${answersHtml}
-                                                    <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
-                                                  </div>
-                                                </div>
-                                                <div class="col-lg-4">${boardHtml()}</div>
-                                              </div>
-                                            `;
+                  <div class="row g-3">
+                    <div class="col-lg-8">
+                      <div class="card">
+                        <div class="dial-zone">
+                          <div class="dial" id="dial">
+                            <div class="dial-inner">
+                              <div class="dial-score" id="scoreNum">${state.score}</div>
+                              <div class="dial-label">目前分數</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="progress-wrap">
+                          第 ${state.currentIndex + 1} / ${state.questions.length} 題　<span class="name-chip">👤 ${escapeHtml(state.name)}</span>
+                          <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+                        </div>
+                        <div class="qcard">
+                          <div class="qpoints">⭐ 本題配分：${q.points} 分　${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
+                          <div class="qtext">${escapeHtml(q.text)}</div>
+                        </div>
+                        ${answersHtml}
+                        <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">${boardHtml()}</div>
+                  </div>
+                `;
                 if (q.type === 'choice') {
                     q.options.forEach((opt, idx) => {
                         document.getElementById('choiceBtn' + idx).onclick = () => answer(idx);
@@ -1292,24 +1085,24 @@
                 const entries = sortedEntries();
                 const myRank = entries.findIndex(([id]) => id === state.playerId) + 1;
                 app.innerHTML = `
-                                              <div class="row g-3">
-                                                <div class="col-lg-8">
-                                                  <div class="card">
-                                                    <span class="trophy">🏆</span>
-                                                    <p class="eyebrow text-center">作答完成</p>
-                                                    <h2 class="text-center">${escapeHtml(state.name)}，你的結果出爐了！</h2>
-                                                    <p class="sub text-center">${myRank > 0 ? `目前排名第 ${myRank} 名` : ''}</p>
-                                                    <div class="end-stats">
-                                                      <div class="stat"><div class="num">${state.score}</div><div class="lbl">總分</div></div>
-                                                      <div class="stat"><div class="num">${state.correct}/${state.total}</div><div class="lbl">答對題數</div></div>
-                                                      <div class="stat"><div class="num">${myRank > 0 ? ('#' + myRank) : '-'}</div><div class="lbl">目前排名</div></div>
-                                                    </div>
-                                                    <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
-                                                  </div>
-                                                </div>
-                                                <div class="col-lg-4">${boardHtml()}</div>
-                                              </div>
-                                            `;
+                  <div class="row g-3">
+                    <div class="col-lg-8">
+                      <div class="card">
+                        <span class="trophy">🏆</span>
+                        <p class="eyebrow text-center">作答完成</p>
+                        <h2 class="text-center">${escapeHtml(state.name)}，你的結果出爐了！</h2>
+                        <p class="sub text-center">${myRank > 0 ? `目前排名第 ${myRank} 名` : ''}</p>
+                        <div class="end-stats">
+                          <div class="stat"><div class="num">${state.score}</div><div class="lbl">總分</div></div>
+                          <div class="stat"><div class="num">${state.correct}/${state.total}</div><div class="lbl">答對題數</div></div>
+                          <div class="stat"><div class="num">${myRank > 0 ? ('#' + myRank) : '-'}</div><div class="lbl">目前排名</div></div>
+                        </div>
+                        <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
+                      </div>
+                    </div>
+                    <div class="col-lg-4">${boardHtml()}</div>
+                  </div>
+                `;
                 renderBoardList();
             }
         }
@@ -1347,17 +1140,13 @@
             if (isCorrect) state.correct += 1;
 
             const scoreNum = document.getElementById('scoreNum');
-            if (scoreNum) {
-                scoreNum.textContent = state.score;
-                scoreNum.classList.remove('score-bump');
-                void scoreNum.offsetWidth;
-                scoreNum.classList.add('score-bump');
-            }
+            if (scoreNum) scoreNum.textContent = state.score;
+
+            // 互動回饋：僅針對自己這次的作答給予圓盤脈動效果，不揭露正確答案
             const dialEl = document.getElementById('dial');
             if (dialEl) {
-                dialEl.classList.remove('flash-neutral');
-                void dialEl.offsetWidth;
-                dialEl.classList.add('flash-neutral');
+                dialEl.classList.add(isCorrect ? 'flash-correct' : 'flash-wrong');
+                setTimeout(() => dialEl.classList.remove('flash-correct', 'flash-wrong'), 700);
             }
 
             if (q.type === 'choice') {
@@ -1406,138 +1195,6 @@
             lastKnownRegOpen = state.registrationOpen;
             render();
             startPolling();
-        })();
-    </script>
-    <script>
-        /* =====================================================================
-           以下為純視覺／互動增強效果，不影響任何遊戲邏輯、計分或後端資料流程。
-           ===================================================================== */
-
-        /* ---------- 1. 背景漂浮光點粒子 ---------- */
-        (function initParticles() {
-            const canvas = document.getElementById('bg-particles');
-            if (!canvas) return;
-            const ctx = canvas.getContext('2d');
-            let w, h, particles;
-            const COLORS = ['rgba(255,46,154,', 'rgba(45,232,255,', 'rgba(255,228,94,', 'rgba(139,44,245,'];
-
-            function resize() {
-                w = canvas.width = window.innerWidth;
-                h = canvas.height = window.innerHeight;
-            }
-
-            function makeParticles() {
-                const count = Math.min(70, Math.floor((w * h) / 22000));
-                particles = Array.from({ length: count }, () => ({
-                    x: Math.random() * w,
-                    y: Math.random() * h,
-                    r: Math.random() * 2 + 0.6,
-                    speedY: Math.random() * 0.35 + 0.08,
-                    speedX: (Math.random() - 0.5) * 0.25,
-                    alpha: Math.random() * 0.5 + 0.25,
-                    color: COLORS[Math.floor(Math.random() * COLORS.length)],
-                    twinkle: Math.random() * Math.PI * 2
-                }));
-            }
-
-            function tick() {
-                ctx.clearRect(0, 0, w, h);
-                particles.forEach(p => {
-                    p.twinkle += 0.03;
-                    const a = p.alpha * (0.6 + 0.4 * Math.sin(p.twinkle));
-                    ctx.beginPath();
-                    ctx.fillStyle = p.color + a.toFixed(2) + ')';
-                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-                    ctx.fill();
-                    p.y -= p.speedY;
-                    p.x += p.speedX;
-                    if (p.y < -10) { p.y = h + 10; p.x = Math.random() * w; }
-                    if (p.x < -10) p.x = w + 10;
-                    if (p.x > w + 10) p.x = -10;
-                });
-                requestAnimationFrame(tick);
-            }
-
-            resize();
-            makeParticles();
-            tick();
-            window.addEventListener('resize', () => { resize(); makeParticles(); });
-        })();
-
-        /* ---------- 2. 按鈕點擊漣漪效果 ---------- */
-        document.addEventListener('click', function (e) {
-            const target = e.target.closest('.btn, .ans-btn, .choice-btn, .lb-page-btn');
-            if (!target) return;
-            const rect = target.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height) * 1.2;
-            const ripple = document.createElement('span');
-            ripple.className = 'ripple';
-            ripple.style.width = ripple.style.height = size + 'px';
-            ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
-            ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
-            target.appendChild(ripple);
-            setTimeout(() => ripple.remove(), 650);
-        }, true);
-
-        /* ---------- 3. 卡片 3D 滑鼠傾斜互動 ---------- */
-        (function initTilt() {
-            const MAX_TILT = 5;
-            document.addEventListener('mousemove', function (e) {
-                const card = e.target.closest ? e.target.closest('.card') : null;
-                document.querySelectorAll('.card.tilt-active').forEach(c => {
-                    if (c !== card) resetTilt(c);
-                });
-                if (!card) return;
-                card.classList.add('tilt', 'tilt-active');
-                const rect = card.getBoundingClientRect();
-                const px = (e.clientX - rect.left) / rect.width - 0.5;
-                const py = (e.clientY - rect.top) / rect.height - 0.5;
-                card.style.transform = `perspective(900px) rotateY(${px * MAX_TILT * 2}deg) rotateX(${-py * MAX_TILT * 2}deg) translateY(-2px)`;
-            });
-            document.addEventListener('mouseleave', function () {
-                document.querySelectorAll('.card.tilt-active').forEach(resetTilt);
-            }, true);
-            function resetTilt(c) {
-                c.style.transform = '';
-                c.classList.remove('tilt-active');
-            }
-        })();
-
-        /* ---------- 4. 結算畫面彩帶慶祝特效 ---------- */
-        (function initConfetti() {
-            const app = document.getElementById('app');
-            if (!app) return;
-            let fired = false;
-            const COLORS = ['#FF2E9A', '#2DE8FF', '#FFE45E', '#8B2CF5', '#2FE88A'];
-
-            function burst() {
-                if (fired) return;
-                fired = true;
-                const count = 90;
-                for (let i = 0; i < count; i++) {
-                    const piece = document.createElement('div');
-                    piece.className = 'confetti-piece';
-                    const size = Math.random() * 8 + 5;
-                    piece.style.left = Math.random() * 100 + 'vw';
-                    piece.style.width = size + 'px';
-                    piece.style.height = (size * 0.4) + 'px';
-                    piece.style.background = COLORS[Math.floor(Math.random() * COLORS.length)];
-                    piece.style.animationDuration = (Math.random() * 1.8 + 2.2) + 's';
-                    piece.style.animationDelay = (Math.random() * 0.6) + 's';
-                    piece.style.opacity = String(Math.random() * 0.5 + 0.5);
-                    document.body.appendChild(piece);
-                    setTimeout(() => piece.remove(), 5000);
-                }
-            }
-
-            const observer = new MutationObserver(() => {
-                if (app.querySelector('.trophy')) {
-                    burst();
-                } else {
-                    fired = false;
-                }
-            });
-            observer.observe(app, { childList: true, subtree: true });
         })();
     </script>
 </body>
