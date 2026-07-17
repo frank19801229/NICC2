@@ -6,33 +6,36 @@
     <title>感控問答擂台</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Klee+One:wght@400;600&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
 
         :root {
-            --pink: #FF6FA5;
-            --pink-dark: #E0447F;
-            --orange: #FFA65C;
-            --purple: #8B6FE8;
-            --purple-dark: #5B3FA8;
-            --cyan: #7FE0EA;
-            --yellow: #FFD782;
-            --green: #2ECC71;
-            --coral: #FF5C5C;
-            --ink: #2A1B3D;
-            --slate: #8B7BA8;
-            --card: #FFFFFF;
-            --line: #F0E6FF;
-            /* ---- 新海誠風格 天空 / 光影 專用色票 ---- */
-            --sky-zenith: #2B2A6B;
-            --sky-upper: #6C4E9E;
-            --sky-mid: #C4699A;
-            --sky-low: #FFA97A;
-            --sky-horizon: #FFE1A8;
-            --sun-core: #FFF6D8;
-            --sun-glow: #FFCB7A;
-            --cloud-lit: rgba(255,236,214,0.9);
-            --cloud-shadow: rgba(120,90,160,0.35);
-            --cyan-dark: #1E8FA6;
+            --sky: #BFE3EF;
+            --sky-deep: #8FCADD;
+            --leaf: #9AC9A0;
+            --leaf-deep: #5FA179;
+            --cream: #FFF8E9;
+            --cream-deep: #F3E7C6;
+            --sun: #FFD98A;
+            --sun-deep: #F2A65A;
+            --coral: #F3A6A0;
+            --coral-deep: #E8867E;
+            --lavender: #C9BFE0;
+            --lavender-deep: #A797CC;
+            --ink: #3E5C46;
+            --slate: #7C9885;
+            --card: #FFFDF6;
+            --line: #EBE1C6;
+            --good: #7FB06E;
+            --bad: #E8867E;
+            /* 保留舊變數名稱，讓下方規則沿用新色票 */
+            --pink: #F3A6A0;
+            --pink-dark: #E07A6E;
+            --orange: #F2A65A;
+            --purple: #7FA46B;
+            --purple-dark: #4F7A52;
+            --cyan: #8FCADD;
+            --yellow: #FFD98A;
+            --green: #7FB06E;
         }
 
         * {
@@ -45,200 +48,76 @@
             font-family: 'Noto Sans TC', sans-serif;
             color: var(--ink);
             background:
-                radial-gradient(ellipse 60% 40% at 78% 22%, var(--sun-core) 0%, var(--sun-glow) 18%, rgba(255,203,122,0) 60%),
-                linear-gradient(180deg, var(--sky-zenith) 0%, var(--sky-upper) 32%, var(--sky-mid) 58%, var(--sky-low) 78%, var(--sky-horizon) 100%);
+                radial-gradient(ellipse 340px 130px at 12% 10%, rgba(255,255,255,0.85), transparent 65%),
+                radial-gradient(ellipse 260px 100px at 78% 6%, rgba(255,255,255,0.75), transparent 65%),
+                radial-gradient(ellipse 220px 90px at 46% 22%, rgba(255,255,255,0.6), transparent 65%),
+                linear-gradient(180deg, #BFE3EF 0%, #D7ECEE 30%, #EDEFD6 62%, #F5EAC8 100%);
             background-attachment: fixed;
-            position: relative;
             overflow-x: hidden;
+            position: relative;
         }
 
-        /* ================= 新海誠風格：天空舞台 ================= */
-        #skyStage {
+        /* ---------- 背景裝飾：微風飄葉與雲朵 ---------- */
+        .ghibli-bg {
             position: fixed;
             inset: 0;
+            pointer-events: none;
             z-index: 0;
             overflow: hidden;
-            pointer-events: none;
         }
 
-        /* 耶穌光 / 耀眼光束 */
-        .godrays {
-            position: absolute;
-            top: -20%;
-            right: -25%;
-            width: 140%;
-            height: 140%;
-            background: conic-gradient(from 200deg at 78% 22%,
-                rgba(255,246,216,0) 0deg,
-                rgba(255,246,216,0.55) 4deg,
-                rgba(255,246,216,0) 9deg,
-                rgba(255,246,216,0) 18deg,
-                rgba(255,246,216,0.4) 23deg,
-                rgba(255,246,216,0) 29deg,
-                rgba(255,246,216,0) 40deg,
-                rgba(255,246,216,0.5) 46deg,
-                rgba(255,246,216,0) 53deg,
-                rgba(255,246,216,0) 70deg,
-                rgba(255,246,216,0.35) 76deg,
-                rgba(255,246,216,0) 84deg,
-                rgba(255,246,216,0) 360deg);
-            mix-blend-mode: screen;
-            animation: rayRotate 40s linear infinite;
-            opacity: .85;
-            will-change: transform;
-        }
-        @keyframes rayRotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            .ghibli-bg .hill {
+                position: absolute;
+                bottom: -60px;
+                width: 140%;
+                left: -20%;
+                height: 220px;
+                border-radius: 50%;
+                background: var(--leaf);
+                opacity: 0.55;
+            }
+
+            .ghibli-bg .hill.back {
+                bottom: -100px;
+                height: 260px;
+                background: #B7D9A8;
+                opacity: 0.5;
+            }
+
+            .ghibli-bg .drift {
+                position: absolute;
+                font-size: 1.6rem;
+                opacity: 0.75;
+                animation: driftAcross linear infinite;
+                filter: drop-shadow(0 4px 6px rgba(60,80,50,0.15));
+            }
+
+        @keyframes driftAcross {
+            0% {
+                transform: translate(-8vw, 0) rotate(-6deg);
+            }
+
+            50% {
+                transform: translate(50vw, -30px) rotate(8deg);
+            }
+
+            100% {
+                transform: translate(110vw, 10px) rotate(-4deg);
+            }
         }
 
-        /* 太陽核心暈光，隨呼吸微微脈動 */
-        .sunGlow {
-            position: absolute;
-            top: 10%;
-            right: 12%;
-            width: 220px;
-            height: 220px;
-            border-radius: 50%;
-            background: radial-gradient(circle, var(--sun-core) 0%, var(--sun-glow) 35%, rgba(255,203,122,0) 72%);
-            filter: blur(2px);
-            animation: sunBreathe 5s ease-in-out infinite;
-            box-shadow: 0 0 120px 60px rgba(255,203,122,0.35);
+        @media (prefers-reduced-motion: reduce) {
+            .ghibli-bg .drift {
+                animation: none;
+            }
         }
-        @keyframes sunBreathe {
-            0%,100% { transform: scale(1); opacity: 1; }
-            50% { transform: scale(1.08); opacity: .88; }
-        }
-
-        /* 遠山剪影 */
-        .mountains {
-            position: absolute;
-            left: 0; right: 0; bottom: 0;
-            height: 22vh;
-            background:
-                linear-gradient(180deg, rgba(80,58,110,0) 0%, rgba(58,38,86,0.9) 100%);
-            clip-path: polygon(0% 60%, 8% 40%, 18% 55%, 30% 30%, 42% 50%, 55% 25%, 68% 48%, 80% 32%, 92% 52%, 100% 38%, 100% 100%, 0% 100%);
-            opacity: .8;
-        }
-
-        /* 雲層（多層視差飄動） */
-        .cloud-layer { position: absolute; left: -20%; width: 140%; pointer-events: none; }
-        .cloud {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(1px);
-        }
-        .cloud-layer.back { top: 12%; animation: driftSlow 90s linear infinite; opacity: .55; }
-        .cloud-layer.mid { top: 26%; animation: driftMed 60s linear infinite; opacity: .75; }
-        .cloud-layer.front { top: 42%; animation: driftFast 38s linear infinite; opacity: .9; }
-        @keyframes driftSlow { 0% { transform: translateX(0); } 100% { transform: translateX(35%); } }
-        @keyframes driftMed { 0% { transform: translateX(0); } 100% { transform: translateX(-30%); } }
-        @keyframes driftFast { 0% { transform: translateX(0); } 100% { transform: translateX(25%); } }
-
-        /* 光塵 / 螢光粒子（隨滑鼠做微視差） */
-        #dustLayer { position: absolute; inset: 0; }
-        .dust {
-            position: absolute;
-            width: 3px; height: 3px;
-            border-radius: 50%;
-            background: var(--cloud-lit);
-            box-shadow: 0 0 6px 2px rgba(255,236,214,0.8);
-            animation: dustFloat linear infinite, dustTwinkle 3s ease-in-out infinite;
-        }
-        @keyframes dustFloat {
-            0% { transform: translateY(0); }
-            100% { transform: translateY(-120vh); }
-        }
-        @keyframes dustTwinkle {
-            0%,100% { opacity: .15; }
-            50% { opacity: .95; }
-        }
-
-        /* 流星（偶發） */
-        .shootingStar {
-            position: absolute;
-            width: 2px; height: 2px;
-            background: #fff;
-            border-radius: 50%;
-            box-shadow: 0 0 8px 2px rgba(255,255,255,0.9);
-            animation: shoot 1.1s linear forwards;
-        }
-        .shootingStar::before {
-            content: '';
-            position: absolute;
-            top: 50%; right: 0;
-            width: 120px; height: 1px;
-            background: linear-gradient(90deg, rgba(255,255,255,0.9), transparent);
-            transform: translateY(-50%);
-        }
-        @keyframes shoot {
-            0% { transform: translate(0,0); opacity: 1; }
-            100% { transform: translate(-360px, 220px); opacity: 0; }
-        }
-
-        /* 游標暈光（互動光暈，跟隨滑鼠） */
-        #cursorGlow {
-            position: fixed;
-            top: 0; left: 0;
-            width: 260px; height: 260px;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(255,246,216,0.28) 0%, rgba(255,246,216,0) 70%);
-            transform: translate(-50%,-50%);
-            pointer-events: none;
-            z-index: 1;
-            mix-blend-mode: screen;
-            transition: opacity .3s ease;
-            opacity: 0;
-        }
-
-        /* 內容需高於天空圖層 */
-        .wrap { position: relative; z-index: 2; }
-
-        /* 卡片：柔光玻璃質感 */
-        .card {
-            background: linear-gradient(180deg, rgba(255,255,255,0.86), rgba(255,250,255,0.78));
-            -webkit-backdrop-filter: blur(18px) saturate(1.1);
-            backdrop-filter: blur(18px) saturate(1.1);
-            position: relative;
-            border: 1px solid rgba(255,255,255,0.6);
-            box-shadow:
-                0 20px 55px -18px rgba(60,30,90,0.55),
-                0 0 0 1px rgba(255,255,255,0.35) inset,
-                0 -2px 24px rgba(255,203,122,0.25) inset;
-            overflow: hidden;
-        }
-        .card::after {
-            content: '';
-            position: absolute;
-            top: 0; left: -60%;
-            width: 40%; height: 100%;
-            background: linear-gradient(100deg, transparent, rgba(255,255,255,0.55), transparent);
-            animation: cardShine 7s ease-in-out infinite;
-            pointer-events: none;
-        }
-        @keyframes cardShine {
-            0%, 60% { left: -60%; }
-            100% { left: 130%; }
-        }
-
-        /* 按鈕水波紋（互動回饋） */
-        .ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.55);
-            transform: scale(0);
-            animation: rippleAnim .6s ease-out forwards;
-            pointer-events: none;
-        }
-        @keyframes rippleAnim {
-            to { transform: scale(2.6); opacity: 0; }
-        }
-        .btn, .ans-btn, .choice-btn { position: relative; overflow: hidden; }
 
         .wrap {
             max-width: 1120px;
             margin: 0 auto;
             padding: 22px 16px 60px;
+            position: relative;
+            z-index: 1;
         }
 
         /* ---------- 頂部品牌列 ---------- */
@@ -252,7 +131,7 @@
 
             .brand .mascot {
                 font-size: 2.1rem;
-                filter: drop-shadow(0 4px 10px rgba(0,0,0,0.35));
+                filter: drop-shadow(0 4px 8px rgba(95,161,121,0.4));
                 animation: bounce 2.4s ease-in-out infinite;
             }
 
@@ -267,72 +146,73 @@
         }
 
         .brand h1 {
-            font-family: 'Baloo 2', sans-serif;
+            font-family: 'Klee One', 'Baloo 2', sans-serif;
             font-size: 1.5rem;
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: 0.02em;
             margin: 0;
-            color: #fff;
-            text-shadow: 0 3px 0 rgba(0,0,0,0.25), 0 0 22px rgba(255,214,150,0.7);
+            color: #2F4A38;
+            text-shadow: 0 2px 0 rgba(255,255,255,0.6);
         }
 
         .brand .badge-live {
             font-family: 'Baloo 2', sans-serif;
             font-size: 1.3rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--yellow), var(--orange));
-            color: #4a2600;
+            background: linear-gradient(135deg, var(--sun), var(--orange));
+            color: #6B4423;
             padding: 4px 12px;
             border-radius: 999px;
-            box-shadow: 0 4px 10px rgba(255,140,66,0.5);
+            box-shadow: 0 4px 10px rgba(242,166,90,0.45);
         }
 
         /* ---------- 卡片 ---------- */
         .card {
             background: var(--card);
-            border: none;
+            border: 1.5px solid var(--line);
             border-radius: 28px;
             padding: 28px;
-            box-shadow: 0 20px 45px -18px rgba(59,10,99,0.55);
+            box-shadow: 0 18px 38px -20px rgba(95,161,121,0.45), 0 6px 16px -8px rgba(140,120,80,0.15);
             position: relative;
             overflow: hidden;
+            transition: box-shadow .2s ease, transform .2s ease;
         }
 
             .card::before {
-                content: '';
+                content: '🍃';
                 position: absolute;
-                top: -40px;
-                right: -40px;
-                width: 140px;
-                height: 140px;
-                border-radius: 50%;
-                background: radial-gradient(circle, rgba(255,61,129,0.18), transparent 70%);
+                top: -18px;
+                right: -6px;
+                font-size: 4.5rem;
+                opacity: 0.14;
+                transform: rotate(18deg);
+                pointer-events: none;
             }
 
         .eyebrow {
             font-family: 'Baloo 2', sans-serif;
             font-size: 1.4rem;
             font-weight: 700;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.08em;
             text-transform: uppercase;
-            color: var(--pink-dark);
+            color: var(--leaf-deep);
             margin: 0 0 6px;
         }
 
         h2 {
-            font-family: 'Baloo 2', sans-serif;
+            font-family: 'Klee One', 'Baloo 2', sans-serif;
             font-size: 1.6rem;
-            font-weight: 800;
+            font-weight: 700;
             margin: 0 0 8px;
             color: var(--ink);
         }
 
         p.sub {
-            color: var(--purple-dark);
+            color: var(--sun-deep);
             margin: 0 0 22px;
             line-height: 1.7;
             font-size: 1.3rem;
-            font-weight: 800;
+            font-weight: 700;
         }
 
         label {
@@ -350,15 +230,15 @@
             border: 2.5px solid var(--line);
             font-size: 1.5rem;
             font-family: inherit;
-            background: #FBFAFF;
+            background: #FFFDF6;
             color: var(--ink);
             transition: border-color .15s ease, box-shadow .15s ease;
         }
 
             input[type=text]:focus {
                 outline: none;
-                border-color: var(--pink);
-                box-shadow: 0 0 0 4px rgba(255,61,129,0.18);
+                border-color: var(--leaf-deep);
+                box-shadow: 0 0 0 4px rgba(95,161,121,0.18);
                 background: #fff;
             }
 
@@ -372,21 +252,28 @@
             font-size: 1.05rem;
             border-radius: 16px;
             padding: 15px 22px;
+            position: relative;
+            overflow: hidden;
             transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
         }
+
+            .btn:hover {
+                transform: translateY(-2px);
+            }
 
             .btn:active {
                 transform: scale(0.96);
             }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--pink), var(--purple));
+            background: linear-gradient(135deg, var(--sun), var(--leaf-deep));
             color: #fff;
-            box-shadow: 0 10px 24px -8px rgba(255,61,129,0.65);
+            box-shadow: 0 10px 22px -8px rgba(95,161,121,0.55);
         }
 
             .btn-primary:hover {
-                filter: brightness(1.08);
+                filter: brightness(1.06);
+                box-shadow: 0 14px 26px -8px rgba(95,161,121,0.6);
             }
 
         .btn-block {
@@ -404,8 +291,8 @@
         }
 
             .btn-ghost:hover {
-                border-color: var(--pink);
-                color: var(--pink);
+                border-color: var(--leaf-deep);
+                color: var(--leaf-deep);
             }
 
         .foot-link {
@@ -427,6 +314,23 @@
                 font-family: inherit;
             }
 
+        /* ---------- 漣漪互動效果 ---------- */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.55);
+            transform: scale(0);
+            animation: rippleAnim .6s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes rippleAnim {
+            to {
+                transform: scale(2.6);
+                opacity: 0;
+            }
+        }
+
         /* ---------- 分數圓盤 ---------- */
         .dial-zone {
             display: flex;
@@ -444,9 +348,10 @@
             justify-content: center;
             margin-bottom: 8px;
             border-radius: 50%;
-            background: conic-gradient(var(--cyan) 0deg, var(--pink) 180deg, var(--yellow) 360deg);
+            background: conic-gradient(var(--sun) 0deg, var(--leaf) 180deg, var(--sky-deep) 360deg);
             padding: 7px;
-            box-shadow: 0 12px 28px -10px rgba(124,58,237,0.55);
+            box-shadow: 0 12px 26px -10px rgba(95,161,121,0.5);
+            transition: box-shadow .3s ease;
         }
 
             .dial::after {
@@ -473,21 +378,21 @@
 
         @keyframes pulseGood {
             0% {
-                box-shadow: 0 0 0 0 rgba(46,204,113,0.55);
+                box-shadow: 0 0 0 0 rgba(127,176,110,0.55);
             }
 
             100% {
-                box-shadow: 0 0 0 30px rgba(46,204,113,0);
+                box-shadow: 0 0 0 30px rgba(127,176,110,0);
             }
         }
 
         @keyframes pulseBad {
             0% {
-                box-shadow: 0 0 0 0 rgba(255,92,92,0.55);
+                box-shadow: 0 0 0 0 rgba(232,134,126,0.55);
             }
 
             100% {
-                box-shadow: 0 0 0 30px rgba(255,92,92,0);
+                box-shadow: 0 0 0 30px rgba(232,134,126,0);
             }
         }
 
@@ -496,22 +401,23 @@
             font-size: 2.7rem;
             font-weight: 800;
             color: var(--ink);
+            transition: color .2s ease;
         }
 
         .dial-label {
             font-size: 1.3rem;
             letter-spacing: 0.08em;
             text-transform: uppercase;
-            color: var(--purple-dark);
+            color: var(--slate);
             font-weight: 600;
         }
 
         .flash-correct .dial-score {
-            color: var(--green);
+            color: var(--good);
         }
 
         .flash-wrong .dial-score {
-            color: var(--coral);
+            color: var(--bad);
         }
 
         .progress-wrap {
@@ -526,7 +432,7 @@
             .progress-wrap .name-chip {
                 display: inline-block;
                 background: var(--line);
-                color: var(--purple-dark);
+                color: var(--leaf-deep);
                 padding: 3px 12px;
                 border-radius: 999px;
                 margin-left: 4px;
@@ -542,14 +448,14 @@
 
         .progress-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--yellow), var(--orange));
+            background: linear-gradient(90deg, var(--sun), var(--sun-deep));
             transition: width .35s ease;
             border-radius: 999px;
         }
 
         /* ---------- 題目卡 ---------- */
         .qcard {
-            background: linear-gradient(180deg, #FBFAFF, #F3EEFF);
+            background: linear-gradient(180deg, #FFFDF3, #FFF3D9);
             border: 2px solid var(--line);
             border-radius: 22px;
             padding: 26px;
@@ -562,11 +468,11 @@
             font-weight: 700;
             font-size: 1.2rem;
             color: #fff;
-            background: linear-gradient(135deg, var(--purple), var(--pink));
+            background: linear-gradient(135deg, var(--leaf-deep), var(--sky-deep));
             border-radius: 999px;
             padding: 5px 16px;
             margin-bottom: 16px;
-            box-shadow: 0 6px 14px -4px rgba(124,58,237,0.5);
+            box-shadow: 0 6px 14px -4px rgba(95,161,121,0.45);
         }
 
         .qtext {
@@ -591,24 +497,27 @@
             font-size: 1.9rem;
             cursor: pointer;
             color: #fff;
+            position: relative;
+            overflow: hidden;
             transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
         }
 
             .ans-btn.true {
-                background: linear-gradient(135deg, #34E89E, var(--green));
-                box-shadow: 0 10px 22px -8px rgba(46,204,113,0.6);
+                background: linear-gradient(135deg, #9AC9A0, var(--leaf-deep));
+                box-shadow: 0 10px 22px -8px rgba(95,161,121,0.55);
             }
 
             .ans-btn.false {
-                background: linear-gradient(135deg, #FF7A7A, var(--coral));
-                box-shadow: 0 10px 22px -8px rgba(255,92,92,0.6);
+                background: linear-gradient(135deg, #F3B3A6, var(--coral-deep));
+                box-shadow: 0 10px 22px -8px rgba(232,134,126,0.55);
             }
 
-            .ans-btn:hover {
+            .ans-btn:hover:not(:disabled) {
                 filter: brightness(1.06);
+                transform: translateY(-2px);
             }
 
-            .ans-btn:active {
+            .ans-btn:active:not(:disabled) {
                 transform: scale(0.95);
             }
 
@@ -625,14 +534,15 @@
             min-height: 24px;
             margin-top: 16px;
             font-weight: 700;
+            color: var(--leaf-deep);
         }
 
             .feedback.ok {
-                color: var(--green);
+                color: var(--good);
             }
 
             .feedback.no {
-                color: var(--coral);
+                color: var(--bad);
             }
 
         /* ---------- 排行榜 ---------- */
@@ -647,8 +557,8 @@
             width: 9px;
             height: 9px;
             border-radius: 50%;
-            background: var(--green);
-            box-shadow: 0 0 0 3px rgba(46,204,113,0.25);
+            background: var(--good);
+            box-shadow: 0 0 0 3px rgba(127,176,110,0.25);
             animation: blink 1.6s infinite;
         }
 
@@ -680,7 +590,7 @@
             font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
             font-size: 1.2rem;
-            color: var(--purple-dark);
+            color: var(--sun-deep);
             margin: -12px 4px 2px 0;
         }
 
@@ -691,13 +601,19 @@
             padding: 11px 10px;
             border-radius: 14px;
             margin-bottom: 7px;
-            background: #FBFAFF;
+            background: #FFFDF6;
             border: 1.5px solid var(--line);
+            transition: transform .12s ease, box-shadow .12s ease;
         }
 
+            .lb-row:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 16px -10px rgba(95,161,121,0.4);
+            }
+
             .lb-row.me {
-                background: linear-gradient(135deg, rgba(255,61,129,0.10), rgba(124,58,237,0.10));
-                border: 1.5px solid var(--pink);
+                background: linear-gradient(135deg, rgba(255,217,138,0.18), rgba(95,161,121,0.12));
+                border: 1.5px solid var(--leaf-deep);
             }
 
         .lb-rank {
@@ -724,8 +640,8 @@
             font-family: 'Baloo 2', sans-serif;
             font-size: 1.2rem;
             font-weight: 700;
-            color: var(--cyan-dark);
-            background: rgba(46,204,113,0.15);
+            color: var(--leaf-deep);
+            background: rgba(127,176,110,0.15);
             padding: 3px 9px;
             border-radius: 20px;
             flex-shrink: 0;
@@ -738,7 +654,7 @@
             width: 46px;
             text-align: right;
             flex-shrink: 0;
-            color: var(--purple);
+            color: var(--sun-deep);
         }
 
         .lb-empty {
@@ -764,22 +680,24 @@
             padding: 0 8px;
             border-radius: 999px;
             border: 1.5px solid var(--line);
-            background: #FBFAFF;
+            background: #FFFDF6;
             color: var(--slate);
             font-family: 'Baloo 2', sans-serif;
             font-size: 0.78rem;
             font-weight: 700;
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
             transition: background .12s ease, color .12s ease, border-color .12s ease;
         }
 
             .lb-page-btn:hover:not(:disabled) {
-                border-color: var(--pink);
-                color: var(--pink);
+                border-color: var(--leaf-deep);
+                color: var(--leaf-deep);
             }
 
             .lb-page-btn.active {
-                background: linear-gradient(135deg, var(--pink), var(--purple));
+                background: linear-gradient(135deg, var(--sun), var(--leaf-deep));
                 border-color: transparent;
                 color: #fff;
             }
@@ -806,7 +724,7 @@
         }
 
         .stat {
-            background: linear-gradient(180deg,#FBFAFF,#F3EEFF);
+            background: linear-gradient(180deg,#FFFDF3,#FFF3D9);
             border: 2px solid var(--line);
             border-radius: 16px;
             padding: 18px 8px;
@@ -817,7 +735,7 @@
                 font-family: 'Baloo 2', sans-serif;
                 font-size: 1.6rem;
                 font-weight: 800;
-                color: var(--purple);
+                color: var(--leaf-deep);
             }
 
             .stat .lbl {
@@ -832,17 +750,18 @@
             text-align: center;
             display: block;
             margin-bottom: 6px;
-            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
+            filter: drop-shadow(0 6px 10px rgba(242,166,90,0.4));
+            animation: bounce 2.4s ease-in-out infinite;
         }
 
         .closed-msg {
-            background: #FFF4E5;
-            border: 2px dashed var(--orange);
+            background: #FFF3D9;
+            border: 2px dashed var(--sun-deep);
             border-radius: 16px;
             padding: 18px;
             text-align: center;
             font-weight: 700;
-            color: #9A5B00;
+            color: #8A5B24;
             margin-bottom: 6px;
             font-family: 'Baloo 2', sans-serif;
         }
@@ -862,19 +781,22 @@
             padding: 15px 18px;
             border-radius: 16px;
             border: 2.5px solid var(--line);
-            background: #FBFAFF;
+            background: #FFFDF6;
             font-family: 'Noto Sans TC', sans-serif;
             font-weight: 700;
             font-size: 1.3rem;
             color: var(--ink);
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
             transition: all .12s ease;
         }
 
             .choice-btn:hover:not(:disabled) {
-                border-color: var(--purple);
-                background: #F3EEFF;
+                border-color: var(--leaf-deep);
+                background: #F3F6EC;
                 transform: translateY(-2px);
+                box-shadow: 0 8px 16px -10px rgba(95,161,121,0.35);
             }
 
             .choice-btn:disabled {
@@ -882,20 +804,20 @@
             }
 
             .choice-btn.correct {
-                background: linear-gradient(135deg, #34E89E, var(--green));
-                border-color: var(--green);
+                background: linear-gradient(135deg, #9AC9A0, var(--leaf-deep));
+                border-color: var(--leaf-deep);
                 color: #fff;
             }
 
             .choice-btn.wrong-selected {
-                background: linear-gradient(135deg, #FF7A7A, var(--coral));
-                border-color: var(--coral);
+                background: linear-gradient(135deg, #F3B3A6, var(--coral-deep));
+                border-color: var(--coral-deep);
                 color: #fff;
             }
 
             .choice-btn.selected {
-                background: #F3EEFF;
-                border-color: var(--purple);
+                background: #F3F6EC;
+                border-color: var(--leaf-deep);
                 color: var(--ink);
             }
 
@@ -906,7 +828,7 @@
             width: 26px;
             height: 26px;
             border-radius: 50%;
-            background: var(--purple);
+            background: var(--leaf-deep);
             color: #fff;
             font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
@@ -977,19 +899,19 @@
                 font-size: 1.35rem;
             }
         }
+
     </style>
 </head>
 <body>
-    <div id="skyStage">
-        <div class="godrays"></div>
-        <div class="sunGlow"></div>
-        <div class="cloud-layer back" id="cloudBack"></div>
-        <div class="cloud-layer mid" id="cloudMid"></div>
-        <div class="cloud-layer front" id="cloudFront"></div>
-        <div class="mountains"></div>
-        <div id="dustLayer"></div>
+    <div class="ghibli-bg" aria-hidden="true">
+        <div class="hill back"></div>
+        <div class="hill"></div>
+        <span class="drift" style="top:8%; animation-duration:26s; animation-delay:0s;">☁️</span>
+        <span class="drift" style="top:18%; animation-duration:34s; animation-delay:-8s;">🍃</span>
+        <span class="drift" style="top:5%; animation-duration:40s; animation-delay:-20s;">☁️</span>
+        <span class="drift" style="top:28%; animation-duration:22s; animation-delay:-4s;">🌿</span>
+        <span class="drift" style="top:14%; animation-duration:30s; animation-delay:-14s;">🍃</span>
     </div>
-    <div id="cursorGlow"></div>
     <div class="wrap">
         <div class="brand">
             <span class="mascot">🧼</span>
@@ -1321,12 +1243,20 @@
             const scoreNum = document.getElementById('scoreNum');
             if (scoreNum) scoreNum.textContent = state.score;
 
+            const dialEl = document.getElementById('dial');
+            if (dialEl) {
+                dialEl.classList.remove('flash-correct', 'flash-wrong');
+                void dialEl.offsetWidth;
+                dialEl.classList.add(isCorrect ? 'flash-correct' : 'flash-wrong');
+                setTimeout(() => dialEl.classList.remove('flash-correct', 'flash-wrong'), 700);
+            }
+
             if (q.type === 'choice') {
                 q.options.forEach((opt, idx) => {
                     const btn = document.getElementById('choiceBtn' + idx);
                     if (!btn) return;
                     btn.disabled = true;
-                    if (idx === selected) btn.classList.add('selected');
+                    if (idx === selected) btn.classList.add(isCorrect ? 'correct' : 'wrong-selected');
                 });
             } else {
                 document.getElementById('btnTrue').disabled = true;
@@ -1362,115 +1292,27 @@
             render();
         }
 
+        function spawnRipple(e) {
+            const btn = e.target.closest('.btn, .ans-btn, .choice-btn, .lb-page-btn');
+            if (!btn || btn.disabled) return;
+            const rect = btn.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            const ripple = document.createElement('span');
+            ripple.className = 'ripple';
+            ripple.style.width = ripple.style.height = size + 'px';
+            ripple.style.left = ((e.clientX ?? rect.left + rect.width / 2) - rect.left - size / 2) + 'px';
+            ripple.style.top = ((e.clientY ?? rect.top + rect.height / 2) - rect.top - size / 2) + 'px';
+            btn.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 650);
+        }
+        document.addEventListener('pointerdown', spawnRipple);
+
         (async function init() {
             await fetchState('list');
             lastKnownRegOpen = state.registrationOpen;
             render();
             startPolling();
         })();
-
-        /* =====================================================================
-           以下為新增的視覺特效程式碼（雲層 / 光塵 / 流星 / 游標光暈 / 按鈕水波紋）
-           純屬疊加效果，不影響上方任何計分、排行榜、API 串接邏輯。
-           ===================================================================== */
-        function buildClouds(layerId, count, sizeRange, opacityRange) {
-            const layer = document.getElementById(layerId);
-            if (!layer) return;
-            let html = '';
-            for (let i = 0; i < count; i++) {
-                const w = sizeRange[0] + Math.random() * (sizeRange[1] - sizeRange[0]);
-                const h = w * (0.35 + Math.random() * 0.15);
-                const top = Math.random() * 100;
-                const left = Math.random() * 120 - 10;
-                const op = opacityRange[0] + Math.random() * (opacityRange[1] - opacityRange[0]);
-                const lit = Math.random() > 0.5;
-                const color = lit
-                    ? 'radial-gradient(ellipse at 35% 35%, var(--cloud-lit), rgba(255,255,255,0) 70%)'
-                    : 'radial-gradient(ellipse at 35% 35%, rgba(255,255,255,0.7), var(--cloud-shadow) 75%)';
-                html += `<div class="cloud" style="top:${top}%;left:${left}%;width:${w}px;height:${h}px;opacity:${op};background:${color};"></div>`;
-            }
-            layer.innerHTML = html;
-        }
-
-        function buildDust(count) {
-            const layer = document.getElementById('dustLayer');
-            if (!layer) return;
-            let html = '';
-            for (let i = 0; i < count; i++) {
-                const left = Math.random() * 100;
-                const dur = 10 + Math.random() * 14;
-                const delay = Math.random() * 14;
-                const twinkleDelay = Math.random() * 3;
-                const size = 2 + Math.random() * 2.5;
-                html += `<div class="dust" style="left:${left}%; bottom:-5%; width:${size}px; height:${size}px; animation-duration:${dur}s, 3s; animation-delay:${delay}s, ${twinkleDelay}s;"></div>`;
-            }
-            layer.innerHTML = html;
-        }
-
-        function spawnShootingStar() {
-            const stage = document.getElementById('skyStage');
-            if (!stage) return;
-            const star = document.createElement('div');
-            star.className = 'shootingStar';
-            star.style.top = (5 + Math.random() * 25) + '%';
-            star.style.left = (55 + Math.random() * 35) + '%';
-            stage.appendChild(star);
-            setTimeout(() => star.remove(), 1200);
-        }
-
-        function initCursorGlow() {
-            const glow = document.getElementById('cursorGlow');
-            if (!glow) return;
-            let hideTimer = null;
-            window.addEventListener('mousemove', (e) => {
-                glow.style.opacity = '1';
-                glow.style.left = e.clientX + 'px';
-                glow.style.top = e.clientY + 'px';
-                clearTimeout(hideTimer);
-                hideTimer = setTimeout(() => { glow.style.opacity = '0'; }, 1200);
-
-                // 雲層與光束依滑鼠位置做微視差
-                const px = (e.clientX / window.innerWidth - 0.5);
-                const py = (e.clientY / window.innerHeight - 0.5);
-                const back = document.getElementById('cloudBack');
-                const mid = document.getElementById('cloudMid');
-                const front = document.getElementById('cloudFront');
-                if (back) back.style.marginLeft = (px * 10) + 'px';
-                if (mid) mid.style.marginLeft = (px * 20) + 'px';
-                if (front) front.style.marginLeft = (px * 34) + 'px';
-                const rays = document.querySelector('.godrays');
-                if (rays) rays.style.marginTop = (py * 16) + 'px';
-            }, { passive: true });
-        }
-
-        function initRippleEffect() {
-            document.addEventListener('click', (e) => {
-                const target = e.target.closest('.btn, .ans-btn, .choice-btn');
-                if (!target) return;
-                const rect = target.getBoundingClientRect();
-                const ripple = document.createElement('span');
-                const size = Math.max(rect.width, rect.height);
-                ripple.className = 'ripple';
-                ripple.style.width = ripple.style.height = size + 'px';
-                ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
-                ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
-                target.appendChild(ripple);
-                setTimeout(() => ripple.remove(), 650);
-            });
-        }
-
-        function initSkyEffects() {
-            buildClouds('cloudBack', 4, [160, 260], [0.3, 0.5]);
-            buildClouds('cloudMid', 4, [120, 200], [0.4, 0.65]);
-            buildClouds('cloudFront', 3, [90, 150], [0.55, 0.85]);
-            buildDust(26);
-            initCursorGlow();
-            initRippleEffect();
-            setInterval(spawnShootingStar, 6000);
-            setTimeout(spawnShootingStar, 1500);
-        }
-
-        initSkyEffects();
     </script>
 </body>
 </html>
