@@ -279,6 +279,8 @@
         .qlist-wrap {
             margin: 0 0 6px;
             padding-right: 4px;
+            width: calc(100% + 5px);
+            margin-left: -2.5px;
         }
 
         .qlist-row {
@@ -603,7 +605,8 @@
             color: var(--slate);
             margin: 0 0 16px 17px;
         }
-   .board-total-label {
+
+        .board-total-label {
             text-align: right;
             font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
@@ -611,6 +614,7 @@
             color: #880000;
             margin: -12px 4px 2px 0;
         }
+
         .lb-row {
             display: flex;
             align-items: center;
@@ -1035,14 +1039,14 @@
 
         function boardHtml() {
             return `
-                                    <div class="card">
-                                      <div class="board-head"><div class="live-dot"></div><div class="board-title">🔥 得分排行榜 (即時)</div></div>
-                                      <div class="board-sub">依分數排序，每 2 秒自動更新</div>
-                                      <div class="board-total-label">總積分</div>
-                                      <div id="lb-list"></div>
-                                      <div id="lb-pagination"></div>
-                                    </div>
-                                  `;
+                                            <div class="card">
+                                              <div class="board-head"><div class="live-dot"></div><div class="board-title">🔥 得分排行榜 (即時)</div></div>
+                                              <div class="board-sub">依分數排序，每 2 秒自動更新</div>
+                                              <div class="board-total-label">總積分</div>
+                                              <div id="lb-list"></div>
+                                              <div id="lb-pagination"></div>
+                                            </div>
+                                          `;
         }
 
         const LB_PAGE_SIZE = 20;
@@ -1071,13 +1075,13 @@
                 const isMe = id === state.playerId;
                 const rankDisplay = medals[i] || (i + 1);
                 return `
-                                      <div class="lb-row ${isMe ? 'me' : ''}">
-                                        <div class="lb-rank">${rankDisplay}</div>
-                                        <div class="lb-name">${escapeHtml(e.name)}${isMe ? ' (你)' : ''}</div>
-                                        <div class="lb-correct">✓ ${e.correct}/${e.total}</div>
-                                        <div class="lb-score">${e.score}</div>
-                                      </div>
-                                    `;
+                                              <div class="lb-row ${isMe ? 'me' : ''}">
+                                                <div class="lb-rank">${rankDisplay}</div>
+                                                <div class="lb-name">${escapeHtml(e.name)}${isMe ? ' (你)' : ''}</div>
+                                                <div class="lb-correct">✓ ${e.correct}/${e.total}</div>
+                                                <div class="lb-score">${e.score}</div>
+                                              </div>
+                                            `;
             }).join('');
 
             if (pagEl) {
@@ -1109,12 +1113,12 @@
 
         function statsHtml() {
             return `
-                                    <div class="card mt-3">
-                                      <div class="board-head"><div class="live-dot" style="background:var(--coral)"></div><div class="board-title">📊 題目答錯率排行 (即時)</div></div>
-                                      <div class="board-sub">依答錯率高到低排序，每 2 秒自動更新</div>
-                                      <div id="stats-list"></div>
-                                    </div>
-                                  `;
+                                            <div class="card mt-3">
+                                              <div class="board-head"><div class="live-dot" style="background:var(--coral)"></div><div class="board-title">📊 題目答錯率排行 (即時)</div></div>
+                                              <div class="board-sub">依答錯率高到低排序，每 2 秒自動更新</div>
+                                              <div id="stats-list"></div>
+                                            </div>
+                                          `;
         }
 
         function renderStatsList() {
@@ -1137,12 +1141,12 @@
                     const shortText = e.text.length > 15 ? e.text.slice(0, 15) + '…' : e.text;
                     const barColor = e.wrongRate >= 50 ? 'var(--coral)' : (e.wrongRate >= 25 ? 'var(--orange)' : 'var(--green)');
                     return `
-                                      <div class="stat-bar-row" title="${escapeHtml(e.text)}（共 ${e.total} 人次作答）">
-                                        <div class="stat-bar-label">${escapeHtml(shortText)}</div>
-                                        <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${e.wrongRate}%; background:${barColor};"></div></div>
-                                        <div class="stat-bar-pct">${e.wrongRate}%</div>
-                                      </div>
-                                    `;
+                                              <div class="stat-bar-row" title="${escapeHtml(e.text)}（共 ${e.total} 人次作答）">
+                                                <div class="stat-bar-label">${escapeHtml(shortText)}</div>
+                                                <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${e.wrongRate}%; background:${barColor};"></div></div>
+                                                <div class="stat-bar-pct">${e.wrongRate}%</div>
+                                              </div>
+                                            `;
                 }).join('');
             }
             updateQlistWrongRates();
@@ -1162,41 +1166,41 @@
             const app = document.getElementById('app');
             if (state.screen === 'login') {
                 app.innerHTML = `
-                                      <div class="row g-3">
-                                        <div class="col-lg-8">
-                                          <div class="card">
-                                            <div class="qlist-header-row">
-                                              <h2>題目列表</h2>
-                                              <div class="qlist-header-actions">
-                                                <button id="resetBoardBtn">主持人選項：清空排行榜與統計</button>
-                                                <button id="toggleRegBtn">主持人選項：${state.registrationOpen ? '🔒 關閉作答' : '🔓 開啟作答'}</button>
-                                              </div>
-                                            </div>
-                                            <div class="qlist-wrap">
-                                              ${QUESTIONS.map((q, i) => {
+                                              <div class="row g-3">
+                                                <div class="col-lg-8">
+                                                  <div class="card">
+                                                    <div class="qlist-header-row">
+                                                      <h2>題目列表</h2>
+                                                      <div class="qlist-header-actions">
+                                                        <button id="resetBoardBtn">主持人選項：清空排行榜與統計</button>
+                                                        <button id="toggleRegBtn">主持人選項：${state.registrationOpen ? '🔒 關閉作答' : '🔓 開啟作答'}</button>
+                                                      </div>
+                                                    </div>
+                                                    <div class="qlist-wrap">
+                                                      ${QUESTIONS.map((q, i) => {
                         const s = (state.stats && state.stats[q.id]) || {};
                         const wrongRate = s.total > 0 ? Math.round((s.wrong / s.total) * 100) : 0;
                         return `
-                                                <div class="qlist-row">
-                                                  <div class="qlist-top">
-                                                    <span class="qlist-idx">#${i + 1}　${q.id.toUpperCase()}</span>
-                                                    <span class="qlist-type ${q.type === 'choice' ? 'choice' : ''}">${q.type === 'choice' ? '選擇題' : '是非題'}</span>
-                                                    <div class="stat-bar-pct" id="qlist-pct-${q.id}">答錯率 : ${wrongRate}%</div>
-                                                  </div>
-                                                  <div class="qlist-text">${escapeHtml(q.text)}</div>
-                                                  ${q.type === 'choice'
+                                                        <div class="qlist-row">
+                                                          <div class="qlist-top">
+                                                            <span class="qlist-idx">#${i + 1}　${q.id.toUpperCase()}</span>
+                                                            <span class="qlist-type ${q.type === 'choice' ? 'choice' : ''}">${q.type === 'choice' ? '選擇題' : '是非題'}</span>
+                                                            <div class="stat-bar-pct" id="qlist-pct-${q.id}">答錯率 : ${wrongRate}%</div>
+                                                          </div>
+                                                          <div class="qlist-text">${escapeHtml(q.text)}</div>
+                                                          ${q.type === 'choice'
                                 ? `<div class="qlist-options">${q.options.map((opt, idx) => `<div class="qlist-opt ${idx === q.correctIndex ? 'correct' : ''}">${String.fromCharCode(65 + idx)}. ${escapeHtml(opt)}${idx === q.correctIndex ? ' ✓ 正解' : ''}</div>`).join('')}</div>`
                                 : `<div class="qlist-answer">✓ 正確答案：${q.answer ? '是 / 正確' : '否 / 錯誤'}</div>`
                             }
-                                                </div>
-                                              `;
+                                                        </div>
+                                                      `;
                     }).join('')}
-                                            </div>
-                                          </div>
-                                        </div>
-                                        <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
-                                      </div>
-                                    `;
+                                                    </div>
+                                                  </div>
+                                                </div>
+                                                <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
+                                              </div>
+                                            `;
                 document.getElementById('resetBoardBtn').onclick = onResetBoard;
                 document.getElementById('toggleRegBtn').onclick = onToggleRegistration;
                 renderBoardList();
@@ -1207,39 +1211,39 @@
                 const pct = Math.round((state.currentIndex / state.questions.length) * 100);
                 const answersHtml = q.type === 'choice'
                     ? `<div class="choice-list">${q.options.map((opt, idx) => `
-                                              <button class="choice-btn" id="choiceBtn${idx}" ${state.locked ? 'disabled' : ''}><span class="choice-letter">${String.fromCharCode(65 + idx)}</span>${escapeHtml(opt)}</button>
-                                            `).join('')}</div>`
+                                                      <button class="choice-btn" id="choiceBtn${idx}" ${state.locked ? 'disabled' : ''}><span class="choice-letter">${String.fromCharCode(65 + idx)}</span>${escapeHtml(opt)}</button>
+                                                    `).join('')}</div>`
                     : `<div class="answers">
-                                              <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
-                                              <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
-                                            </div>`;
+                                                      <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
+                                                      <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
+                                                    </div>`;
                 app.innerHTML = `
-                                      <div class="row g-3">
-                                        <div class="col-lg-8">
-                                          <div class="card">
-                                            <div class="dial-zone">
-                                              <div class="dial" id="dial">
-                                                <div class="dial-inner">
-                                                  <div class="dial-score" id="scoreNum">${state.score}</div>
-                                                  <div class="dial-label">目前分數</div>
+                                              <div class="row g-3">
+                                                <div class="col-lg-8">
+                                                  <div class="card">
+                                                    <div class="dial-zone">
+                                                      <div class="dial" id="dial">
+                                                        <div class="dial-inner">
+                                                          <div class="dial-score" id="scoreNum">${state.score}</div>
+                                                          <div class="dial-label">目前分數</div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <div class="progress-wrap">
+                                                      第 ${state.currentIndex + 1} / ${state.questions.length} 題　<span class="name-chip">👤 ${escapeHtml(state.name)}</span>
+                                                      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+                                                    </div>
+                                                    <div class="qcard">
+                                                      <div class="qpoints">⭐ 本題配分：${q.points} 分　${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
+                                                      <div class="qtext">${escapeHtml(q.text)}</div>
+                                                    </div>
+                                                    ${answersHtml}
+                                                    <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
+                                                  </div>
                                                 </div>
+                                                <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
                                               </div>
-                                            </div>
-                                            <div class="progress-wrap">
-                                              第 ${state.currentIndex + 1} / ${state.questions.length} 題　<span class="name-chip">👤 ${escapeHtml(state.name)}</span>
-                                              <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-                                            </div>
-                                            <div class="qcard">
-                                              <div class="qpoints">⭐ 本題配分：${q.points} 分　${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
-                                              <div class="qtext">${escapeHtml(q.text)}</div>
-                                            </div>
-                                            ${answersHtml}
-                                            <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
-                                          </div>
-                                        </div>
-                                        <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
-                                      </div>
-                                    `;
+                                            `;
                 if (q.type === 'choice') {
                     q.options.forEach((opt, idx) => {
                         document.getElementById('choiceBtn' + idx).onclick = () => answer(idx);
@@ -1255,24 +1259,24 @@
                 const entries = sortedEntries();
                 const myRank = entries.findIndex(([id]) => id === state.playerId) + 1;
                 app.innerHTML = `
-                                      <div class="row g-3">
-                                        <div class="col-lg-8">
-                                          <div class="card">
-                                            <span class="trophy">🏆</span>
-                                            <p class="eyebrow text-center">作答完成</p>
-                                            <h2 class="text-center">${escapeHtml(state.name)}，你的結果出爐了！</h2>
-                                            <p class="sub text-center">${myRank > 0 ? `目前排名第 ${myRank} 名` : ''}</p>
-                                            <div class="end-stats">
-                                              <div class="stat"><div class="num">${state.score}</div><div class="lbl">總分</div></div>
-                                              <div class="stat"><div class="num">${state.correct}/${state.total}</div><div class="lbl">答對題數</div></div>
-                                              <div class="stat"><div class="num">${myRank > 0 ? ('#' + myRank) : '-'}</div><div class="lbl">目前排名</div></div>
-                                            </div>
-                                            <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
-                                          </div>
-                                        </div>
-                                        <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
-                                      </div>
-                                    `;
+                                              <div class="row g-3">
+                                                <div class="col-lg-8">
+                                                  <div class="card">
+                                                    <span class="trophy">🏆</span>
+                                                    <p class="eyebrow text-center">作答完成</p>
+                                                    <h2 class="text-center">${escapeHtml(state.name)}，你的結果出爐了！</h2>
+                                                    <p class="sub text-center">${myRank > 0 ? `目前排名第 ${myRank} 名` : ''}</p>
+                                                    <div class="end-stats">
+                                                      <div class="stat"><div class="num">${state.score}</div><div class="lbl">總分</div></div>
+                                                      <div class="stat"><div class="num">${state.correct}/${state.total}</div><div class="lbl">答對題數</div></div>
+                                                      <div class="stat"><div class="num">${myRank > 0 ? ('#' + myRank) : '-'}</div><div class="lbl">目前排名</div></div>
+                                                    </div>
+                                                    <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
+                                                  </div>
+                                                </div>
+                                                <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
+                                              </div>
+                                            `;
                 renderBoardList();
                 renderStatsList();
             }
