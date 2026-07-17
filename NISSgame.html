@@ -6,28 +6,32 @@
     <title>感控問答擂台</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-
-
-        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Space+Grotesk:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
 
         :root {
-            --pink: #FF3D81;
-            --pink-dark: #E01E68;
-            --orange: #FF8C42;
+            --pink: #FF2E92;
+            --pink-soft: #FF6BB3;
             --purple: #7C3AED;
-            --purple-dark: #5B21B6;
-            --cyan: #22D3EE;
-            --yellow: #FFD23F;
-            --green: #2ECC71;
-            --coral: #FF5C5C;
-            --ink: #2A1B3D;
+            --purple-dark: #4C1D95;
+            --teal: #16E0BD;
+            --gold: #FFC93C;
+            --gold-dark: #E8A200;
+            --success: #1FD980;
+            --danger: #FF4D6D;
+            --ink: #1B1030;
             --slate: #8B7BA8;
             --card: #FFFFFF;
-            --line: #F0E6FF;
+            --line: #ECE3FF;
+            --bg-deep: #0C0620;
         }
 
         * {
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -35,14 +39,53 @@
             min-height: 100vh;
             font-family: 'Noto Sans TC', sans-serif;
             color: var(--ink);
-            background: radial-gradient(circle at 15% 0%, rgba(255,61,129,0.35), transparent 45%), radial-gradient(circle at 90% 10%, rgba(34,211,238,0.30), transparent 40%), radial-gradient(circle at 50% 100%, rgba(255,210,63,0.25), transparent 45%), linear-gradient(160deg, #3B0A63 0%, #6D28D9 45%, #9333EA 100%);
+            background:
+                radial-gradient(circle at 12% -6%, rgba(255,46,146,0.55), transparent 42%),
+                radial-gradient(circle at 92% 8%, rgba(22,224,189,0.42), transparent 40%),
+                radial-gradient(circle at 50% 108%, rgba(255,201,60,0.30), transparent 46%),
+                linear-gradient(160deg, #16072E 0%, #3B0A63 42%, #5B189B 78%, #7C2CC7 100%);
             background-attachment: fixed;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+            /* 微微的掃描格紋，讓底色不會只是單純漸層 */
+            body::before {
+                content: '';
+                position: fixed;
+                inset: 0;
+                pointer-events: none;
+                z-index: 0;
+                opacity: 0.5;
+                background-image:
+                    repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 3px);
+            }
+
+            /* 浮動光斑，緩慢飄動製造氛圍 */
+            body::after {
+                content: '';
+                position: fixed;
+                inset: -10%;
+                pointer-events: none;
+                z-index: 0;
+                background:
+                    radial-gradient(circle at 20% 30%, rgba(255,255,255,0.10), transparent 8%),
+                    radial-gradient(circle at 75% 65%, rgba(255,255,255,0.08), transparent 6%),
+                    radial-gradient(circle at 40% 80%, rgba(255,255,255,0.07), transparent 7%);
+                animation: driftGlow 14s ease-in-out infinite alternate;
+            }
+
+        @keyframes driftGlow {
+            0% { transform: translate(0,0) scale(1); }
+            100% { transform: translate(2%,-3%) scale(1.05); }
         }
 
         .wrap {
             max-width: 1120px;
             margin: 0 auto;
             padding: 22px 16px 60px;
+            position: relative;
+            z-index: 1;
         }
 
         /* ---------- 頂部品牌列 ---------- */
@@ -50,100 +93,141 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 22px;
+            margin-bottom: 24px;
             justify-content: center;
         }
 
             .brand .mascot {
-                font-size: 2.1rem;
-                filter: drop-shadow(0 4px 10px rgba(0,0,0,0.35));
+                font-size: 2.2rem;
+                filter: drop-shadow(0 4px 10px rgba(0,0,0,0.4));
                 animation: bounce 2.4s ease-in-out infinite;
             }
 
         @keyframes bounce {
-            0%,100% {
-                transform: translateY(0) rotate(-4deg);
-            }
-
-            50% {
-                transform: translateY(-6px) rotate(4deg);
-            }
+            0%,100% { transform: translateY(0) rotate(-4deg); }
+            50% { transform: translateY(-7px) rotate(4deg); }
         }
 
         .brand h1 {
             font-family: 'Baloo 2', sans-serif;
-            font-size: 1.5rem;
+            font-size: 1.55rem;
             font-weight: 800;
             letter-spacing: 0.02em;
             margin: 0;
             color: #fff;
-            text-shadow: 0 3px 0 rgba(0,0,0,0.25);
+            background: linear-gradient(120deg, #fff 30%, var(--gold) 60%, #fff 90%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 3px 14px rgba(255,46,146,0.35);
         }
 
         .brand .badge-live {
-            font-family: 'Baloo 2', sans-serif;
-            font-size: 1.3rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.8rem;
             font-weight: 700;
-            background: linear-gradient(135deg, var(--yellow), var(--orange));
+            letter-spacing: 0.06em;
+            background: linear-gradient(135deg, var(--gold), #FF8C42);
             color: #4a2600;
-            padding: 4px 12px;
+            padding: 6px 14px;
             border-radius: 999px;
-            box-shadow: 0 4px 10px rgba(255,140,66,0.5);
-        }
-
-        /* ---------- 卡片 ---------- */
-        .card {
-            background: var(--card);
-            border: none;
-            border-radius: 28px;
-            padding: 28px;
-            box-shadow: 0 20px 45px -18px rgba(59,10,99,0.55);
+            box-shadow: 0 4px 14px -2px rgba(255,140,66,0.6);
             position: relative;
             overflow: hidden;
+        }
+
+            .brand .badge-live::after {
+                content: '';
+                position: absolute;
+                top: 0; left: -60%;
+                width: 40%; height: 100%;
+                background: linear-gradient(115deg, transparent, rgba(255,255,255,0.65), transparent);
+                animation: shine 2.6s ease-in-out infinite;
+            }
+
+        @keyframes shine {
+            0% { left: -60%; }
+            60%,100% { left: 130%; }
+        }
+
+        /* ---------- 卡片（HUD 面板） ---------- */
+        .card {
+            background: var(--card);
+            border: 1.5px solid rgba(255,255,255,0.6);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: 0 24px 50px -18px rgba(30,4,64,0.6), 0 0 0 1px rgba(255,255,255,0.4) inset;
+            position: relative;
+            overflow: hidden;
+            animation: cardIn .5s cubic-bezier(.22,1.1,.4,1) both;
+        }
+
+        .row.g-3 > [class^="col-"]:nth-child(2) .card {
+            animation-delay: .08s;
+        }
+
+        @keyframes cardIn {
+            from { opacity: 0; transform: translateY(18px) scale(.98); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
         }
 
             .card::before {
                 content: '';
                 position: absolute;
-                top: -40px;
-                right: -40px;
-                width: 140px;
-                height: 140px;
+                top: -46px;
+                right: -46px;
+                width: 150px;
+                height: 150px;
                 border-radius: 50%;
-                background: radial-gradient(circle, rgba(255,61,129,0.18), transparent 70%);
+                background: radial-gradient(circle, rgba(255,46,146,0.16), transparent 70%);
             }
 
+            .card::after {
+                content: '';
+                position: absolute;
+                top: 0; left: 0;
+                width: 100%; height: 5px;
+                background: linear-gradient(90deg, var(--pink), var(--purple), var(--teal), var(--gold));
+                background-size: 250% 100%;
+                animation: hueSlide 6s linear infinite;
+            }
+
+        @keyframes hueSlide {
+            0% { background-position: 0% 0; }
+            100% { background-position: 250% 0; }
+        }
+
         .eyebrow {
-            font-family: 'Baloo 2', sans-serif;
-            font-size: 1.4rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.82rem;
             font-weight: 700;
-            letter-spacing: 0.1em;
+            letter-spacing: 0.18em;
             text-transform: uppercase;
-            color: green;
-            margin: 0 0 6px;
+            color: var(--pink);
+            margin: 6px 0 6px;
         }
 
         h2 {
             font-family: 'Baloo 2', sans-serif;
-            font-size: 1.6rem;
+            font-size: 1.55rem;
             font-weight: 800;
             margin: 0 0 8px;
             color: var(--ink);
         }
 
         p.sub {
-            color: deeppink;
+            color: var(--slate);
             margin: 0 0 22px;
-            line-height: 1.7;
-            font-size: 1.3rem;
-            font-weight: 800;
+            line-height: 1.75;
+            font-size: 0.95rem;
+            font-weight: 500;
         }
 
         label {
             display: block;
             font-size: 0.85rem;
             color: var(--slate);
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 6px;
         }
 
@@ -152,7 +236,7 @@
             padding: 15px 18px;
             border-radius: 16px;
             border: 2.5px solid var(--line);
-            font-size: 1.5rem;
+            font-size: 1.15rem;
             font-family: inherit;
             background: #FBFAFF;
             color: var(--ink);
@@ -162,11 +246,11 @@
             input[type=text]:focus {
                 outline: none;
                 border-color: var(--pink);
-                box-shadow: 0 0 0 4px rgba(255,61,129,0.18);
+                box-shadow: 0 0 0 4px rgba(255,46,146,0.16);
                 background: #fff;
             }
 
-        /* ---------- 按鈕 ---------- */
+        /* ---------- 按鈕（電玩手感：按下去會有 3D 回饋） ---------- */
         .btn {
             appearance: none;
             border: none;
@@ -176,27 +260,34 @@
             font-size: 1.05rem;
             border-radius: 16px;
             padding: 15px 22px;
-            transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+            position: relative;
+            transition: transform .1s ease, box-shadow .1s ease, filter .12s ease;
+            overflow: hidden;
         }
 
             .btn:active {
-                transform: scale(0.96);
+                transform: translateY(3px) scale(0.98);
             }
 
         .btn-primary {
             background: linear-gradient(135deg, var(--pink), var(--purple));
             color: #fff;
-            box-shadow: 0 10px 24px -8px rgba(255,61,129,0.65);
+            box-shadow: 0 8px 0 0 var(--purple-dark), 0 14px 26px -8px rgba(255,46,146,0.55);
         }
 
             .btn-primary:hover {
                 filter: brightness(1.08);
             }
 
+            .btn-primary:active {
+                box-shadow: 0 3px 0 0 var(--purple-dark), 0 8px 18px -8px rgba(255,46,146,0.5);
+            }
+
         .btn-block {
             width: 100%;
             margin-top: 18px;
-            font-size: 1.5rem;
+            font-size: 1.15rem;
+            letter-spacing: 0.02em;
         }
 
         .btn-ghost {
@@ -231,100 +322,136 @@
                 font-family: inherit;
             }
 
-        /* ---------- 分數圓盤 ---------- */
+        /* 觸控漣漪效果 */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.55);
+            transform: scale(0);
+            animation: rippleAnim .55s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes rippleAnim {
+            to { transform: scale(2.6); opacity: 0; }
+        }
+
+        /* ---------- 分數能量核心 ---------- */
         .dial-zone {
             display: flex;
             flex-direction: column;
             align-items: center;
+            margin-bottom: 6px;
+        }
+
+        .streak-badge {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #fff;
+            background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+            padding: 4px 14px;
+            border-radius: 999px;
             margin-bottom: 10px;
+            box-shadow: 0 6px 14px -4px rgba(232,162,0,0.6);
+            opacity: 0;
+            transform: scale(0.6);
+            transition: opacity .25s ease, transform .25s cubic-bezier(.34,1.56,.64,1);
+        }
+
+            .streak-badge.show {
+                opacity: 1;
+                transform: scale(1);
+                animation: streakPop .5s cubic-bezier(.34,1.56,.64,1);
+            }
+
+        @keyframes streakPop {
+            0% { transform: scale(0.5) rotate(-8deg); }
+            60% { transform: scale(1.15) rotate(3deg); }
+            100% { transform: scale(1) rotate(0); }
         }
 
         .dial {
             position: relative;
-            width: 150px;
-            height: 150px;
+            width: 152px;
+            height: 152px;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-bottom: 8px;
             border-radius: 50%;
-            background: conic-gradient(var(--cyan) 0deg, var(--pink) 180deg, var(--yellow) 360deg);
-            padding: 7px;
-            box-shadow: 0 12px 28px -10px rgba(124,58,237,0.55);
+            background: conic-gradient(var(--teal) 0deg, var(--pink) 180deg, var(--gold) 360deg);
+            padding: 8px;
+            box-shadow: 0 14px 32px -10px rgba(124,58,237,0.55), 0 0 0 6px rgba(255,255,255,0.35) inset;
+            animation: dialSpin 9s linear infinite;
+        }
+
+        @keyframes dialSpin {
+            from { filter: hue-rotate(0deg); }
+            to { filter: hue-rotate(360deg); }
         }
 
             .dial::after {
                 content: '';
                 position: absolute;
-                inset: 7px;
+                inset: 8px;
                 border-radius: 50%;
                 background: #fff;
+                box-shadow: 0 0 0 1px rgba(124,58,237,0.08) inset;
             }
 
         .dial-inner {
             position: relative;
             z-index: 2;
             text-align: center;
+            animation-play-state: paused;
         }
 
         .dial.flash-correct {
-            animation: pulseGood .7s ease-out;
+            animation: pulseGood .7s ease-out, dialSpin 9s linear infinite;
         }
 
         .dial.flash-wrong {
-            animation: pulseBad .7s ease-out;
+            animation: pulseBad .7s ease-out, dialSpin 9s linear infinite;
         }
 
         @keyframes pulseGood {
-            0% {
-                box-shadow: 0 0 0 0 rgba(46,204,113,0.55);
-            }
-
-            100% {
-                box-shadow: 0 0 0 30px rgba(46,204,113,0);
-            }
+            0% { box-shadow: 0 0 0 0 rgba(31,217,128,0.55), 0 0 0 6px rgba(255,255,255,0.35) inset; }
+            100% { box-shadow: 0 0 0 34px rgba(31,217,128,0), 0 0 0 6px rgba(255,255,255,0.35) inset; }
         }
 
         @keyframes pulseBad {
-            0% {
-                box-shadow: 0 0 0 0 rgba(255,92,92,0.55);
-            }
-
-            100% {
-                box-shadow: 0 0 0 30px rgba(255,92,92,0);
-            }
+            0% { box-shadow: 0 0 0 0 rgba(255,77,109,0.55), 0 0 0 6px rgba(255,255,255,0.35) inset; }
+            100% { box-shadow: 0 0 0 34px rgba(255,77,109,0), 0 0 0 6px rgba(255,255,255,0.35) inset; }
         }
 
         .dial-score {
-            font-family: 'Baloo 2', sans-serif;
-            font-size: 2.7rem;
-            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2.5rem;
+            font-weight: 700;
             color: var(--ink);
+            font-variant-numeric: tabular-nums;
         }
 
         .dial-label {
-            font-size: 1.3rem;
-            letter-spacing: 0.08em;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.68rem;
+            letter-spacing: 0.12em;
             text-transform: uppercase;
-            color: darkslateblue;
+            color: var(--slate);
             font-weight: 600;
         }
 
-        .flash-correct .dial-score {
-            color: var(--green);
-        }
-
-        .flash-wrong .dial-score {
-            color: var(--coral);
-        }
+        .flash-correct .dial-score { color: var(--success); }
+        .flash-wrong .dial-score { color: var(--danger); }
 
         .progress-wrap {
             font-family: 'Baloo 2', sans-serif;
-            font-size: 1.2rem;
+            font-size: 0.95rem;
             color: var(--ink);
             text-align: center;
             margin-bottom: 18px;
-            font-weight: 600;
+            font-weight: 700;
         }
 
             .progress-wrap .name-chip {
@@ -342,14 +469,26 @@
             background: var(--line);
             overflow: hidden;
             margin-top: 8px;
+            position: relative;
         }
 
         .progress-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--yellow), var(--orange));
-            transition: width .35s ease;
+            background: linear-gradient(90deg, var(--gold), #FF8C42, var(--pink));
+            background-size: 200% 100%;
+            transition: width .4s cubic-bezier(.3,.9,.4,1);
             border-radius: 999px;
+            position: relative;
         }
+
+            .progress-bar-fill::after {
+                content: '';
+                position: absolute;
+                inset: 0;
+                background: linear-gradient(115deg, transparent 30%, rgba(255,255,255,0.55) 50%, transparent 70%);
+                background-size: 220% 100%;
+                animation: shine 2.2s ease-in-out infinite;
+            }
 
         /* ---------- 題目卡 ---------- */
         .qcard {
@@ -358,13 +497,15 @@
             border-radius: 22px;
             padding: 26px;
             margin-bottom: 22px;
+            position: relative;
         }
 
         .qpoints {
             display: inline-block;
-            font-family: 'Baloo 2', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             font-weight: 700;
-            font-size: 1.2rem;
+            font-size: 0.82rem;
+            letter-spacing: 0.02em;
             color: #fff;
             background: linear-gradient(135deg, var(--purple), var(--pink));
             border-radius: 999px;
@@ -374,9 +515,9 @@
         }
 
         .qtext {
-            font-size: 1.7rem;
-            line-height: 1.75;
-            font-weight: 600;
+            font-size: 1.28rem;
+            line-height: 1.7;
+            font-weight: 700;
             color: var(--ink);
         }
 
@@ -392,29 +533,34 @@
             border: none;
             font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
-            font-size: 1.9rem;
+            font-size: 1.4rem;
             cursor: pointer;
             color: #fff;
-            transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+            position: relative;
+            overflow: hidden;
+            transition: transform .1s ease, box-shadow .1s ease, filter .12s ease;
         }
 
             .ans-btn.true {
-                background: linear-gradient(135deg, #34E89E, var(--green));
-                box-shadow: 0 10px 22px -8px rgba(46,204,113,0.6);
+                background: linear-gradient(135deg, #34E89E, var(--success));
+                box-shadow: 0 8px 0 0 #12A863, 0 14px 24px -8px rgba(31,217,128,0.55);
             }
 
             .ans-btn.false {
-                background: linear-gradient(135deg, #FF7A7A, var(--coral));
-                box-shadow: 0 10px 22px -8px rgba(255,92,92,0.6);
+                background: linear-gradient(135deg, #FF7A7A, var(--danger));
+                box-shadow: 0 8px 0 0 #C22F4C, 0 14px 24px -8px rgba(255,77,109,0.55);
             }
 
-            .ans-btn:hover {
+            .ans-btn:hover:not(:disabled) {
                 filter: brightness(1.06);
             }
 
-            .ans-btn:active {
-                transform: scale(0.95);
+            .ans-btn:active:not(:disabled) {
+                transform: translateY(5px);
             }
+
+            .ans-btn.true:active:not(:disabled) { box-shadow: 0 3px 0 0 #12A863; }
+            .ans-btn.false:active:not(:disabled) { box-shadow: 0 3px 0 0 #C22F4C; }
 
             .ans-btn:disabled {
                 opacity: 0.45;
@@ -431,15 +577,10 @@
             font-weight: 700;
         }
 
-            .feedback.ok {
-                color: var(--green);
-            }
+            .feedback.ok { color: var(--success); }
+            .feedback.no { color: var(--danger); }
 
-            .feedback.no {
-                color: var(--coral);
-            }
-
-        /* ---------- 排行榜 ---------- */
+        /* ---------- 排行榜（HUD 面板） ---------- */
         .board-head {
             display: flex;
             align-items: center;
@@ -451,64 +592,67 @@
             width: 9px;
             height: 9px;
             border-radius: 50%;
-            background: var(--green);
-            box-shadow: 0 0 0 3px rgba(46,204,113,0.25);
+            background: var(--success);
+            box-shadow: 0 0 0 3px rgba(31,217,128,0.25);
             animation: blink 1.6s infinite;
         }
 
         @keyframes blink {
-            0%,100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.3;
-            }
+            0%,100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
         .board-title {
             font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             color: var(--ink);
         }
 
         .board-sub {
-            font-size: 1rem;
-            color: red;
-            margin: 0 0 16px 17px;
+            font-size: 0.74rem;
+            color: var(--slate);
+            margin: 0 0 4px 17px;
         }
 
         .board-total-label {
             text-align: right;
-            font-family: 'Baloo 2', sans-serif;
-            font-weight: 800;
-            font-size: 1.2rem;
-            color: #880000;
-            margin: -12px 4px 2px 0;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
+            font-size: 0.72rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: var(--pink);
+            margin: -4px 4px 10px 0;
         }
 
         .lb-row {
             display: flex;
             align-items: center;
             gap: 10px;
-            padding: 11px 10px;
-            border-radius: 14px;
-            margin-bottom: 7px;
+            padding: 11px 12px;
+            border-radius: 16px;
+            margin-bottom: 8px;
             background: #FBFAFF;
             border: 1.5px solid var(--line);
+            transition: transform .12s ease, box-shadow .12s ease;
         }
 
+            .lb-row:hover {
+                transform: translateX(2px);
+            }
+
             .lb-row.me {
-                background: linear-gradient(135deg, rgba(255,61,129,0.10), rgba(124,58,237,0.10));
+                background: linear-gradient(135deg, rgba(255,46,146,0.10), rgba(124,58,237,0.10));
                 border: 1.5px solid var(--pink);
+                box-shadow: 0 6px 16px -8px rgba(255,46,146,0.4);
             }
 
         .lb-rank {
-            font-family: 'Baloo 2', sans-serif;
-            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
             color: var(--slate);
-            font-size: 1.2rem;
+            font-size: 1.05rem;
             width: 26px;
             flex-shrink: 0;
             text-align: center;
@@ -516,7 +660,7 @@
 
         .lb-name {
             flex: 1;
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 700;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -525,20 +669,20 @@
         }
 
         .lb-correct {
-            font-family: 'Baloo 2', sans-serif;
-            font-size: 1.2rem;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 0.78rem;
             font-weight: 700;
-            color: blue;
-            background: rgba(46,204,113,0.15);
+            color: var(--success);
+            background: rgba(31,217,128,0.14);
             padding: 3px 9px;
             border-radius: 20px;
             flex-shrink: 0;
         }
 
         .lb-score {
-            font-family: 'Baloo 2', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
             width: 46px;
             text-align: right;
             flex-shrink: 0;
@@ -547,7 +691,7 @@
 
         .lb-empty {
             color: var(--slate);
-            font-size: 1.2rem;
+            font-size: 0.95rem;
             text-align: center;
             padding: 20px 0;
         }
@@ -570,7 +714,7 @@
             border: 1.5px solid var(--line);
             background: #FBFAFF;
             color: var(--slate);
-            font-family: 'Baloo 2', sans-serif;
+            font-family: 'Space Grotesk', sans-serif;
             font-size: 0.78rem;
             font-weight: 700;
             cursor: pointer;
@@ -618,9 +762,9 @@
         }
 
             .stat .num {
-                font-family: 'Baloo 2', sans-serif;
-                font-size: 1.6rem;
-                font-weight: 800;
+                font-family: 'Space Grotesk', sans-serif;
+                font-size: 1.5rem;
+                font-weight: 700;
                 color: var(--purple);
             }
 
@@ -637,11 +781,18 @@
             display: block;
             margin-bottom: 6px;
             filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
+            animation: trophyPop .6s cubic-bezier(.34,1.56,.64,1);
+        }
+
+        @keyframes trophyPop {
+            0% { transform: scale(0.3) rotate(-15deg); opacity: 0; }
+            60% { transform: scale(1.15) rotate(6deg); opacity: 1; }
+            100% { transform: scale(1) rotate(0); }
         }
 
         .closed-msg {
             background: #FFF4E5;
-            border: 2px dashed var(--orange);
+            border: 2px dashed var(--gold-dark);
             border-radius: 16px;
             padding: 18px;
             text-align: center;
@@ -669,9 +820,11 @@
             background: #FBFAFF;
             font-family: 'Noto Sans TC', sans-serif;
             font-weight: 700;
-            font-size: 1.3rem;
+            font-size: 1rem;
             color: var(--ink);
             cursor: pointer;
+            position: relative;
+            overflow: hidden;
             transition: all .12s ease;
         }
 
@@ -686,14 +839,14 @@
             }
 
             .choice-btn.correct {
-                background: linear-gradient(135deg, #34E89E, var(--green));
-                border-color: var(--green);
+                background: linear-gradient(135deg, #34E89E, var(--success));
+                border-color: var(--success);
                 color: #fff;
             }
 
             .choice-btn.wrong-selected {
-                background: linear-gradient(135deg, #FF7A7A, var(--coral));
-                border-color: var(--coral);
+                background: linear-gradient(135deg, #FF7A7A, var(--danger));
+                border-color: var(--danger);
                 color: #fff;
             }
 
@@ -712,8 +865,8 @@
             border-radius: 50%;
             background: var(--purple);
             color: #fff;
-            font-family: 'Baloo 2', sans-serif;
-            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700;
             font-size: 0.78rem;
             margin-right: 12px;
             flex-shrink: 0;
@@ -724,63 +877,56 @@
             background: rgba(255,255,255,0.35);
         }
 
-        /* ---------- 答錯率長條圖 ---------- */
-        .stat-bar-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 11px;
-        }
-
-        .stat-bar-label {
-            width: 108px;
-            flex-shrink: 0;
-            font-size: 0.72rem;
-            font-weight: 700;
-            color: var(--ink);
+        /* ---------- 五彩紙屑（結算慶祝） ---------- */
+        .confetti-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
             overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            cursor: help;
+            z-index: 50;
         }
 
-        .stat-bar-track {
-            flex: 1;
+        .confetti-piece {
+            position: absolute;
+            top: -10px;
+            width: 8px;
             height: 14px;
-            border-radius: 999px;
-            background: var(--line);
-            overflow: hidden;
+            opacity: 0.9;
+            animation: confettiFall linear forwards;
         }
 
-        .stat-bar-fill {
-            height: 100%;
-            border-radius: 999px;
-            transition: width .4s ease;
-        }
-
-        .stat-bar-pct {
-            width: 40px;
-            text-align: right;
-            font-family: 'Baloo 2', sans-serif;
-            font-weight: 800;
-            font-size: 0.78rem;
-            flex-shrink: 0;
+        @keyframes confettiFall {
+            to {
+                transform: translateY(110vh) rotate(600deg);
+                opacity: 0.2;
+            }
         }
 
         @media(max-width:575px) {
-            .answers {
-                gap: 10px;
-            }
+            .answers { gap: 10px; }
 
             .ans-btn {
-                font-size: 1.5rem;
+                font-size: 1.1rem;
                 padding: 18px 6px;
             }
 
-            h2 {
-                font-size: 1.35rem;
+            h2 { font-size: 1.3rem; }
+
+            .qtext { font-size: 1.1rem; }
+
+            .dial { width: 128px; height: 128px; }
+
+            .dial-score { font-size: 2rem; }
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *, *::before, *::after {
+                animation-duration: 0.001ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.001ms !important;
             }
         }
+
     </style>
 </head>
 <body>
@@ -846,11 +992,63 @@
             leaderboard: {},
             stats: {},
             registrationOpen: true,
-            lbPage: 1
+            lbPage: 1,
+            streak: 0
         };
 
         let pollTimer = null;
         let lastKnownRegOpen = null;
+
+        /* ---------- 互動小工具：漣漪效果 / 分數數字滾動 / 五彩紙屑 ---------- */
+        function attachRipple(root) {
+            (root || document).querySelectorAll('.btn, .ans-btn, .choice-btn, .lb-page-btn').forEach(el => {
+                if (el.dataset.rippleBound) return;
+                el.dataset.rippleBound = '1';
+                el.addEventListener('pointerdown', e => {
+                    if (el.disabled) return;
+                    const rect = el.getBoundingClientRect();
+                    const span = document.createElement('span');
+                    const size = Math.max(rect.width, rect.height) * 1.2;
+                    span.className = 'ripple';
+                    span.style.width = span.style.height = size + 'px';
+                    span.style.left = (e.clientX - rect.left - size / 2) + 'px';
+                    span.style.top = (e.clientY - rect.top - size / 2) + 'px';
+                    el.appendChild(span);
+                    setTimeout(() => span.remove(), 600);
+                });
+            });
+        }
+
+        function animateScoreTo(el, from, to) {
+            if (!el) return;
+            const duration = 450;
+            const start = performance.now();
+            function step(now) {
+                const p = Math.min(1, (now - start) / duration);
+                const eased = 1 - Math.pow(1 - p, 3);
+                el.textContent = Math.round(from + (to - from) * eased);
+                if (p < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+        }
+
+        function spawnConfetti() {
+            const layer = document.createElement('div');
+            layer.className = 'confetti-layer';
+            const colors = ['#FF2E92', '#7C3AED', '#16E0BD', '#FFC93C', '#1FD980'];
+            for (let i = 0; i < 46; i++) {
+                const p = document.createElement('span');
+                p.className = 'confetti-piece';
+                p.style.left = (Math.random() * 100) + 'vw';
+                p.style.background = colors[i % colors.length];
+                p.style.animationDuration = (2.6 + Math.random() * 1.8) + 's';
+                p.style.animationDelay = (Math.random() * 0.6) + 's';
+                p.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+                layer.appendChild(p);
+            }
+            document.body.appendChild(layer);
+            setTimeout(() => layer.remove(), 5000);
+        }
 
         async function fetchState(action, extraParams) {
             try {
@@ -1005,6 +1203,7 @@
                     document.getElementById('nameInput').addEventListener('keydown', e => { if (e.key === 'Enter') onJoin(); });
                 }
                 renderBoardList();
+                attachRipple(app);
             }
             else if (state.screen === 'game') {
                 const q = state.questions[state.currentIndex];
@@ -1022,6 +1221,7 @@
                                     <div class="col-lg-8">
                                       <div class="card">
                                         <div class="dial-zone">
+                                          <div class="streak-badge ${state.streak >= 2 ? 'show' : ''}" id="streakBadge">🔥 連對 ${state.streak} 題！</div>
                                           <div class="dial" id="dial">
                                             <div class="dial-inner">
                                               <div class="dial-score" id="scoreNum">${state.score}</div>
@@ -1053,6 +1253,7 @@
                     document.getElementById('btnFalse').onclick = () => answer(false);
                 }
                 renderBoardList();
+                attachRipple(app);
             }
             else if (state.screen === 'end') {
                 const entries = sortedEntries();
@@ -1077,6 +1278,8 @@
                                   </div>
                                 `;
                 renderBoardList();
+                attachRipple(app);
+                spawnConfetti();
             }
         }
 
@@ -1085,7 +1288,7 @@
             const name = (input.value || '').trim();
             if (!name) {
                 input.focus();
-                input.style.borderColor = 'var(--coral)';
+                input.style.borderColor = 'var(--danger)';
                 return;
             }
             state.name = name;
@@ -1097,6 +1300,7 @@
             state.total = 0;
             state.feedback = null;
             state.locked = false;
+            state.streak = 0;
             state.screen = 'game';
             updateMyEntry(false);
             render();
@@ -1108,19 +1312,39 @@
             const q = state.questions[state.currentIndex];
             const isCorrect = q.type === 'choice' ? (selected === q.correctIndex) : (selected === q.answer);
             const delta = isCorrect ? q.points : -0;
+            const prevScore = state.score;
             state.score = Math.max(0, state.score + delta);
             state.total += 1;
-            if (isCorrect) state.correct += 1;
+            if (isCorrect) {
+                state.correct += 1;
+                state.streak += 1;
+            } else {
+                state.streak = 0;
+            }
 
             const scoreNum = document.getElementById('scoreNum');
-            if (scoreNum) scoreNum.textContent = state.score;
+            if (scoreNum) animateScoreTo(scoreNum, prevScore, state.score);
+
+            const dial = document.getElementById('dial');
+            if (dial) {
+                dial.classList.remove('flash-correct', 'flash-wrong');
+                void dial.offsetWidth; // 強制重新觸發動畫
+                dial.classList.add(isCorrect ? 'flash-correct' : 'flash-wrong');
+            }
+
+            const streakBadge = document.getElementById('streakBadge');
+            if (streakBadge) {
+                streakBadge.textContent = `🔥 連對 ${state.streak} 題！`;
+                streakBadge.classList.toggle('show', state.streak >= 2);
+            }
 
             if (q.type === 'choice') {
                 q.options.forEach((opt, idx) => {
                     const btn = document.getElementById('choiceBtn' + idx);
                     if (!btn) return;
                     btn.disabled = true;
-                    if (idx === selected) btn.classList.add('selected');
+                    if (idx === q.correctIndex) btn.classList.add('correct');
+                    else if (idx === selected) btn.classList.add('wrong-selected');
                 });
             } else {
                 document.getElementById('btnTrue').disabled = true;
@@ -1141,7 +1365,7 @@
                     state.screen = 'end';
                 }
                 render();
-            }, 500);
+            }, 700);
         }
 
         async function onResetBoard() {
