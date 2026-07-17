@@ -1,1 +1,1165 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no">
+    <title>感控問答擂台</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
 
+        :root {
+            --pink: #FF3D81;
+            --pink-dark: #E01E68;
+            --orange: #FF8C42;
+            --purple: #7C3AED;
+            --purple-dark: #5B21B6;
+            --cyan: #22D3EE;
+            --yellow: #FFD23F;
+            --green: #2ECC71;
+            --coral: #FF5C5C;
+            --ink: #2A1B3D;
+            --slate: #8B7BA8;
+            --card: #FFFFFF;
+            --line: #F0E6FF;
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            font-family: 'Noto Sans TC', sans-serif;
+            color: var(--ink);
+            background: radial-gradient(circle at 15% 0%, rgba(255,61,129,0.35), transparent 45%), radial-gradient(circle at 90% 10%, rgba(34,211,238,0.30), transparent 40%), radial-gradient(circle at 50% 100%, rgba(255,210,63,0.25), transparent 45%), linear-gradient(160deg, #3B0A63 0%, #6D28D9 45%, #9333EA 100%);
+            background-attachment: fixed;
+        }
+
+        .wrap {
+            max-width: 1120px;
+            margin: 0 auto;
+            padding: 22px 16px 60px;
+        }
+
+        /* ---------- 頂部品牌列 ---------- */
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 22px;
+            justify-content: center;
+        }
+
+            .brand .mascot {
+                font-size: 2.1rem;
+                filter: drop-shadow(0 4px 10px rgba(0,0,0,0.35));
+                animation: bounce 2.4s ease-in-out infinite;
+            }
+
+        @keyframes bounce {
+            0%,100% {
+                transform: translateY(0) rotate(-4deg);
+            }
+
+            50% {
+                transform: translateY(-6px) rotate(4deg);
+            }
+        }
+
+        .brand h1 {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            margin: 0;
+            color: #fff;
+            text-shadow: 0 3px 0 rgba(0,0,0,0.25);
+        }
+
+        .brand .badge-live {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--yellow), var(--orange));
+            color: #4a2600;
+            padding: 4px 12px;
+            border-radius: 999px;
+            box-shadow: 0 4px 10px rgba(255,140,66,0.5);
+        }
+
+        /* ---------- 卡片 ---------- */
+        .card {
+            background: var(--card);
+            border: none;
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: 0 20px 45px -18px rgba(59,10,99,0.55);
+            position: relative;
+            overflow: hidden;
+        }
+
+            .card::before {
+                content: '';
+                position: absolute;
+                top: -40px;
+                right: -40px;
+                width: 140px;
+                height: 140px;
+                border-radius: 50%;
+                background: radial-gradient(circle, rgba(255,61,129,0.18), transparent 70%);
+            }
+
+        .eyebrow {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: green;
+            margin: 0 0 6px;
+        }
+
+        h2 {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            margin: 0 0 8px;
+            color: var(--ink);
+        }
+
+        p.sub {
+            color: deeppink;
+            margin: 0 0 22px;
+            line-height: 1.7;
+            font-size: 1.3rem;
+            font-weight: 800;
+        }
+
+        label {
+            display: block;
+            font-size: 0.85rem;
+            color: var(--slate);
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        input[type=text] {
+            width: 100%;
+            padding: 15px 18px;
+            border-radius: 16px;
+            border: 2.5px solid var(--line);
+            font-size: 1.5rem;
+            font-family: inherit;
+            background: #FBFAFF;
+            color: var(--ink);
+            transition: border-color .15s ease, box-shadow .15s ease;
+        }
+
+            input[type=text]:focus {
+                outline: none;
+                border-color: var(--pink);
+                box-shadow: 0 0 0 4px rgba(255,61,129,0.18);
+                background: #fff;
+            }
+
+        /* ---------- 按鈕 ---------- */
+        .btn {
+            appearance: none;
+            border: none;
+            cursor: pointer;
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 700;
+            font-size: 1.05rem;
+            border-radius: 16px;
+            padding: 15px 22px;
+            transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+        }
+
+            .btn:active {
+                transform: scale(0.96);
+            }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--pink), var(--purple));
+            color: #fff;
+            box-shadow: 0 10px 24px -8px rgba(255,61,129,0.65);
+        }
+
+            .btn-primary:hover {
+                filter: brightness(1.08);
+            }
+
+        .btn-block {
+            width: 100%;
+            margin-top: 18px;
+            font-size: 1.5rem;
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--slate);
+            border: 2px solid var(--line);
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+            .btn-ghost:hover {
+                border-color: var(--pink);
+                color: var(--pink);
+            }
+
+        .foot-link {
+            margin-top: 18px;
+            text-align: center;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 8px 16px;
+        }
+
+            .foot-link button {
+                background: none;
+                border: none;
+                color: var(--slate);
+                font-size: 0.75rem;
+                text-decoration: underline;
+                cursor: pointer;
+                font-family: inherit;
+            }
+
+        /* ---------- 分數圓盤 ---------- */
+        .dial-zone {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .dial {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            border-radius: 50%;
+            background: conic-gradient(var(--cyan) 0deg, var(--pink) 180deg, var(--yellow) 360deg);
+            padding: 7px;
+            box-shadow: 0 12px 28px -10px rgba(124,58,237,0.55);
+        }
+
+            .dial::after {
+                content: '';
+                position: absolute;
+                inset: 7px;
+                border-radius: 50%;
+                background: #fff;
+            }
+
+        .dial-inner {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .dial.flash-correct {
+            animation: pulseGood .7s ease-out;
+        }
+
+        .dial.flash-wrong {
+            animation: pulseBad .7s ease-out;
+        }
+
+        @keyframes pulseGood {
+            0% {
+                box-shadow: 0 0 0 0 rgba(46,204,113,0.55);
+            }
+
+            100% {
+                box-shadow: 0 0 0 30px rgba(46,204,113,0);
+            }
+        }
+
+        @keyframes pulseBad {
+            0% {
+                box-shadow: 0 0 0 0 rgba(255,92,92,0.55);
+            }
+
+            100% {
+                box-shadow: 0 0 0 30px rgba(255,92,92,0);
+            }
+        }
+
+        .dial-score {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 2.7rem;
+            font-weight: 800;
+            color: var(--ink);
+        }
+
+        .dial-label {
+            font-size: 1.3rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: darkslateblue;
+            font-weight: 600;
+        }
+
+        .flash-correct .dial-score {
+            color: var(--green);
+        }
+
+        .flash-wrong .dial-score {
+            color: var(--coral);
+        }
+
+        .progress-wrap {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 1.2rem;
+            color: var(--ink);
+            text-align: center;
+            margin-bottom: 18px;
+            font-weight: 600;
+        }
+
+            .progress-wrap .name-chip {
+                display: inline-block;
+                background: var(--line);
+                color: var(--purple-dark);
+                padding: 3px 12px;
+                border-radius: 999px;
+                margin-left: 4px;
+            }
+
+        .progress-bar-track {
+            height: 12px;
+            border-radius: 999px;
+            background: var(--line);
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--yellow), var(--orange));
+            transition: width .35s ease;
+            border-radius: 999px;
+        }
+
+        /* ---------- 題目卡 ---------- */
+        .qcard {
+            background: linear-gradient(180deg, #FBFAFF, #F3EEFF);
+            border: 2px solid var(--line);
+            border-radius: 22px;
+            padding: 26px;
+            margin-bottom: 22px;
+        }
+
+        .qpoints {
+            display: inline-block;
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: #fff;
+            background: linear-gradient(135deg, var(--purple), var(--pink));
+            border-radius: 999px;
+            padding: 5px 16px;
+            margin-bottom: 16px;
+            box-shadow: 0 6px 14px -4px rgba(124,58,237,0.5);
+        }
+
+        .qtext {
+            font-size: 1.7rem;
+            line-height: 1.75;
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .answers {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .ans-btn {
+            padding: 22px 10px;
+            border-radius: 18px;
+            border: none;
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 800;
+            font-size: 1.9rem;
+            cursor: pointer;
+            color: #fff;
+            transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
+        }
+
+            .ans-btn.true {
+                background: linear-gradient(135deg, #34E89E, var(--green));
+                box-shadow: 0 10px 22px -8px rgba(46,204,113,0.6);
+            }
+
+            .ans-btn.false {
+                background: linear-gradient(135deg, #FF7A7A, var(--coral));
+                box-shadow: 0 10px 22px -8px rgba(255,92,92,0.6);
+            }
+
+            .ans-btn:hover {
+                filter: brightness(1.06);
+            }
+
+            .ans-btn:active {
+                transform: scale(0.95);
+            }
+
+            .ans-btn:disabled {
+                opacity: 0.45;
+                cursor: not-allowed;
+                transform: none;
+            }
+
+        .feedback {
+            text-align: center;
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 1rem;
+            min-height: 24px;
+            margin-top: 16px;
+            font-weight: 700;
+        }
+
+            .feedback.ok {
+                color: var(--green);
+            }
+
+            .feedback.no {
+                color: var(--coral);
+            }
+
+        /* ---------- 排行榜 ---------- */
+        .board-head {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+
+        .live-dot {
+            width: 9px;
+            height: 9px;
+            border-radius: 50%;
+            background: var(--green);
+            box-shadow: 0 0 0 3px rgba(46,204,113,0.25);
+            animation: blink 1.6s infinite;
+        }
+
+        @keyframes blink {
+            0%,100% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.3;
+            }
+        }
+
+        .board-title {
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--ink);
+        }
+
+        .board-sub {
+            font-size: 1rem;
+            color: red;
+            margin: 0 0 16px 17px;
+        }
+
+        .board-total-label {
+            text-align: right;
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: #880000;
+            margin: -12px 4px 2px 0;
+        }
+
+        .lb-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 11px 10px;
+            border-radius: 14px;
+            margin-bottom: 7px;
+            background: #FBFAFF;
+            border: 1.5px solid var(--line);
+        }
+
+            .lb-row.me {
+                background: linear-gradient(135deg, rgba(255,61,129,0.10), rgba(124,58,237,0.10));
+                border: 1.5px solid var(--pink);
+            }
+
+        .lb-rank {
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 800;
+            color: var(--slate);
+            font-size: 1.2rem;
+            width: 26px;
+            flex-shrink: 0;
+            text-align: center;
+        }
+
+        .lb-name {
+            flex: 1;
+            font-size: 1.2rem;
+            font-weight: 700;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: var(--ink);
+        }
+
+        .lb-correct {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: blue;
+            background: rgba(46,204,113,0.15);
+            padding: 3px 9px;
+            border-radius: 20px;
+            flex-shrink: 0;
+        }
+
+        .lb-score {
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 1.2rem;
+            font-weight: 800;
+            width: 46px;
+            text-align: right;
+            flex-shrink: 0;
+            color: var(--purple);
+        }
+
+        .lb-empty {
+            color: var(--slate);
+            font-size: 1.2rem;
+            text-align: center;
+            padding: 20px 0;
+        }
+
+        /* ---------- 排行榜分頁 ---------- */
+        .lb-pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-top: 12px;
+            flex-wrap: wrap;
+        }
+
+        .lb-page-btn {
+            min-width: 30px;
+            height: 30px;
+            padding: 0 8px;
+            border-radius: 999px;
+            border: 1.5px solid var(--line);
+            background: #FBFAFF;
+            color: var(--slate);
+            font-family: 'Baloo 2', sans-serif;
+            font-size: 0.78rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background .12s ease, color .12s ease, border-color .12s ease;
+        }
+
+            .lb-page-btn:hover:not(:disabled) {
+                border-color: var(--pink);
+                color: var(--pink);
+            }
+
+            .lb-page-btn.active {
+                background: linear-gradient(135deg, var(--pink), var(--purple));
+                border-color: transparent;
+                color: #fff;
+            }
+
+            .lb-page-btn:disabled {
+                opacity: 0.4;
+                cursor: not-allowed;
+            }
+
+        .lb-page-info {
+            width: 100%;
+            text-align: center;
+            font-size: 0.72rem;
+            color: var(--slate);
+            margin-top: 2px;
+        }
+
+        /* ---------- 結算畫面 ---------- */
+        .end-stats {
+            display: grid;
+            grid-template-columns: repeat(3,1fr);
+            gap: 12px;
+            margin: 22px 0;
+        }
+
+        .stat {
+            background: linear-gradient(180deg,#FBFAFF,#F3EEFF);
+            border: 2px solid var(--line);
+            border-radius: 16px;
+            padding: 18px 8px;
+            text-align: center;
+        }
+
+            .stat .num {
+                font-family: 'Baloo 2', sans-serif;
+                font-size: 1.6rem;
+                font-weight: 800;
+                color: var(--purple);
+            }
+
+            .stat .lbl {
+                font-size: 0.72rem;
+                color: var(--slate);
+                margin-top: 4px;
+                font-weight: 600;
+            }
+
+        .trophy {
+            font-size: 4rem;
+            text-align: center;
+            display: block;
+            margin-bottom: 6px;
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
+        }
+
+        .closed-msg {
+            background: #FFF4E5;
+            border: 2px dashed var(--orange);
+            border-radius: 16px;
+            padding: 18px;
+            text-align: center;
+            font-weight: 700;
+            color: #9A5B00;
+            margin-bottom: 6px;
+            font-family: 'Baloo 2', sans-serif;
+        }
+
+        /* ---------- 選擇題按鈕 ---------- */
+        .choice-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .choice-btn {
+            display: flex;
+            align-items: center;
+            text-align: left;
+            width: 100%;
+            padding: 15px 18px;
+            border-radius: 16px;
+            border: 2.5px solid var(--line);
+            background: #FBFAFF;
+            font-family: 'Noto Sans TC', sans-serif;
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--ink);
+            cursor: pointer;
+            transition: all .12s ease;
+        }
+
+            .choice-btn:hover:not(:disabled) {
+                border-color: var(--purple);
+                background: #F3EEFF;
+                transform: translateY(-2px);
+            }
+
+            .choice-btn:disabled {
+                cursor: not-allowed;
+            }
+
+            .choice-btn.correct {
+                background: linear-gradient(135deg, #34E89E, var(--green));
+                border-color: var(--green);
+                color: #fff;
+            }
+
+            .choice-btn.wrong-selected {
+                background: linear-gradient(135deg, #FF7A7A, var(--coral));
+                border-color: var(--coral);
+                color: #fff;
+            }
+
+            .choice-btn.selected {
+                background: #F3EEFF;
+                border-color: var(--purple);
+                color: var(--ink);
+            }
+
+        .choice-letter {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: var(--purple);
+            color: #fff;
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 800;
+            font-size: 0.78rem;
+            margin-right: 12px;
+            flex-shrink: 0;
+        }
+
+        .choice-btn.correct .choice-letter,
+        .choice-btn.wrong-selected .choice-letter {
+            background: rgba(255,255,255,0.35);
+        }
+
+        /* ---------- 答錯率長條圖 ---------- */
+        .stat-bar-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 11px;
+        }
+
+        .stat-bar-label {
+            width: 108px;
+            flex-shrink: 0;
+            font-size: 0.72rem;
+            font-weight: 700;
+            color: var(--ink);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            cursor: help;
+        }
+
+        .stat-bar-track {
+            flex: 1;
+            height: 14px;
+            border-radius: 999px;
+            background: var(--line);
+            overflow: hidden;
+        }
+
+        .stat-bar-fill {
+            height: 100%;
+            border-radius: 999px;
+            transition: width .4s ease;
+        }
+
+        .stat-bar-pct {
+            width: 40px;
+            text-align: right;
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 800;
+            font-size: 0.78rem;
+            flex-shrink: 0;
+        }
+
+        @media(max-width:575px) {
+            .answers {
+                gap: 10px;
+            }
+
+            .ans-btn {
+                font-size: 1.5rem;
+                padding: 18px 6px;
+            }
+
+            h2 {
+                font-size: 1.35rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="wrap">
+        <div class="brand">
+            <span class="mascot">🧼</span>
+            <h1>感控問答擂台</h1>
+            <span class="badge-live">即時挑戰</span>
+        </div>
+        <div id="app"></div>
+    </div>
+    <script>
+        /* =====================================================================
+           Google Apps Script 設定 — 請依照 README.md 的步驟部署好 Apps Script
+           後，把下面的網址換成你自己的 Web App 網址（結尾是 /exec）。
+           ===================================================================== */
+        const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzEJaUPK5WnOauCcXmz0yYlV3alPNa447UC04tNAdwAaJKotixd3Sc6yXCn8jq5Me8ljw/exec";
+
+        /* 房間代碼：同一份 HTML 部署給不同場次/單位使用時，改這個字串即可
+           讓彼此的排行榜互相獨立，不會混在一起。 */
+        const ROOM_ID = "default-room";
+
+        function sanitizeKey(s) {
+            return String(s).replace(/[^a-zA-Z0-9_\u4e00-\u9fff-]/g, '_');
+        }
+
+        function apiUrl(params) {
+            const usp = new URLSearchParams(Object.assign({ room: ROOM_ID }, params));
+            return APPS_SCRIPT_URL + '?' + usp.toString();
+        }
+
+        const QUESTIONS = [
+            { id: 'q1', type: 'boolean', text: '戴手套可以取代洗手；只要手套沒有破損，就可以持續戴著照護不同病人或不同照護步驟。', answer: false, points: 10 },
+            { id: 'q2', type: 'boolean', text: '本院洗手種類包含一般性洗手、消毒性洗手與外科刷手；一般性洗手可清除大部分暫時性細菌。', answer: true, points: 20 },
+            { id: 'q3', type: 'boolean', text: 'WHO 提出的「洗手五時機」包括：接觸病人前、執行無菌/清潔操作前、暴觸體液後、接觸病人後、接觸病人週遭環境後。', answer: true, points: 10 },
+            { id: 'q4', type: 'boolean', text: '病人手部有明顯髒污，或照護疑似困難梭狀桿菌（C. diff）感染病人後，只要用酒精性乾洗手液消毒即可，不需要用肥皂及清水洗手。', answer: false, points: 20 },
+            { id: 'q5', type: 'boolean', text: '穿脫個人防護裝備（PPE）時，脫除的原則順序為：手套 → 護目鏡/面罩 → 隔離衣 → 口罩，脫除後應立即洗手。', answer: true, points: 20 },
+            { id: 'q6', type: 'boolean', text: '發生針扎（尖銳物品扎傷）後，正確處置的第一步是立即擠出傷口血液，再以肥皂和大量清水沖洗傷口。', answer: true, points: 15 },
+            { id: 'q7', type: 'boolean', text: '空氣傳染防護（Airborne Precautions）只要配戴外科口罩即可，不需要配戴 N95 等級呼吸防護具。', answer: false, points: 20 },
+            { id: 'q8', type: 'boolean', text: '留置導尿管期間應盡量維持密閉式引流系統，且集尿袋應低於膀胱位置，以防止尿液逆流。', answer: true, points: 15 },
+            { id: 'q9', type: 'boolean', text: '使用後的針具應立即將針頭回套針帽（re-cap），以避免刺傷他人。', answer: false, points: 20 },
+            { id: 'q10', type: 'boolean', text: '置放中心靜脈導管（CVC）時應採最大無菌屏障（無菌長袍、無菌手套、口罩、髮帽及大範圍無菌單）。', answer: true, points: 15 },
+            { id: 'q11', type: 'boolean', text: '外科手術部位感染（SSI）監測期通常為術後30天，若有植入物則依手術類別可延長至90天或1年。', answer: true, points: 15 },
+            { id: 'q12', type: 'boolean', text: '照護不同病人之間，只要沒有明顯髒污，就不需要進行手部衛生。', answer: false, points: 10 },
+            { id: 'mc1', type: 'choice', text: '依照 WHO 洗手五時機，下列何者「不」包括在內？', options: ['接觸病人前', '用餐前', '暴觸體液後', '接觸病人週遭環境後'], correctIndex: 1, points: 20 },
+            { id: 'mc2', type: 'choice', text: '使用酒精性乾洗手液時，建議至少搓揉多久才能達到有效殺菌效果？', options: ['5 秒', '10 秒', '20～30 秒', '2 分鐘'], correctIndex: 2, points: 15 },
+            { id: 'mc3', type: 'choice', text: '執行「接觸傳染防護」（Contact Precautions）時，最需要加強穿戴的防護裝備是？', options: ['N95 口罩', '手套與隔離衣', '護目鏡', '鉛衣'], correctIndex: 1, points: 15 },
+            { id: 'mc4', type: 'choice', text: '發生針扎意外，除了立即處理傷口，接下來「最優先」該做的是？', options: ['自行上網查資料', '立即通報並依院內感染管制流程處理', '先觀察一週再說', '直接請假回家休息'], correctIndex: 1, points: 20 },
+            { id: 'mc5', type: 'choice', text: '下列何者「不是」正確的醫療廢棄物分類方式？', options: ['尖銳物品丟入利器盒', '被血液污染的紗布視為感染性事業廢棄物', '將針具與一般垃圾混合丟棄', '生物性廢棄物依規定滅菌後處理'], correctIndex: 2, points: 20 }
+        ];
+
+        let state = {
+            screen: 'login',
+            playerId: '',
+            name: '',
+            questions: [],
+            currentIndex: 0,
+            score: 0,
+            correct: 0,
+            total: 0,
+            feedback: null,
+            locked: false,
+            leaderboard: {},
+            stats: {},
+            registrationOpen: true,
+            lbPage: 1
+        };
+
+        let pollTimer = null;
+        let lastKnownRegOpen = null;
+
+        async function fetchState(action, extraParams) {
+            try {
+                const res = await fetch(apiUrl(Object.assign({ action: action }, extraParams || {})));
+                if (!res.ok) throw new Error('HTTP ' + res.status);
+                const data = await res.json();
+                state.leaderboard = data.leaderboard || {};
+                state.stats = data.stats || {};
+                state.registrationOpen = (data.registrationOpen !== false);
+                return data;
+            } catch (e) {
+                console.error('與伺服器溝通失敗:', e.message);
+                return null;
+            }
+        }
+
+        async function updateMyEntry(finished) {
+            if (!state.playerId) return;
+            await fetchState('update', {
+                playerId: sanitizeKey(state.playerId),
+                name: state.name,
+                score: state.score,
+                correct: state.correct,
+                total: state.total,
+                finished: !!finished
+            });
+            renderBoardList();
+        }
+
+        function logAnswerStat(questionId, isCorrect) {
+            fetchState('logAnswer', { questionId: questionId, correct: !!isCorrect });
+        }
+
+        async function refreshLeaderboard() {
+            await fetchState('list');
+            renderBoardList();
+            if (state.screen === 'login' && state.registrationOpen !== lastKnownRegOpen) {
+                lastKnownRegOpen = state.registrationOpen;
+                render();
+            } else {
+                lastKnownRegOpen = state.registrationOpen;
+            }
+        }
+
+        function startPolling() {
+            if (pollTimer) clearInterval(pollTimer);
+            pollTimer = setInterval(refreshLeaderboard, 2000);
+        }
+
+        function sortedEntries() {
+            return Object.entries(state.leaderboard)
+                .sort((a, b) => (b[1].score - a[1].score) || (b[1].correct - a[1].correct));
+        }
+
+        function boardHtml() {
+            return `
+                                            <div class="card">
+                                              <div class="board-head"><div class="live-dot"></div><div class="board-title">🔥 得分排行榜 (即時)</div></div>
+                                              <div class="board-sub">依分數排序，每 2 秒自動更新</div>
+                                              <div class="board-total-label">總積分</div>
+                                              <div id="lb-list"></div>
+                                              <div id="lb-pagination"></div>
+                                            </div>
+                                          `;
+        }
+
+        const LB_PAGE_SIZE = 20;
+
+        function renderBoardList() {
+            const el = document.getElementById('lb-list');
+            const pagEl = document.getElementById('lb-pagination');
+            if (!el) return;
+            const entries = sortedEntries();
+            if (entries.length === 0) {
+                el.innerHTML = `<div class="lb-empty">🎯 還沒有人開始作答</div>`;
+                if (pagEl) pagEl.innerHTML = '';
+                return;
+            }
+
+            const totalPages = Math.max(1, Math.ceil(entries.length / LB_PAGE_SIZE));
+            if (state.lbPage > totalPages) state.lbPage = totalPages;
+            if (state.lbPage < 1) state.lbPage = 1;
+
+            const startIdx = (state.lbPage - 1) * LB_PAGE_SIZE;
+            const pageEntries = entries.slice(startIdx, startIdx + LB_PAGE_SIZE);
+
+            const medals = ['🥇', '🥈', '🥉'];
+            el.innerHTML = pageEntries.map(([id, e], idx) => {
+                const i = startIdx + idx;
+                const isMe = id === state.playerId;
+                const rankDisplay = medals[i] || (i + 1);
+                return `
+                                              <div class="lb-row ${isMe ? 'me' : ''}">
+                                                <div class="lb-rank">${rankDisplay}</div>
+                                                <div class="lb-name" title="${escapeHtml(e.name)}">${escapeHtml(e.name)}${isMe ? ' (你)' : ''}</div>
+                                                <div class="lb-correct">✓ ${e.correct}/${e.total}</div>
+                                                <div class="lb-score">${e.score}</div>
+                                              </div>
+                                            `;
+            }).join('');
+
+            if (pagEl) {
+                if (totalPages <= 1) {
+                    pagEl.innerHTML = '';
+                } else {
+                    let buttons = '';
+                    buttons += `<button class="lb-page-btn" id="lbPrevBtn" ${state.lbPage === 1 ? 'disabled' : ''}>‹</button>`;
+                    for (let p = 1; p <= totalPages; p++) {
+                        buttons += `<button class="lb-page-btn ${p === state.lbPage ? 'active' : ''}" data-page="${p}">${p}</button>`;
+                    }
+                    buttons += `<button class="lb-page-btn" id="lbNextBtn" ${state.lbPage === totalPages ? 'disabled' : ''}>›</button>`;
+                    pagEl.innerHTML = buttons + `<div class="lb-page-info">共 ${entries.length} 人・第 ${state.lbPage}/${totalPages} 頁</div>`;
+
+                    const prevBtn = document.getElementById('lbPrevBtn');
+                    const nextBtn = document.getElementById('lbNextBtn');
+                    if (prevBtn) prevBtn.onclick = () => { state.lbPage -= 1; renderBoardList(); };
+                    if (nextBtn) nextBtn.onclick = () => { state.lbPage += 1; renderBoardList(); };
+                    pagEl.querySelectorAll('.lb-page-btn[data-page]').forEach(btn => {
+                        btn.onclick = () => { state.lbPage = parseInt(btn.dataset.page, 10); renderBoardList(); };
+                    });
+                }
+            }
+        }
+
+        function escapeHtml(s) {
+            return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+        }
+
+        function render() {
+            const app = document.getElementById('app');
+            if (state.screen === 'login') {
+                app.innerHTML = `
+                                              <div class="row g-3">
+                                                <div class="col-lg-8">
+                                                  <div class="card">
+                                                    <p class="eyebrow">🎮 開始作答</p>
+                                                    <h2>輸入你的姓名與職稱 加入擂台</h2>
+                                                    ${state.registrationOpen ? `
+                                                      <label for="nameInput">姓名 職稱</label>
+                                                      <input id="nameInput" type="text" placeholder="例如：王小明護理師" maxlength="20">
+                                                      <button class="btn btn-primary btn-block" id="joinBtn">🚀 加入作答</button>
+                                                    ` : `
+                                                      <div class="closed-msg">🚫 目前尚未開放加入作答，請稍候主辦人開放後再試一次</div>
+                                                    `}
+                                                  </div>
+                                                </div>
+                                                <div class="col-lg-4">${boardHtml()}</div>
+                                              </div>
+                                            `;
+                if (state.registrationOpen) {
+                    document.getElementById('joinBtn').onclick = onJoin;
+                    document.getElementById('nameInput').addEventListener('keydown', e => { if (e.key === 'Enter') onJoin(); });
+                }
+                renderBoardList();
+            }
+            else if (state.screen === 'game') {
+                const q = state.questions[state.currentIndex];
+                const pct = Math.round((state.currentIndex / state.questions.length) * 100);
+                const answersHtml = q.type === 'choice'
+                    ? `<div class="choice-list">${q.options.map((opt, idx) => `
+                                                      <button class="choice-btn" id="choiceBtn${idx}" ${state.locked ? 'disabled' : ''}><span class="choice-letter">${String.fromCharCode(65 + idx)}</span>${escapeHtml(opt)}</button>
+                                                    `).join('')}</div>`
+                    : `<div class="answers">
+                                                      <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
+                                                      <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
+                                                    </div>`;
+                app.innerHTML = `
+                                              <div class="row g-3">
+                                                <div class="col-lg-8">
+                                                  <div class="card">
+                                                    <div class="dial-zone">
+                                                      <div class="dial" id="dial">
+                                                        <div class="dial-inner">
+                                                          <div class="dial-score" id="scoreNum">${state.score}</div>
+                                                          <div class="dial-label">目前分數</div>
+                                                        </div>
+                                                      </div>
+                                                    </div>
+                                                    <div class="progress-wrap">
+                                                      第 ${state.currentIndex + 1} / ${state.questions.length} 題　<span class="name-chip">👤 ${escapeHtml(state.name)}</span>
+                                                      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+                                                    </div>
+                                                    <div class="qcard">
+                                                      <div class="qpoints">⭐ 本題配分：${q.points} 分　${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
+                                                      <div class="qtext">${escapeHtml(q.text)}</div>
+                                                    </div>
+                                                    ${answersHtml}
+                                                    <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
+                                                  </div>
+                                                </div>
+                                                <div class="col-lg-4">${boardHtml()}</div>
+                                              </div>
+                                            `;
+                if (q.type === 'choice') {
+                    q.options.forEach((opt, idx) => {
+                        document.getElementById('choiceBtn' + idx).onclick = () => answer(idx);
+                    });
+                } else {
+                    document.getElementById('btnTrue').onclick = () => answer(true);
+                    document.getElementById('btnFalse').onclick = () => answer(false);
+                }
+                renderBoardList();
+            }
+            else if (state.screen === 'end') {
+                const entries = sortedEntries();
+                const myRank = entries.findIndex(([id]) => id === state.playerId) + 1;
+                app.innerHTML = `
+                                              <div class="row g-3">
+                                                <div class="col-lg-8">
+                                                  <div class="card">
+                                                    <span class="trophy">🏆</span>
+                                                    <p class="eyebrow text-center">作答完成</p>
+                                                    <h2 class="text-center">${escapeHtml(state.name)}，你的結果出爐了！</h2>
+                                                    <p class="sub text-center">${myRank > 0 ? `目前排名第 ${myRank} 名` : ''}</p>
+                                                    <div class="end-stats">
+                                                      <div class="stat"><div class="num">${state.score}</div><div class="lbl">總分</div></div>
+                                                      <div class="stat"><div class="num">${state.correct}/${state.total}</div><div class="lbl">答對題數</div></div>
+                                                      <div class="stat"><div class="num">${myRank > 0 ? ('#' + myRank) : '-'}</div><div class="lbl">目前排名</div></div>
+                                                    </div>
+                                                    <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
+                                                  </div>
+                                                </div>
+                                                <div class="col-lg-4">${boardHtml()}</div>
+                                              </div>
+                                            `;
+                renderBoardList();
+            }
+        }
+
+        function onJoin() {
+            const input = document.getElementById('nameInput');
+            const name = (input.value || '').trim();
+            if (!name) {
+                input.focus();
+                input.style.borderColor = 'var(--coral)';
+                return;
+            }
+            state.name = name;
+            state.playerId = sanitizeKey(name) + '_' + Math.random().toString(36).slice(2, 6);
+            state.questions = QUESTIONS.slice(); // 依 id 順序出題，不隨機
+            state.currentIndex = 0;
+            state.score = 0;
+            state.correct = 0;
+            state.total = 0;
+            state.feedback = null;
+            state.locked = false;
+            state.screen = 'game';
+            updateMyEntry(false);
+            render();
+        }
+
+        function answer(selected) {
+            if (state.locked) return;
+            state.locked = true;
+            const q = state.questions[state.currentIndex];
+            const isCorrect = q.type === 'choice' ? (selected === q.correctIndex) : (selected === q.answer);
+            const delta = isCorrect ? q.points : -0;
+            state.score = Math.max(0, state.score + delta);
+            state.total += 1;
+            if (isCorrect) state.correct += 1;
+
+            const scoreNum = document.getElementById('scoreNum');
+            if (scoreNum) scoreNum.textContent = state.score;
+
+            if (q.type === 'choice') {
+                q.options.forEach((opt, idx) => {
+                    const btn = document.getElementById('choiceBtn' + idx);
+                    if (!btn) return;
+                    btn.disabled = true;
+                    if (idx === selected) btn.classList.add('selected');
+                });
+            } else {
+                document.getElementById('btnTrue').disabled = true;
+                document.getElementById('btnFalse').disabled = true;
+            }
+            const fz = document.getElementById('feedbackZone');
+            if (fz) fz.textContent = '📮 已送出，前往下一題…';
+
+            logAnswerStat(q.id, isCorrect);
+
+            const isLast = (state.currentIndex + 1) >= state.questions.length;
+            updateMyEntry(isLast);
+
+            setTimeout(() => {
+                state.currentIndex += 1;
+                state.locked = false;
+                if (state.currentIndex >= state.questions.length) {
+                    state.screen = 'end';
+                }
+                render();
+            }, 500);
+        }
+
+        async function onResetBoard() {
+            if (!confirm('確定要清空所有玩家的排行榜與答錯率統計資料嗎？此動作無法復原。')) return;
+            await fetchState('reset');
+            render();
+        }
+
+        async function onToggleRegistration() {
+            const newOpen = !state.registrationOpen;
+            await fetchState('setRegistration', { open: newOpen });
+            render();
+        }
+
+        (async function init() {
+            await fetchState('list');
+            lastKnownRegOpen = state.registrationOpen;
+            render();
+            startPolling();
+        })();
+    </script>
+</body>
+</html>
