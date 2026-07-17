@@ -6,296 +6,213 @@
     <title>感控問答擂台</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Serif+TC:wght@500;600;700;900&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
 
         :root {
-            /* ---- 水墨暈染色系（沿用原變數名稱，重新賦予東方墨色） ---- */
-            --pink: #B33A3A;
-            /* 印泥硃紅 */
-            --pink-dark: #8B2323;
-            /* 深硃紅 */
-            --orange: #C9932B;
-            /* 金箔色 */
-            --purple: #4B4A6B;
-            /* 墨藍 */
-            --purple-dark: #302F45;
-            /* 深墨藍 */
-            --cyan: #5C8374;
-            /* 淡竹青 */
-            --yellow: #C9A227;
-            /* 金黃 */
-            --green: #4F7942;
-            /* 竹綠（正確） */
-            --coral: #A6432B;
-            /* 硃磦紅（錯誤） */
-            --ink: #241F1B;
-            /* 濃墨 */
-            --slate: #7A7364;
-            /* 淡墨灰 */
-            --card: #F7F1E3;
-            /* 宣紙 */
-            --line: #E4D9C0;
-            /* 宣紙邊線 */
+            --pink: #FF3D81;
+            --pink-dark: #E01E68;
+            --orange: #FF8C42;
+            --purple: #7C3AED;
+            --purple-dark: #5B21B6;
+            --cyan: #22D3EE;
+            --yellow: #FFD23F;
+            --green: #2ECC71;
+            --coral: #FF5C5C;
+            --ink: #2A1B3D;
+            --slate: #8B7BA8;
+            --card: #FFFFFF;
+            --line: #F0E6FF;
         }
 
         * {
             box-sizing: border-box;
         }
 
-        html, body {
+        body {
             margin: 0;
             min-height: 100vh;
-        }
-
-        body {
             font-family: 'Noto Sans TC', sans-serif;
             color: var(--ink);
-            position: relative;
-            background:
-                radial-gradient(circle at 12% 5%, rgba(75,74,107,0.16), transparent 42%),
-                radial-gradient(circle at 92% 12%, rgba(92,131,116,0.18), transparent 40%),
-                radial-gradient(circle at 50% 100%, rgba(179,58,58,0.10), transparent 48%),
-                radial-gradient(circle at 78% 70%, rgba(201,146,39,0.10), transparent 40%),
-                linear-gradient(160deg, #F3ECD9 0%, #EBE0C3 48%, #E1D2A7 100%);
+            background: radial-gradient(circle at 15% 0%, rgba(255,61,129,0.35), transparent 45%), radial-gradient(circle at 90% 10%, rgba(34,211,238,0.30), transparent 40%), radial-gradient(circle at 50% 100%, rgba(255,210,63,0.25), transparent 45%), linear-gradient(160deg, #3B0A63 0%, #6D28D9 45%, #9333EA 100%);
             background-attachment: fixed;
             overflow-x: hidden;
         }
 
-        /* 宣紙纖維顆粒感（噪點疊圖，柔和且不干擾閱讀） */
-        body::before {
-            content: '';
+        /* ---------- 視差背景層（Parallax） ---------- */
+        .parallax-layer {
             position: fixed;
-            inset: 0;
-            z-index: 0;
+            inset: -10% -10%;
             pointer-events: none;
-            opacity: 0.5;
-            mix-blend-mode: multiply;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.14  0 0 0 0 0.12  0 0 0 0 0.10  0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-        }
-
-        /* 遠景飄散墨韻（緩慢漂移，營造暈染氛圍） */
-        .ink-float {
-            position: fixed;
             z-index: 0;
-            pointer-events: none;
-            border-radius: 58% 42% 55% 45% / 50% 55% 45% 50%;
-            filter: blur(30px);
-            opacity: 0.35;
-            mix-blend-mode: multiply;
+            will-change: transform;
+            transition: transform .25s ease-out;
         }
 
-            .ink-float.f1 {
-                width: 380px;
-                height: 380px;
-                top: -80px;
-                left: -100px;
-                background: radial-gradient(circle, rgba(36,31,27,0.30), transparent 70%);
-                animation: driftA 26s ease-in-out infinite;
+            .parallax-layer .p-item {
+                position: absolute;
+                filter: drop-shadow(0 6px 12px rgba(0,0,0,0.3));
             }
 
-            .ink-float.f2 {
-                width: 320px;
-                height: 320px;
-                bottom: -60px;
-                right: -80px;
-                background: radial-gradient(circle, rgba(179,58,58,0.22), transparent 70%);
-                animation: driftB 32s ease-in-out infinite;
-            }
-
-            .ink-float.f3 {
-                width: 260px;
-                height: 260px;
-                top: 40%;
-                right: 8%;
-                background: radial-gradient(circle, rgba(92,131,116,0.20), transparent 70%);
-                animation: driftA 22s ease-in-out infinite reverse;
-            }
-
-        @keyframes driftA {
-            0%, 100% { transform: translate(0,0) scale(1); }
-            50% { transform: translate(24px,-18px) scale(1.06); }
+        .layer-back {
+            z-index: 0;
         }
 
-        @keyframes driftB {
-            0%, 100% { transform: translate(0,0) scale(1); }
-            50% { transform: translate(-20px,16px) scale(1.05); }
+            .layer-back .p-item {
+                opacity: 0.18;
+                font-size: 4rem;
+                filter: blur(1px) drop-shadow(0 8px 14px rgba(0,0,0,0.25));
+            }
+
+        .layer-mid .p-item {
+            opacity: 0.32;
+            font-size: 2.4rem;
+            animation: floatBob 5s ease-in-out infinite;
+        }
+
+        .layer-front .p-item {
+            opacity: 0.55;
+            font-size: 1.4rem;
+            animation: floatBob 3.4s ease-in-out infinite;
+        }
+
+        @keyframes floatBob {
+            0%, 100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-16px) rotate(8deg);
+            }
+        }
+
+        /* ---------- 3D 場景舞台 ---------- */
+        .stage {
+            perspective: 1400px;
+        }
+
+        .wrap {
+            position: relative;
+            z-index: 1;
+            transition: transform .18s ease-out;
+            transform-style: preserve-3d;
+        }
+
+        #app {
+            perspective: 1200px;
         }
 
         .wrap {
             max-width: 1120px;
             margin: 0 auto;
             padding: 22px 16px 60px;
-            position: relative;
-            z-index: 1;
         }
 
         /* ---------- 頂部品牌列 ---------- */
         .brand {
             display: flex;
             align-items: center;
-            gap: 14px;
-            margin-bottom: 26px;
+            gap: 12px;
+            margin-bottom: 22px;
             justify-content: center;
-            position: relative;
         }
-
-            .brand .mascot-badge {
-                position: relative;
-                width: 54px;
-                height: 54px;
-                border-radius: 50%;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                background: radial-gradient(circle at 35% 30%, #FBF6E8, #E4D9C0 75%);
-                border: 2px solid var(--line);
-                box-shadow: 0 6px 16px -6px rgba(36,31,27,0.45), inset 0 0 0 1px rgba(36,31,27,0.06);
-            }
 
             .brand .mascot {
                 font-size: 2.1rem;
-                filter: drop-shadow(0 3px 6px rgba(0,0,0,0.25));
-                animation: bounce 2.6s ease-in-out infinite;
-                display: inline-block;
+                filter: drop-shadow(0 4px 10px rgba(0,0,0,0.35));
+                animation: bounce 2.4s ease-in-out infinite;
             }
 
         @keyframes bounce {
-            0%, 100% {
+            0%,100% {
                 transform: translateY(0) rotate(-4deg);
             }
 
             50% {
-                transform: translateY(-5px) rotate(4deg);
+                transform: translateY(-6px) rotate(4deg);
             }
         }
 
         .brand h1 {
-            font-family: 'Ma Shan Zheng', 'Noto Serif TC', serif;
+            font-family: 'Baloo 2', sans-serif;
             font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: 0.06em;
+            font-weight: 800;
+            letter-spacing: 0.02em;
             margin: 0;
-            color: var(--ink);
-            text-shadow: 0 1px 0 rgba(255,255,255,0.4);
+            color: #fff;
+            text-shadow: 0 3px 0 rgba(0,0,0,0.25);
         }
 
         .brand .badge-live {
-            font-family: 'Noto Serif TC', serif;
+            font-family: 'Baloo 2', sans-serif;
             font-size: 1.3rem;
             font-weight: 700;
             background: linear-gradient(135deg, var(--yellow), var(--orange));
-            color: #3C2A00;
-            padding: 4px 14px;
+            color: #4a2600;
+            padding: 4px 12px;
             border-radius: 999px;
-            box-shadow: 0 4px 10px rgba(201,146,39,0.45);
+            box-shadow: 0 4px 10px rgba(255,140,66,0.5);
         }
 
-        /* 印章：紅色方章配上白文，貼在標題右側，如篆刻落款 */
-        .seal-stamp {
-            width: 34px;
-            height: 34px;
-            border-radius: 6px;
-            background: linear-gradient(155deg, var(--pink), var(--pink-dark));
-            color: #F7EFDD;
-            font-family: 'Ma Shan Zheng', serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.1rem;
-            box-shadow: 0 4px 10px -2px rgba(139,35,35,0.55);
-            transform: rotate(-6deg);
-            animation: stampIn .6s cubic-bezier(.2,1.4,.4,1) both;
-            border: 1px solid rgba(247,239,221,0.35);
-        }
-
-        @keyframes stampIn {
-            0% { transform: rotate(-6deg) scale(1.8); opacity: 0; }
-            60% { opacity: 1; }
-            100% { transform: rotate(-6deg) scale(1); opacity: 1; }
-        }
-
-        /* ---------- 卡片（宣紙質感） ---------- */
+        /* ---------- 卡片 ---------- */
         .card {
             background: var(--card);
-            border: 1px solid var(--line);
-            border-radius: 22px;
+            border: none;
+            border-radius: 28px;
             padding: 28px;
-            box-shadow: 0 20px 45px -22px rgba(36,31,27,0.45);
+            box-shadow: 0 20px 45px -18px rgba(59,10,99,0.55);
             position: relative;
             overflow: hidden;
-            animation: cardRise .45s ease both;
+            transform-style: preserve-3d;
+            animation: cardIn3D .6s cubic-bezier(.22,.9,.32,1.1) both;
         }
 
-        @keyframes cardRise {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes cardIn3D {
+            0% {
+                opacity: 0;
+                transform: rotateX(-18deg) translateY(26px) scale(0.95);
+            }
+
+            100% {
+                opacity: 1;
+                transform: rotateX(0deg) translateY(0) scale(1);
+            }
         }
 
             .card::before {
                 content: '';
                 position: absolute;
-                top: -50px;
-                right: -50px;
-                width: 170px;
-                height: 170px;
+                top: -40px;
+                right: -40px;
+                width: 140px;
+                height: 140px;
                 border-radius: 50%;
-                background: radial-gradient(circle, rgba(36,31,27,0.10), transparent 70%);
-                mix-blend-mode: multiply;
-            }
-
-            .card::after {
-                content: '';
-                position: absolute;
-                bottom: -60px;
-                left: -60px;
-                width: 160px;
-                height: 160px;
-                border-radius: 50%;
-                background: radial-gradient(circle, rgba(179,58,58,0.07), transparent 70%);
-                mix-blend-mode: multiply;
+                background: radial-gradient(circle, rgba(255,61,129,0.18), transparent 70%);
             }
 
         .eyebrow {
-            font-family: 'Ma Shan Zheng', serif;
+            font-family: 'Baloo 2', sans-serif;
             font-size: 1.4rem;
-            font-weight: 400;
-            letter-spacing: 0.08em;
-            color: var(--pink);
+            font-weight: 700;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            color: green;
             margin: 0 0 6px;
-            position: relative;
-            z-index: 1;
         }
 
         h2 {
-            font-family: 'Ma Shan Zheng', 'Noto Serif TC', serif;
+            font-family: 'Baloo 2', sans-serif;
             font-size: 1.6rem;
-            font-weight: 500;
-            margin: 0 0 6px;
+            font-weight: 800;
+            margin: 0 0 8px;
             color: var(--ink);
-            position: relative;
-            z-index: 1;
-        }
-
-        /* 毛筆勾勒分隔線 */
-        h2::after {
-            content: '';
-            display: block;
-            width: 92px;
-            height: 6px;
-            margin: 8px 0 16px;
-            background: linear-gradient(90deg, var(--pink) 0%, var(--pink) 55%, transparent 58%, transparent 62%, var(--pink) 65%, transparent 100%);
-            border-radius: 3px;
-            opacity: 0.75;
         }
 
         p.sub {
-            color: var(--slate);
+            color: deeppink;
             margin: 0 0 22px;
             line-height: 1.7;
             font-size: 1.3rem;
-            font-weight: 700;
-            position: relative;
-            z-index: 1;
+            font-weight: 800;
         }
 
         label {
@@ -304,44 +221,38 @@
             color: var(--slate);
             font-weight: 600;
             margin-bottom: 6px;
-            position: relative;
-            z-index: 1;
         }
 
         input[type=text] {
             width: 100%;
             padding: 15px 18px;
-            border-radius: 12px;
-            border: 2px solid var(--line);
+            border-radius: 16px;
+            border: 2.5px solid var(--line);
             font-size: 1.5rem;
             font-family: inherit;
-            background: #FBF6E8;
+            background: #FBFAFF;
             color: var(--ink);
             transition: border-color .15s ease, box-shadow .15s ease;
-            position: relative;
-            z-index: 1;
         }
 
             input[type=text]:focus {
                 outline: none;
                 border-color: var(--pink);
-                box-shadow: 0 0 0 4px rgba(179,58,58,0.15);
+                box-shadow: 0 0 0 4px rgba(255,61,129,0.18);
                 background: #fff;
             }
 
-        /* ---------- 按鈕（含水墨點按漣漪） ---------- */
+        /* ---------- 按鈕 ---------- */
         .btn {
             appearance: none;
             border: none;
             cursor: pointer;
-            font-family: 'Noto Serif TC', serif;
+            font-family: 'Baloo 2', sans-serif;
             font-weight: 700;
             font-size: 1.05rem;
-            border-radius: 12px;
+            border-radius: 16px;
             padding: 15px 22px;
             transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
-            position: relative;
-            overflow: hidden;
         }
 
             .btn:active {
@@ -350,13 +261,46 @@
 
         .btn-primary {
             background: linear-gradient(135deg, var(--pink), var(--purple));
-            color: #F7EFDD;
-            box-shadow: 0 10px 22px -10px rgba(139,35,35,0.55);
+            color: #fff;
+            box-shadow: 0 8px 0 0 var(--purple-dark), 0 16px 26px -10px rgba(255,61,129,0.65);
+            position: relative;
+            overflow: hidden;
+            transform: translateY(0);
+            transition: transform .1s ease, box-shadow .1s ease, filter .12s ease;
         }
+
+            .btn-primary::after {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: -60%;
+                width: 40%;
+                height: 100%;
+                background: linear-gradient(120deg, transparent, rgba(255,255,255,0.55), transparent);
+                transform: skewX(-20deg);
+                animation: shineSweep 2.6s ease-in-out infinite;
+            }
 
             .btn-primary:hover {
                 filter: brightness(1.08);
+                transform: translateY(-3px);
+                box-shadow: 0 11px 0 0 var(--purple-dark), 0 18px 28px -10px rgba(255,61,129,0.7);
             }
+
+            .btn-primary:active {
+                transform: translateY(5px) scale(0.98);
+                box-shadow: 0 2px 0 0 var(--purple-dark), 0 6px 14px -6px rgba(255,61,129,0.6);
+            }
+
+        @keyframes shineSweep {
+            0% {
+                left: -60%;
+            }
+
+            60%, 100% {
+                left: 130%;
+            }
+        }
 
         .btn-block {
             width: 100%;
@@ -391,36 +335,17 @@
                 border: none;
                 color: var(--slate);
                 font-size: 0.75rem;
-                text-decoration: none;
+                text-decoration: underline;
                 cursor: pointer;
                 font-family: inherit;
-                position: relative;
-                padding-bottom: 2px;
             }
 
-            .foot-link button::after {
-                content: '';
-                position: absolute;
-                left: 0;
-                bottom: 0;
-                width: 0;
-                height: 1.5px;
-                background: var(--pink);
-                transition: width .2s ease;
-            }
-
-            .foot-link button:hover::after {
-                width: 100%;
-            }
-
-        /* ---------- 分數圓盤（如玉璧 / 印泥圓章） ---------- */
+        /* ---------- 分數圓盤 ---------- */
         .dial-zone {
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
         }
 
         .dial {
@@ -434,13 +359,7 @@
             border-radius: 50%;
             background: conic-gradient(var(--cyan) 0deg, var(--pink) 180deg, var(--yellow) 360deg);
             padding: 7px;
-            box-shadow: 0 12px 26px -12px rgba(75,74,107,0.5);
-            animation: breathe 4s ease-in-out infinite;
-        }
-
-        @keyframes breathe {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.02); }
+            box-shadow: 0 12px 28px -10px rgba(124,58,237,0.55);
         }
 
             .dial::after {
@@ -448,7 +367,7 @@
                 position: absolute;
                 inset: 7px;
                 border-radius: 50%;
-                background: #FBF6E8;
+                background: #fff;
             }
 
         .dial-inner {
@@ -467,26 +386,26 @@
 
         @keyframes pulseGood {
             0% {
-                box-shadow: 0 0 0 0 rgba(79,121,66,0.5);
+                box-shadow: 0 0 0 0 rgba(46,204,113,0.55);
             }
 
             100% {
-                box-shadow: 0 0 0 30px rgba(79,121,66,0);
+                box-shadow: 0 0 0 30px rgba(46,204,113,0);
             }
         }
 
         @keyframes pulseBad {
             0% {
-                box-shadow: 0 0 0 0 rgba(166,67,43,0.5);
+                box-shadow: 0 0 0 0 rgba(255,92,92,0.55);
             }
 
             100% {
-                box-shadow: 0 0 0 30px rgba(166,67,43,0);
+                box-shadow: 0 0 0 30px rgba(255,92,92,0);
             }
         }
 
         .dial-score {
-            font-family: 'Noto Serif TC', serif;
+            font-family: 'Baloo 2', sans-serif;
             font-size: 2.7rem;
             font-weight: 800;
             color: var(--ink);
@@ -495,7 +414,8 @@
         .dial-label {
             font-size: 1.3rem;
             letter-spacing: 0.08em;
-            color: var(--purple-dark);
+            text-transform: uppercase;
+            color: darkslateblue;
             font-weight: 600;
         }
 
@@ -508,14 +428,12 @@
         }
 
         .progress-wrap {
-            font-family: 'Noto Serif TC', serif;
+            font-family: 'Baloo 2', sans-serif;
             font-size: 1.2rem;
             color: var(--ink);
             text-align: center;
             margin-bottom: 18px;
             font-weight: 600;
-            position: relative;
-            z-index: 1;
         }
 
             .progress-wrap .name-chip {
@@ -537,33 +455,31 @@
 
         .progress-bar-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--yellow), var(--pink));
+            background: linear-gradient(90deg, var(--yellow), var(--orange));
             transition: width .35s ease;
             border-radius: 999px;
         }
 
         /* ---------- 題目卡 ---------- */
         .qcard {
-            background: linear-gradient(180deg, #FBF6E8, #F0E6C8);
+            background: linear-gradient(180deg, #FBFAFF, #F3EEFF);
             border: 2px solid var(--line);
-            border-radius: 18px;
+            border-radius: 22px;
             padding: 26px;
             margin-bottom: 22px;
-            position: relative;
-            z-index: 1;
         }
 
         .qpoints {
             display: inline-block;
-            font-family: 'Noto Serif TC', serif;
+            font-family: 'Baloo 2', sans-serif;
             font-weight: 700;
             font-size: 1.2rem;
-            color: #F7EFDD;
+            color: #fff;
             background: linear-gradient(135deg, var(--purple), var(--pink));
             border-radius: 999px;
             padding: 5px 16px;
             margin-bottom: 16px;
-            box-shadow: 0 6px 14px -6px rgba(75,74,107,0.5);
+            box-shadow: 0 6px 14px -4px rgba(124,58,237,0.5);
         }
 
         .qtext {
@@ -577,57 +493,90 @@
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 14px;
-            position: relative;
-            z-index: 1;
+            perspective: 900px;
+        }
+
+        @keyframes btnFlipIn {
+            0% {
+                opacity: 0;
+                transform: rotateX(-70deg) translateY(14px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: rotateX(0deg) translateY(0);
+            }
         }
 
         .ans-btn {
+            animation: btnFlipIn .5s ease both;
+        }
+
+            .ans-btn:nth-child(2) {
+                animation-delay: .08s;
+            }
+
+        .ans-btn {
             padding: 22px 10px;
-            border-radius: 16px;
+            border-radius: 18px;
             border: none;
-            font-family: 'Noto Serif TC', serif;
+            font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
             font-size: 1.9rem;
             cursor: pointer;
-            color: #F7EFDD;
-            transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
-            position: relative;
-            overflow: hidden;
+            color: #fff;
+            transform: translateY(0) translateZ(0);
+            transition: transform .1s ease, box-shadow .1s ease, filter .12s ease;
         }
 
             .ans-btn.true {
-                background: linear-gradient(135deg, #6B8E5A, var(--green));
-                box-shadow: 0 10px 20px -10px rgba(79,121,66,0.55);
+                background: linear-gradient(135deg, #34E89E, var(--green));
+                box-shadow: 0 8px 0 0 #1f9e57, 0 16px 26px -10px rgba(46,204,113,0.65);
             }
 
             .ans-btn.false {
-                background: linear-gradient(135deg, #C1543A, var(--coral));
-                box-shadow: 0 10px 20px -10px rgba(166,67,43,0.55);
+                background: linear-gradient(135deg, #FF7A7A, var(--coral));
+                box-shadow: 0 8px 0 0 #c23b3b, 0 16px 26px -10px rgba(255,92,92,0.65);
             }
 
-            .ans-btn:hover {
+            .ans-btn:hover:not(:disabled) {
                 filter: brightness(1.06);
+                transform: translateY(-3px);
             }
 
-            .ans-btn:active {
-                transform: scale(0.95);
+            .ans-btn.true:hover:not(:disabled) {
+                box-shadow: 0 11px 0 0 #1f9e57, 0 18px 28px -10px rgba(46,204,113,0.7);
+            }
+
+            .ans-btn.false:hover:not(:disabled) {
+                box-shadow: 0 11px 0 0 #c23b3b, 0 18px 28px -10px rgba(255,92,92,0.7);
+            }
+
+            .ans-btn:active:not(:disabled) {
+                transform: translateY(6px);
+            }
+
+            .ans-btn.true:active:not(:disabled) {
+                box-shadow: 0 2px 0 0 #1f9e57, 0 6px 14px -6px rgba(46,204,113,0.6);
+            }
+
+            .ans-btn.false:active:not(:disabled) {
+                box-shadow: 0 2px 0 0 #c23b3b, 0 6px 14px -6px rgba(255,92,92,0.6);
             }
 
             .ans-btn:disabled {
                 opacity: 0.45;
                 cursor: not-allowed;
-                transform: none;
+                transform: translateY(4px);
             }
 
         .feedback {
             text-align: center;
-            font-family: 'Noto Serif TC', serif;
+            font-family: 'Baloo 2', sans-serif;
             font-size: 1rem;
             min-height: 24px;
             margin-top: 16px;
             font-weight: 700;
-            position: relative;
-            z-index: 1;
         }
 
             .feedback.ok {
@@ -644,8 +593,6 @@
             align-items: center;
             gap: 8px;
             margin-bottom: 6px;
-            position: relative;
-            z-index: 1;
         }
 
         .live-dot {
@@ -653,12 +600,12 @@
             height: 9px;
             border-radius: 50%;
             background: var(--green);
-            box-shadow: 0 0 0 3px rgba(79,121,66,0.25);
+            box-shadow: 0 0 0 3px rgba(46,204,113,0.25);
             animation: blink 1.6s infinite;
         }
 
         @keyframes blink {
-            0%, 100% {
+            0%,100% {
                 opacity: 1;
             }
 
@@ -668,29 +615,25 @@
         }
 
         .board-title {
-            font-family: 'Ma Shan Zheng', serif;
-            font-weight: 400;
+            font-family: 'Baloo 2', sans-serif;
+            font-weight: 800;
             font-size: 1.2rem;
             color: var(--ink);
         }
 
         .board-sub {
             font-size: 1rem;
-            color: var(--slate);
+            color: red;
             margin: 0 0 16px 17px;
-            position: relative;
-            z-index: 1;
         }
 
         .board-total-label {
             text-align: right;
-            font-family: 'Noto Serif TC', serif;
+            font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
             font-size: 1.2rem;
-            color: var(--pink-dark);
+            color: #880000;
             margin: -12px 4px 2px 0;
-            position: relative;
-            z-index: 1;
         }
 
         .lb-row {
@@ -698,28 +641,19 @@
             align-items: center;
             gap: 10px;
             padding: 11px 10px;
-            border-radius: 12px;
+            border-radius: 14px;
             margin-bottom: 7px;
-            background: #FBF6E8;
+            background: #FBFAFF;
             border: 1.5px solid var(--line);
-            position: relative;
-            z-index: 1;
-            transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
         }
 
-            .lb-row:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 16px -8px rgba(36,31,27,0.3);
-                border-color: var(--pink);
-            }
-
             .lb-row.me {
-                background: linear-gradient(135deg, rgba(179,58,58,0.08), rgba(75,74,107,0.08));
+                background: linear-gradient(135deg, rgba(255,61,129,0.10), rgba(124,58,237,0.10));
                 border: 1.5px solid var(--pink);
             }
 
         .lb-rank {
-            font-family: 'Noto Serif TC', serif;
+            font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
             color: var(--slate);
             font-size: 1.2rem;
@@ -739,18 +673,18 @@
         }
 
         .lb-correct {
-            font-family: 'Noto Serif TC', serif;
+            font-family: 'Baloo 2', sans-serif;
             font-size: 1.2rem;
             font-weight: 700;
-            color: var(--green);
-            background: rgba(79,121,66,0.12);
+            color: blue;
+            background: rgba(46,204,113,0.15);
             padding: 3px 9px;
             border-radius: 20px;
             flex-shrink: 0;
         }
 
         .lb-score {
-            font-family: 'Noto Serif TC', serif;
+            font-family: 'Baloo 2', sans-serif;
             font-size: 1.2rem;
             font-weight: 800;
             width: 46px;
@@ -764,8 +698,6 @@
             font-size: 1.2rem;
             text-align: center;
             padding: 20px 0;
-            position: relative;
-            z-index: 1;
         }
 
         /* ---------- 排行榜分頁 ---------- */
@@ -776,8 +708,6 @@
             gap: 6px;
             margin-top: 12px;
             flex-wrap: wrap;
-            position: relative;
-            z-index: 1;
         }
 
         .lb-page-btn {
@@ -786,15 +716,13 @@
             padding: 0 8px;
             border-radius: 999px;
             border: 1.5px solid var(--line);
-            background: #FBF6E8;
+            background: #FBFAFF;
             color: var(--slate);
-            font-family: 'Noto Serif TC', serif;
+            font-family: 'Baloo 2', sans-serif;
             font-size: 0.78rem;
             font-weight: 700;
             cursor: pointer;
             transition: background .12s ease, color .12s ease, border-color .12s ease;
-            position: relative;
-            overflow: hidden;
         }
 
             .lb-page-btn:hover:not(:disabled) {
@@ -805,7 +733,7 @@
             .lb-page-btn.active {
                 background: linear-gradient(135deg, var(--pink), var(--purple));
                 border-color: transparent;
-                color: #F7EFDD;
+                color: #fff;
             }
 
             .lb-page-btn:disabled {
@@ -827,20 +755,18 @@
             grid-template-columns: repeat(3,1fr);
             gap: 12px;
             margin: 22px 0;
-            position: relative;
-            z-index: 1;
         }
 
         .stat {
-            background: linear-gradient(180deg,#FBF6E8,#F0E6C8);
+            background: linear-gradient(180deg,#FBFAFF,#F3EEFF);
             border: 2px solid var(--line);
-            border-radius: 14px;
+            border-radius: 16px;
             padding: 18px 8px;
             text-align: center;
         }
 
             .stat .num {
-                font-family: 'Noto Serif TC', serif;
+                font-family: 'Baloo 2', sans-serif;
                 font-size: 1.6rem;
                 font-weight: 800;
                 color: var(--purple);
@@ -858,23 +784,19 @@
             text-align: center;
             display: block;
             margin-bottom: 6px;
-            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.22));
-            position: relative;
-            z-index: 1;
+            filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
         }
 
         .closed-msg {
-            background: #F3E7C9;
+            background: #FFF4E5;
             border: 2px dashed var(--orange);
-            border-radius: 14px;
+            border-radius: 16px;
             padding: 18px;
             text-align: center;
             font-weight: 700;
-            color: #7A5A1E;
+            color: #9A5B00;
             margin-bottom: 6px;
-            font-family: 'Noto Serif TC', serif;
-            position: relative;
-            z-index: 1;
+            font-family: 'Baloo 2', sans-serif;
         }
 
         /* ---------- 選擇題按鈕 ---------- */
@@ -882,8 +804,6 @@
             display: flex;
             flex-direction: column;
             gap: 12px;
-            position: relative;
-            z-index: 1;
         }
 
         .choice-btn {
@@ -892,60 +812,43 @@
             text-align: left;
             width: 100%;
             padding: 15px 18px;
-            border-radius: 14px;
-            border: 2px solid var(--line);
-            background: #FBF6E8;
+            border-radius: 16px;
+            border: 2.5px solid var(--line);
+            background: #FBFAFF;
             font-family: 'Noto Sans TC', sans-serif;
             font-weight: 700;
             font-size: 1.3rem;
             color: var(--ink);
             cursor: pointer;
-            transition: all .12s ease;
-            position: relative;
-            overflow: hidden;
+            box-shadow: 0 6px 0 0 var(--line);
+            transform: translateY(0);
+            transition: transform .1s ease, box-shadow .1s ease, border-color .12s ease, background .12s ease;
         }
-
-            .choice-btn::after {
-                content: '';
-                position: absolute;
-                left: 18px;
-                bottom: 8px;
-                width: 0;
-                height: 2px;
-                background: var(--pink);
-                transition: width .25s ease;
-            }
 
             .choice-btn:hover:not(:disabled) {
                 border-color: var(--purple);
-                background: #F3E8D0;
-                transform: translateY(-2px);
+                background: #F3EEFF;
+                transform: translateY(-3px);
+                box-shadow: 0 9px 0 0 var(--line);
             }
 
-            .choice-btn:hover:not(:disabled)::after {
-                width: 40px;
+            .choice-btn:active:not(:disabled) {
+                transform: translateY(5px);
+                box-shadow: 0 1px 0 0 var(--line);
             }
 
             .choice-btn:disabled {
                 cursor: not-allowed;
-            }
-
-            .choice-btn.correct {
-                background: linear-gradient(135deg, #6B8E5A, var(--green));
-                border-color: var(--green);
-                color: #F7EFDD;
-            }
-
-            .choice-btn.wrong-selected {
-                background: linear-gradient(135deg, #C1543A, var(--coral));
-                border-color: var(--coral);
-                color: #F7EFDD;
+                opacity: 0.7;
+                transform: translateY(4px);
+                box-shadow: 0 2px 0 0 var(--line);
             }
 
             .choice-btn.selected {
-                background: #F3E8D0;
+                background: linear-gradient(135deg, #F3EEFF, #E9DCFF);
                 border-color: var(--purple);
                 color: var(--ink);
+                box-shadow: 0 2px 0 0 var(--purple-dark);
             }
 
         .choice-letter {
@@ -956,18 +859,18 @@
             height: 26px;
             border-radius: 50%;
             background: var(--purple);
-            color: #F7EFDD;
-            font-family: 'Noto Serif TC', serif;
+            color: #fff;
+            font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
             font-size: 0.78rem;
             margin-right: 12px;
             flex-shrink: 0;
+            transition: transform .12s ease;
         }
 
-        .choice-btn.correct .choice-letter,
-        .choice-btn.wrong-selected .choice-letter {
-            background: rgba(247,239,221,0.35);
-        }
+            .choice-btn:hover:not(:disabled) .choice-letter {
+                transform: rotate(-8deg) scale(1.08);
+            }
 
         /* ---------- 答錯率長條圖 ---------- */
         .stat-bar-row {
@@ -1006,29 +909,10 @@
         .stat-bar-pct {
             width: 40px;
             text-align: right;
-            font-family: 'Noto Serif TC', serif;
+            font-family: 'Baloo 2', sans-serif;
             font-weight: 800;
             font-size: 0.78rem;
             flex-shrink: 0;
-        }
-
-        /* ---------- 水墨點按漣漪（互動回饋） ---------- */
-        .ink-ripple {
-            position: absolute;
-            border-radius: 50%;
-            background: radial-gradient(circle, rgba(36,31,27,0.32), transparent 72%);
-            transform: scale(0);
-            pointer-events: none;
-            mix-blend-mode: multiply;
-            animation: inkSpread .6s ease-out forwards;
-            z-index: 5;
-        }
-
-        @keyframes inkSpread {
-            to {
-                transform: scale(1);
-                opacity: 0;
-            }
         }
 
         @media(max-width:575px) {
@@ -1048,17 +932,34 @@
     </style>
 </head>
 <body>
-    <div class="ink-float f1"></div>
-    <div class="ink-float f2"></div>
-    <div class="ink-float f3"></div>
-    <div class="wrap">
-        <div class="brand">
-            <div class="mascot-badge"><span class="mascot">🧼</span></div>
-            <h1>感控問答擂台</h1>
-            <span class="seal-stamp">潔</span>
-            <span class="badge-live">即時挑戰</span>
+    <div class="stage">
+        <div class="parallax-layer layer-back" data-speed="10">
+            <span class="p-item" style="left:8%; top:12%;">🧼</span>
+            <span class="p-item" style="left:78%; top:8%;">🧴</span>
+            <span class="p-item" style="left:20%; top:70%;">🩹</span>
+            <span class="p-item" style="left:88%; top:65%;">💧</span>
         </div>
-        <div id="app"></div>
+        <div class="parallax-layer layer-mid" data-speed="28">
+            <span class="p-item" style="left:14%; top:30%; animation-delay:.2s;">✨</span>
+            <span class="p-item" style="left:70%; top:22%; animation-delay:1s;">🌟</span>
+            <span class="p-item" style="left:40%; top:82%; animation-delay:.6s;">💫</span>
+            <span class="p-item" style="left:90%; top:40%; animation-delay:1.4s;">🧫</span>
+            <span class="p-item" style="left:5%; top:55%; animation-delay:.9s;">💊</span>
+        </div>
+        <div class="parallax-layer layer-front" data-speed="50">
+            <span class="p-item" style="left:25%; top:15%; animation-delay:.3s;">⭐</span>
+            <span class="p-item" style="left:60%; top:60%; animation-delay:.9s;">✨</span>
+            <span class="p-item" style="left:82%; top:20%; animation-delay:1.2s;">🌟</span>
+            <span class="p-item" style="left:35%; top:45%; animation-delay:.5s;">💫</span>
+        </div>
+        <div class="wrap">
+            <div class="brand">
+                <span class="mascot">🧼</span>
+                <h1>感控問答擂台</h1>
+                <span class="badge-live">即時挑戰</span>
+            </div>
+            <div id="app"></div>
+        </div>
     </div>
     <script>
         /* =====================================================================
@@ -1176,7 +1077,7 @@
         function boardHtml() {
             return `
                                             <div class="card">
-                                              <div class="board-head"><div class="live-dot"></div><div class="board-title">🔥 得分排行榜（即時）</div></div>
+                                              <div class="board-head"><div class="live-dot"></div><div class="board-title">🔥 得分排行榜 (即時)</div></div>
                                               <div class="board-sub">依分數排序，每 2 秒自動更新</div>
                                               <div class="board-total-label">總積分</div>
                                               <div id="lb-list"></div>
@@ -1254,7 +1155,7 @@
                                               <div class="row g-3">
                                                 <div class="col-lg-8">
                                                   <div class="card">
-                                                    <p class="eyebrow">開始作答</p>
+                                                    <p class="eyebrow">🎮 開始作答</p>
                                                     <h2>輸入你的姓名與職稱 加入擂台</h2>
                                                     ${state.registrationOpen ? `
                                                       <label for="nameInput">姓名 職稱</label>
@@ -1424,28 +1325,73 @@
             render();
         }
 
-        /* ---------- 水墨點按漣漪效果（純視覺互動回饋，不影響任何作答邏輯） ---------- */
-        function inkRipple(e) {
-            const target = e.target.closest('.btn, .ans-btn, .choice-btn, .lb-page-btn');
-            if (!target) return;
-            const rect = target.getBoundingClientRect();
-            const size = Math.max(rect.width, rect.height) * 1.6;
-            const ripple = document.createElement('span');
-            ripple.className = 'ink-ripple';
-            ripple.style.width = size + 'px';
-            ripple.style.height = size + 'px';
-            ripple.style.left = (e.clientX - rect.left - size / 2) + 'px';
-            ripple.style.top = (e.clientY - rect.top - size / 2) + 'px';
-            target.appendChild(ripple);
-            ripple.addEventListener('animationend', () => ripple.remove());
+        /* ---------- 視差滾動 + 3D 傾斜互動 ---------- */
+        function initParallax() {
+            const layers = document.querySelectorAll('.parallax-layer');
+            const wrap = document.querySelector('.wrap');
+            if (!layers.length && !wrap) return;
+
+            let targetX = 0, targetY = 0, curX = 0, curY = 0;
+
+            function setTarget(nx, ny) {
+                targetX = Math.max(-1, Math.min(1, nx));
+                targetY = Math.max(-1, Math.min(1, ny));
+            }
+
+            function loop() {
+                curX += (targetX - curX) * 0.08;
+                curY += (targetY - curY) * 0.08;
+
+                layers.forEach(layer => {
+                    const speed = parseFloat(layer.dataset.speed || '20');
+                    const mx = curX * speed;
+                    const my = curY * speed;
+                    layer.style.transform = `translate3d(${mx}px, ${my}px, 0)`;
+                });
+
+                if (wrap) {
+                    const rotY = curX * 5;
+                    const rotX = -curY * 5;
+                    wrap.style.transform = `rotateX(${rotX}deg) rotateY(${rotY}deg)`;
+                }
+
+                requestAnimationFrame(loop);
+            }
+            requestAnimationFrame(loop);
+
+            window.addEventListener('mousemove', (e) => {
+                const nx = (e.clientX / window.innerWidth) * 2 - 1;
+                const ny = (e.clientY / window.innerHeight) * 2 - 1;
+                setTarget(nx, ny);
+            });
+            window.addEventListener('mouseleave', () => setTarget(0, 0));
+
+            window.addEventListener('touchmove', (e) => {
+                if (!e.touches || !e.touches[0]) return;
+                const t = e.touches[0];
+                const nx = (t.clientX / window.innerWidth) * 2 - 1;
+                const ny = (t.clientY / window.innerHeight) * 2 - 1;
+                setTarget(nx, ny);
+            }, { passive: true });
+            window.addEventListener('touchend', () => setTarget(0, 0));
+
+            // 手機陀螺儀作為輔助（若裝置與瀏覽器支援）
+            if (window.DeviceOrientationEvent) {
+                window.addEventListener('deviceorientation', (e) => {
+                    if (e.gamma == null || e.beta == null) return;
+                    const nx = e.gamma / 30;
+                    const ny = (e.beta - 40) / 30;
+                    setTarget(nx, ny);
+                });
+            }
         }
-        document.addEventListener('click', inkRipple);
 
         (async function init() {
             await fetchState('list');
             lastKnownRegOpen = state.registrationOpen;
             render();
             startPolling();
+            initParallax();
         })();
     </script>
 </body>
