@@ -6,6 +6,11 @@
     <title>感控問答擂台</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+        /* =====================================================================
+           視覺主題：清新風（薄荷綠、天空藍、暖陽黃點綴，白色卡片為主）。
+           下面 :root 裡的顏色變數是整份樣式表唯一需要調色的地方，
+           其餘規則都是透過 var(--xxx) 取用這裡定義好的顏色。
+           ===================================================================== */
         @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
 
         :root {
@@ -453,174 +458,6 @@
                 color: var(--coral);
             }
 
-        /* ---------- 排行榜 ---------- */
-        .board-head {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 6px;
-        }
-
-        .live-dot {
-            width: 9px;
-            height: 9px;
-            border-radius: 50%;
-            background: var(--mint);
-            box-shadow: 0 0 0 3px rgba(20,193,160,0.22);
-            animation: blink 1.6s infinite;
-        }
-
-        @keyframes blink {
-            0%,100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.3;
-            }
-        }
-
-        .board-title {
-            font-family: 'Baloo 2', sans-serif;
-            font-weight: 800;
-            font-size: 1.2rem;
-            color: var(--ink);
-        }
-
-        .board-sub {
-            font-size: 1rem;
-            color: var(--slate);
-            margin: 0 0 16px 17px;
-        }
-
-        .board-total-label {
-            text-align: right;
-            font-family: 'Baloo 2', sans-serif;
-            font-weight: 800;
-            font-size: 1.2rem;
-            color: var(--sky);
-            margin: -12px 4px 2px 0;
-        }
-
-        .lb-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 11px 10px;
-            border-radius: 14px;
-            margin-bottom: 7px;
-            background: var(--bg-base);
-            border: 1.5px solid var(--line);
-            transition: transform .12s ease, box-shadow .12s ease;
-        }
-
-            .lb-row:hover {
-                transform: translateY(-1px);
-                box-shadow: 0 8px 16px -10px rgba(15,60,50,0.3);
-            }
-
-            .lb-row.me {
-                background: linear-gradient(135deg, rgba(20,193,160,0.10), rgba(62,193,232,0.10));
-                border: 1.5px solid var(--mint);
-            }
-
-        .lb-rank {
-            font-family: 'Baloo 2', sans-serif;
-            font-weight: 800;
-            color: var(--slate);
-            font-size: 1.2rem;
-            width: 26px;
-            flex-shrink: 0;
-            text-align: center;
-        }
-
-        .lb-name {
-            flex: 1;
-            font-size: 1.2rem;
-            font-weight: 700;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            color: var(--ink);
-        }
-
-        .lb-correct {
-            font-family: 'Baloo 2', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--mint-dark);
-            background: var(--mint-pale);
-            padding: 3px 9px;
-            border-radius: 20px;
-            flex-shrink: 0;
-        }
-
-        .lb-score {
-            font-family: 'Baloo 2', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 800;
-            width: 46px;
-            text-align: right;
-            flex-shrink: 0;
-            color: var(--purple);
-        }
-
-        .lb-empty {
-            color: var(--slate);
-            font-size: 1.2rem;
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        /* ---------- 排行榜分頁 ---------- */
-        .lb-pagination {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-
-        .lb-page-btn {
-            min-width: 30px;
-            height: 30px;
-            padding: 0 8px;
-            border-radius: 999px;
-            border: 1.5px solid var(--line);
-            background: var(--bg-base);
-            color: var(--slate);
-            font-family: 'Baloo 2', sans-serif;
-            font-size: 0.78rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background .12s ease, color .12s ease, border-color .12s ease;
-        }
-
-            .lb-page-btn:hover:not(:disabled) {
-                border-color: var(--mint);
-                color: var(--mint-dark);
-            }
-
-            .lb-page-btn.active {
-                background: linear-gradient(135deg, var(--mint), var(--sky));
-                border-color: transparent;
-                color: #fff;
-            }
-
-            .lb-page-btn:disabled {
-                opacity: 0.4;
-                cursor: not-allowed;
-            }
-
-        .lb-page-info {
-            width: 100%;
-            text-align: center;
-            font-size: 0.72rem;
-            color: var(--slate);
-            margin-top: 2px;
-        }
-
         /* ---------- 結算畫面 ---------- */
         .end-stats {
             display: grid;
@@ -830,15 +667,21 @@
            讓彼此的排行榜互相獨立，不會混在一起。 */
         const ROOM_ID = "default-room";
 
+        // 把玩家代號中不適合當作 URL 參數/資料庫 key 的字元換成底線，避免傳到後端時出錯。
         function sanitizeKey(s) {
             return String(s).replace(/[^a-zA-Z0-9_\u4e00-\u9fff-]/g, '_');
         }
 
+        // 組出呼叫 Google Apps Script 的完整網址：固定帶上 room（房間代碼），
+        // 再加上這次呼叫需要的其他參數（例如 action、playerId、score...等）。
         function apiUrl(params) {
             const usp = new URLSearchParams(Object.assign({ room: ROOM_ID }, params));
             return APPS_SCRIPT_URL + '?' + usp.toString();
         }
 
+        // 題庫：每題可以是 type:'boolean'（是非題，用 answer:true/false 判斷對錯）
+        // 或 type:'choice'（選擇題，用 options 陣列 + correctIndex 判斷對錯）。
+        // points 是這一題答對可以拿到的分數；答錯不會扣分（見 answer() 函式）。
         const QUESTIONS = [
             { id: 'q1', type: 'boolean', text: '戴手套可以取代洗手；只要手套沒有破損，就可以持續戴著照護不同病人或不同照護步驟。', answer: false, points: 10 },
             { id: 'q2', type: 'boolean', text: '本院洗手種類包含一般性洗手、消毒性洗手與外科刷手；一般性洗手可清除大部分暫時性細菌。', answer: true, points: 20 },
@@ -859,26 +702,28 @@
             { id: 'mc5', type: 'choice', text: '下列何者「不是」正確的醫療廢棄物分類方式？', options: ['尖銳物品丟入利器盒', '被血液污染的紗布視為感染性事業廢棄物', '將針具與一般垃圾混合丟棄', '生物性廢棄物依規定滅菌後處理'], correctIndex: 2, points: 20 }
         ];
 
+        // 整個小遊戲的「畫面狀態」，render() 會依據這裡的內容決定要畫出登入/答題/結算哪一個畫面。
         let state = {
-            screen: 'login',
-            playerId: '',
-            name: '',
-            questions: [],
-            currentIndex: 0,
-            score: 0,
-            correct: 0,
-            total: 0,
-            feedback: null,
-            locked: false,
-            leaderboard: {},
-            stats: {},
-            registrationOpen: true,
-            lbPage: 1
+            screen: 'login',       // 目前畫面：'login'（登入）/ 'game'（作答中）/ 'end'（結算）
+            playerId: '',          // 這個玩家在後端資料庫（Google試算表）用的唯一代號
+            name: '',              // 玩家輸入的姓名/職稱（顯示用）
+            questions: [],         // 這次要作答的題目清單（複製自 QUESTIONS）
+            currentIndex: 0,       // 目前作答到第幾題（從 0 開始算）
+            score: 0,              // 目前總分（答錯最低就是 0 分，不會變負數）
+            correct: 0,            // 目前答對的題數
+            total: 0,              // 目前已作答的題數
+            feedback: null,        // 目前沒有用到，保留欄位
+            locked: false,         // 是否鎖定作答按鈕（防止同一題被連續點兩次）
+            leaderboard: {},       // 從後端抓回來的排行榜資料（雖然畫面上不顯示，但結算頁排名要用）
+            stats: {},             // 從後端抓回來的各題答對/答錯統計（目前畫面沒有顯示）
+            registrationOpen: true // 主辦人是否開放「加入作答」
         };
 
-        let pollTimer = null;
-        let lastKnownRegOpen = null;
+        let pollTimer = null;        // 輪詢計時器的代號，用來在需要時取消排程
+        let lastKnownRegOpen = null; // 記住上一次輪詢到的「開放/關閉作答」狀態，用來判斷有沒有變化
 
+        // 統一的後端溝通函式：呼叫 Google Apps Script API，並把回傳的排行榜/統計/開放狀態
+        // 同步存回 state，方便各個功能共用同一份資料，不用每個地方各自處理 fetch。
         async function fetchState(action, extraParams) {
             try {
                 const res = await fetch(apiUrl(Object.assign({ action: action }, extraParams || {})));
@@ -894,6 +739,8 @@
             }
         }
 
+        // 把「目前這位玩家」的最新成績送到後端（Google 試算表），讓其他人（或結算時）看得到。
+        // finished=true 代表這是最後一題答完、成績已經定案。
         async function updateMyEntry(finished) {
             if (!state.playerId) return;
             await fetchState('update', {
@@ -904,16 +751,19 @@
                 total: state.total,
                 finished: !!finished
             });
-            renderBoardList();
         }
 
+        // 記錄「這一題」全體玩家的答對/答錯次數，讓後端可以統計每題的答對率（目前畫面沒有呈現，
+        // 但資料仍會持續累積在後端，之後想加上「各題答錯率」的圖表時可以直接拿來用）。
         function logAnswerStat(questionId, isCorrect) {
             fetchState('logAnswer', { questionId: questionId, correct: !!isCorrect });
         }
 
+        // 輪詢改成輕量版：30~45 秒（30 秒基礎 + 0~15 秒隨機抖動）才打一次 action=list，
+        // 且只用來偵測「開放/關閉作答」的狀態有沒有變化；排行榜資料不再顯示，
+        // 但仍會一併存入 state.leaderboard，讓結算畫面可以順便算出目前排名（不用額外請求）。
         async function refreshLeaderboard() {
             await fetchState('list');
-            renderBoardList();
             if (state.screen === 'login' && state.registrationOpen !== lastKnownRegOpen) {
                 lastKnownRegOpen = state.registrationOpen;
                 render();
@@ -922,96 +772,39 @@
             }
         }
 
-        function startPolling() {
-            if (pollTimer) clearInterval(pollTimer);
-            pollTimer = setInterval(refreshLeaderboard, 2000);
+        function scheduleNextPoll() {
+            const delay = 30000 + Math.random() * 15000; // 30~45 秒隨機
+            pollTimer = setTimeout(async () => {
+                await refreshLeaderboard();
+                scheduleNextPoll();
+            }, delay);
         }
 
+        function startPolling() {
+            if (pollTimer) clearTimeout(pollTimer);
+            scheduleNextPoll();
+        }
+
+        // 把排行榜資料（物件）轉成依分數高到低排序的陣列，主要是給結算畫面算「目前排名第幾名」用。
         function sortedEntries() {
             return Object.entries(state.leaderboard)
                 .sort((a, b) => (b[1].score - a[1].score) || (b[1].correct - a[1].correct));
         }
 
-        function boardHtml() {
-            return `
-                <div class="card">
-                  <div class="board-head"><div class="live-dot"></div><div class="board-title">🔥 得分排行榜 (即時)</div></div>
-                  <div class="board-sub">依分數排序，每 2 秒自動更新</div>
-                  <div class="board-total-label">總積分</div>
-                  <div id="lb-list"></div>
-                  <div id="lb-pagination"></div>
-                </div>
-              `;
-        }
-
-        const LB_PAGE_SIZE = 20;
-
-        function renderBoardList() {
-            const el = document.getElementById('lb-list');
-            const pagEl = document.getElementById('lb-pagination');
-            if (!el) return;
-            const entries = sortedEntries();
-            if (entries.length === 0) {
-                el.innerHTML = `<div class="lb-empty">🎯 還沒有人開始作答</div>`;
-                if (pagEl) pagEl.innerHTML = '';
-                return;
-            }
-
-            const totalPages = Math.max(1, Math.ceil(entries.length / LB_PAGE_SIZE));
-            if (state.lbPage > totalPages) state.lbPage = totalPages;
-            if (state.lbPage < 1) state.lbPage = 1;
-
-            const startIdx = (state.lbPage - 1) * LB_PAGE_SIZE;
-            const pageEntries = entries.slice(startIdx, startIdx + LB_PAGE_SIZE);
-
-            const medals = ['🥇', '🥈', '🥉'];
-            el.innerHTML = pageEntries.map(([id, e], idx) => {
-                const i = startIdx + idx;
-                const isMe = id === state.playerId;
-                const rankDisplay = medals[i] || (i + 1);
-                return `
-                  <div class="lb-row ${isMe ? 'me' : ''}">
-                    <div class="lb-rank">${rankDisplay}</div>
-                    <div class="lb-name" title="${escapeHtml(e.name)}">${escapeHtml(e.name)}${isMe ? ' (你)' : ''}</div>
-                    <div class="lb-correct">✓ ${e.correct}/${e.total}</div>
-                    <div class="lb-score">${e.score}</div>
-                  </div>
-                `;
-            }).join('');
-
-            if (pagEl) {
-                if (totalPages <= 1) {
-                    pagEl.innerHTML = '';
-                } else {
-                    let buttons = '';
-                    buttons += `<button class="lb-page-btn" id="lbPrevBtn" ${state.lbPage === 1 ? 'disabled' : ''}>‹</button>`;
-                    for (let p = 1; p <= totalPages; p++) {
-                        buttons += `<button class="lb-page-btn ${p === state.lbPage ? 'active' : ''}" data-page="${p}">${p}</button>`;
-                    }
-                    buttons += `<button class="lb-page-btn" id="lbNextBtn" ${state.lbPage === totalPages ? 'disabled' : ''}>›</button>`;
-                    pagEl.innerHTML = buttons + `<div class="lb-page-info">共 ${entries.length} 人・第 ${state.lbPage}/${totalPages} 頁</div>`;
-
-                    const prevBtn = document.getElementById('lbPrevBtn');
-                    const nextBtn = document.getElementById('lbNextBtn');
-                    if (prevBtn) prevBtn.onclick = () => { state.lbPage -= 1; renderBoardList(); };
-                    if (nextBtn) nextBtn.onclick = () => { state.lbPage += 1; renderBoardList(); };
-                    pagEl.querySelectorAll('.lb-page-btn[data-page]').forEach(btn => {
-                        btn.onclick = () => { state.lbPage = parseInt(btn.dataset.page, 10); renderBoardList(); };
-                    });
-                }
-            }
-        }
-
+        // 把使用者輸入或題目文字中的特殊字元轉成安全的 HTML 實體，避免破版或被當成程式碼執行（XSS）。
         function escapeHtml(s) {
             return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         }
 
+        // 畫面渲染的主函式：依照 state.screen 決定要畫「登入」「作答」還是「結算」畫面，
+        // 每次呼叫都會整段重寫 #app 裡面的 HTML，是一個很單純、每次都「整頁重畫」的寫法。
         function render() {
             const app = document.getElementById('app');
+            // ---- 畫面一：登入（輸入姓名、加入作答） ----
             if (state.screen === 'login') {
                 app.innerHTML = `
-                  <div class="row g-3">
-                    <div class="col-lg-8">
+                  <div class="row g-3 justify-content-center">
+                    <div class="col-lg-8 mx-auto">
                       <div class="card">
                         <p class="eyebrow">🎮 開始作答</p>
                         <h2>輸入你的姓名與職稱 加入擂台</h2>
@@ -1024,18 +817,18 @@
                         `}
                       </div>
                     </div>
-                    <div class="col-lg-4">${boardHtml()}</div>
                   </div>
                 `;
                 if (state.registrationOpen) {
                     document.getElementById('joinBtn').onclick = onJoin;
                     document.getElementById('nameInput').addEventListener('keydown', e => { if (e.key === 'Enter') onJoin(); });
                 }
-                renderBoardList();
             }
+            // ---- 畫面二：作答中（顯示目前分數、題目與選項） ----
             else if (state.screen === 'game') {
                 const q = state.questions[state.currentIndex];
                 const pct = Math.round((state.currentIndex / state.questions.length) * 100);
+                // 依題目型態（是非題 / 選擇題）組出不同的作答按鈕 HTML
                 const answersHtml = q.type === 'choice'
                     ? `<div class="choice-list">${q.options.map((opt, idx) => `
                           <button class="choice-btn" id="choiceBtn${idx}" ${state.locked ? 'disabled' : ''}><span class="choice-letter">${String.fromCharCode(65 + idx)}</span>${escapeHtml(opt)}</button>
@@ -1045,8 +838,8 @@
                           <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
                         </div>`;
                 app.innerHTML = `
-                  <div class="row g-3">
-                    <div class="col-lg-8">
+                  <div class="row g-3 justify-content-center">
+                    <div class="col-lg-8 mx-auto">
                       <div class="card">
                         <div class="dial-zone">
                           <div class="dial" id="dial">
@@ -1068,7 +861,6 @@
                         <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
                       </div>
                     </div>
-                    <div class="col-lg-4">${boardHtml()}</div>
                   </div>
                 `;
                 if (q.type === 'choice') {
@@ -1079,14 +871,15 @@
                     document.getElementById('btnTrue').onclick = () => answer(true);
                     document.getElementById('btnFalse').onclick = () => answer(false);
                 }
-                renderBoardList();
             }
+            // ---- 畫面三：結算（顯示總分、答對題數、目前排名） ----
             else if (state.screen === 'end') {
                 const entries = sortedEntries();
+                // 用最後一次拿到的排行榜資料算出自己排第幾名（0 代表還抓不到排名資料）
                 const myRank = entries.findIndex(([id]) => id === state.playerId) + 1;
                 app.innerHTML = `
-                  <div class="row g-3">
-                    <div class="col-lg-8">
+                  <div class="row g-3 justify-content-center">
+                    <div class="col-lg-8 mx-auto">
                       <div class="card">
                         <span class="trophy">🏆</span>
                         <p class="eyebrow text-center">作答完成</p>
@@ -1100,13 +893,13 @@
                         <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
                       </div>
                     </div>
-                    <div class="col-lg-4">${boardHtml()}</div>
                   </div>
                 `;
-                renderBoardList();
             }
         }
 
+        // 「加入作答」按鈕的處理函式：驗證姓名有填寫、初始化這位玩家的作答狀態，
+        // 然後把畫面切到「作答中」，並先送一筆 0 分的紀錄到後端（讓後端知道這個人開始玩了）。
         function onJoin() {
             const input = document.getElementById('nameInput');
             const name = (input.value || '').trim();
@@ -1129,16 +922,21 @@
             render();
         }
 
+        // 使用者點擊答案時執行：
+        // selected 是非題時是 true/false，選擇題時是選項的 index（0=A、1=B...）。
         function answer(selected) {
-            if (state.locked) return;
+            if (state.locked) return; // 避免同一題被連續點兩下
             state.locked = true;
             const q = state.questions[state.currentIndex];
             const isCorrect = q.type === 'choice' ? (selected === q.correctIndex) : (selected === q.answer);
+
+            // 計分規則：答對加該題配分，答錯不加不扣（Math.max(0, ...) 同時確保分數不會變負數）
             const delta = isCorrect ? q.points : -0;
             state.score = Math.max(0, state.score + delta);
             state.total += 1;
             if (isCorrect) state.correct += 1;
 
+            // 更新畫面上的分數數字
             const scoreNum = document.getElementById('scoreNum');
             if (scoreNum) scoreNum.textContent = state.score;
 
@@ -1149,6 +947,8 @@
                 setTimeout(() => dialEl.classList.remove('flash-correct', 'flash-wrong'), 700);
             }
 
+            // 鎖住這一題的按鈕，避免重複作答；選擇題只會把「使用者點的那個選項」標成
+            // 中性的已選取樣式，不會標示正確答案是哪一個。
             if (q.type === 'choice') {
                 q.options.forEach((opt, idx) => {
                     const btn = document.getElementById('choiceBtn' + idx);
@@ -1163,11 +963,14 @@
             const fz = document.getElementById('feedbackZone');
             if (fz) fz.textContent = '📮 已送出，前往下一題…';
 
+            // 把這一題的作答結果記錄到後端統計（供之後分析各題答對率用）
             logAnswerStat(q.id, isCorrect);
 
+            // 判斷是不是最後一題，把目前成績送到後端（每一題都會送一次，讓其他人能即時看到最新分數）
             const isLast = (state.currentIndex + 1) >= state.questions.length;
             updateMyEntry(isLast);
 
+            // 停頓 0.5 秒讓玩家看到剛剛送出的畫面回饋，再切到下一題（或切到結算畫面）
             setTimeout(() => {
                 state.currentIndex += 1;
                 state.locked = false;
@@ -1178,18 +981,25 @@
             }, 500);
         }
 
+        // 主辦人功能：清空後端的排行榜與答錯率統計資料（目前沒有按鈕呼叫這個函式，
+        // 保留起來是為了之後如果要加「清空」按鈕時可以直接用）。
         async function onResetBoard() {
             if (!confirm('確定要清空所有玩家的排行榜與答錯率統計資料嗎？此動作無法復原。')) return;
             await fetchState('reset');
             render();
         }
 
+        // 主辦人功能：開啟/關閉「加入作答」（目前沒有按鈕呼叫這個函式，原因同上）。
         async function onToggleRegistration() {
             const newOpen = !state.registrationOpen;
             await fetchState('setRegistration', { open: newOpen });
             render();
         }
 
+        // 進入頁面時的初始化流程：
+        // 1. 先跟後端要一次最新狀態（主要是為了拿到目前「開放/關閉作答」的狀態）
+        // 2. 畫出第一個畫面（登入畫面）
+        // 3. 開始輕量輪詢，之後每 30~45 秒自動確認一次開放狀態有沒有變化
         (async function init() {
             await fetchState('list');
             lastKnownRegOpen = state.registrationOpen;
