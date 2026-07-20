@@ -894,8 +894,11 @@
         }
 
         function startPolling() {
-            if (pollTimer) clearInterval(pollTimer);
-            pollTimer = setInterval(refreshLeaderboard, 5000);
+         const randomDelay = 5000 + Math.floor(Math.random() * 3000); // 8 ~ 11 秒隨機
+    pollTimer = setTimeout(function() {
+        refreshLeaderboard();
+        startPolling(); // 執行完後再排下一次
+    }, randomDelay);
         }
 
         function sortedEntries() {
