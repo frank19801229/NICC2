@@ -9,7 +9,6 @@
 
 
 
-
         @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
 
         :root {
@@ -1029,12 +1028,8 @@
         }
 
         function startPolling() {
-            if (pollTimer) clearTimeout(pollTimer);
-            const randomDelay = 5000 + Math.floor(Math.random() * 3000); // 8 ~ 11 秒隨機
-            pollTimer = setTimeout(function () {
-                refreshLeaderboard();
-                startPolling(); // 執行完後再排下一次
-            }, randomDelay);
+            if (pollTimer) clearInterval(pollTimer);
+            pollTimer = setInterval(refreshLeaderboard, 2000);
         }
 
         function sortedEntries() {
@@ -1348,7 +1343,7 @@
                     state.screen = 'end';
                 }
                 render();
-            }, 800);
+            }, 500);
         }
 
         async function onResetBoard() {
