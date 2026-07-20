@@ -1,4 +1,14 @@
 <!DOCTYPE html>
+<!--
+  感控問答擂台（甜美蘿莉風）
+  ------------------------------------------------------------
+  單機檔案，前端用 vanilla JS 依 state.screen 手動切換三個畫面：
+    login（登入）→ game（答題）→ end（結算）
+  分數/排行榜資料存在外部的 Google Apps Script（見下方 APPS_SCRIPT_URL），
+  前端用 fetchState() 統一呼叫，並用輕量輪詢偵測「是否開放作答」的狀態變化。
+  作答過程不會顯示正確答案，只會提示「已送出」。
+  ------------------------------------------------------------
+-->
 <html lang="zh-Hant">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +19,7 @@
         @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&family=Chewy&display=swap');
 
         :root {
-            /* ---------- 甜美蘿莉 Sweet Lolita 色票 ---------- */
+            /* ---------- 甜美蘿莉 Sweet Lolita 色票（所有顏色都用這裡的變數，方便統一改色） ---------- */
             --pink: #FF7EB6;
             --pink-dark: #E8478F;
             --pink-pale: #FFE3F0;
@@ -20,19 +30,19 @@
             --yellow: #FFD966;
             --green: #57D08A;
             --coral: #FF8FA3;
-            --ink: #5B3A52;
-            --slate: #B98CB4;
+            --ink: #5B3A52;   /* 主要文字顏色（深梅紫） */
+            --slate: #B98CB4; /* 次要/說明文字顏色 */
             --card: #FFFFFF;
-            --cream: #FFF8FC;
-            --line: #FFD3EA;
+            --cream: #FFF8FC; /* 卡片內部淺色底 */
+            --line: #FFD3EA;  /* 邊框/分隔線顏色 */
         }
 
         * {
-            box-sizing: border-box;
+            box-sizing: border-box; /* 讓 padding/border 都算進寬高裡，版面比較好抓 */
         }
 
         html, body {
-            overflow-x: hidden;
+            overflow-x: hidden; /* 飄浮的裝飾 emoji 會跑到畫面外，這裡擋住橫向捲軸 */
         }
 
         body {
@@ -40,22 +50,23 @@
             min-height: 100vh;
             font-family: 'Noto Sans TC', sans-serif;
             color: var(--ink);
+            /* 多層放射狀漸層疊在一起，做出柔和的粉彩雲霧背景 */
             background:
                 radial-gradient(circle at 12% 8%, rgba(255,182,217,0.55), transparent 42%),
                 radial-gradient(circle at 92% 6%, rgba(201,166,255,0.50), transparent 40%),
                 radial-gradient(circle at 50% 105%, rgba(255,217,102,0.35), transparent 45%),
                 radial-gradient(circle at 85% 70%, rgba(155,232,204,0.35), transparent 40%),
                 linear-gradient(160deg, #FFEAF5 0%, #FDE3FF 40%, #EFE6FF 70%, #E8F6FF 100%);
-            background-attachment: fixed;
+            background-attachment: fixed; /* 捲動頁面時背景固定不跟著捲，營造沉浸感 */
             position: relative;
         }
 
-        /* 閃亮亮的粉塵背景 */
+        /* 閃亮亮的粉塵背景：兩層小圓點疊出星塵感，用 twinkle 動畫讓它們忽明忽暗 */
         body::before {
             content: '';
             position: fixed;
             inset: 0;
-            pointer-events: none;
+            pointer-events: none; /* 不擋住底下的點擊操作 */
             background-image:
                 radial-gradient(circle, rgba(255,255,255,0.9) 1.5px, transparent 1.6px),
                 radial-gradient(circle, rgba(255,255,255,0.7) 1px, transparent 1.1px);
@@ -70,7 +81,7 @@
             50% { opacity: 1; }
         }
 
-        /* 飄浮愛心/星星裝飾層 */
+        /* 飄浮愛心/星星裝飾層：容器本身固定滿版，裡面的 .floaty 元素由 JS 動態產生 */
         #floatyLayer {
             position: fixed;
             inset: 0;
@@ -79,6 +90,7 @@
             z-index: 0;
         }
 
+        /* 單一顆飄浮 emoji 的樣式，實際飄浮軌跡由 floatUp 動畫控制 */
         .floaty {
             position: absolute;
             bottom: -60px;
@@ -90,6 +102,7 @@
             animation-iteration-count: infinite;
         }
 
+        /* 從畫面底下飄到頂端消失，同時旋轉一圈、中途稍微放大再縮小 */
         @keyframes floatUp {
             0% { transform: translateY(0) rotate(0deg) scale(0.8); opacity: 0; }
             10% { opacity: 0.85; }
@@ -103,7 +116,7 @@
             margin: 0 auto;
             padding: 22px 16px 60px;
             position: relative;
-            z-index: 1;
+            z-index: 1; /* 蓋在背景裝飾層（z-index:0）之上，確保內容可以被點擊 */
         }
 
         /* ---------- 頂部品牌列 ---------- */
@@ -190,6 +203,7 @@
             overflow: hidden;
         }
 
+            /* 卡片右上角一團粉色光暈裝飾 */
             .card::before {
                 content: '';
                 position: absolute;
@@ -201,6 +215,7 @@
                 background: radial-gradient(circle, rgba(255,126,182,0.22), transparent 70%);
             }
 
+            /* 卡片左下角一團淺紫光暈裝飾，跟右上角互相呼應 */
             .card::after {
                 content: '';
                 position: absolute;
@@ -212,6 +227,7 @@
                 background: radial-gradient(circle, rgba(201,166,255,0.20), transparent 70%);
             }
 
+            /* 卡片左上角歪斜的蝴蝶結貼紙（🎀），純裝飾用 */
             .card > .ribbon-corner {
                 position: absolute;
                 top: 14px;
@@ -265,7 +281,7 @@
         }
 
             label::before {
-                content: '🐾 ';
+                content: '🐾 '; /* 每個 label 前面加一個小肉球符號，呼應蘿莉/兔子主題 */
             }
 
         input[type=text] {
@@ -304,6 +320,7 @@
             overflow: hidden;
         }
 
+            /* 按鈕表面一道斜向高光，做出糖果/軟糖般的光澤感 */
             .btn::after {
                 content: '';
                 position: absolute;
@@ -315,11 +332,11 @@
             }
 
             .btn:hover {
-                transform: translateY(-2px) rotate(-0.5deg);
+                transform: translateY(-2px) rotate(-0.5deg); /* 輕微浮起 + 歪一點角度，更活潑 */
             }
 
             .btn:active {
-                transform: scale(0.95);
+                transform: scale(0.95); /* 按下去縮小一點，模擬按壓回饋 */
             }
 
         .btn-primary {
@@ -330,7 +347,7 @@
         }
 
             .btn-primary::before {
-                content: '🎀 ';
+                content: '🎀 '; /* 主要按鈕前面固定加一個蝴蝶結符號 */
             }
 
             .btn-primary:hover {
@@ -358,6 +375,7 @@
             }
 
         .foot-link {
+            /* 卡片下方一排文字連結（例如管理員用的重設/開關按鈕），置中自動換行排列 */
             margin-top: 18px;
             text-align: center;
             display: flex;
@@ -385,6 +403,7 @@
             position: relative;
         }
 
+        /* 圓盤外圍一圈虛線光暈，用 spinSlow 讓它慢慢轉動，增加「轉盤」的感覺 */
         .dial-zone::before {
             content: '';
             position: absolute;
@@ -400,6 +419,7 @@
             to { transform: rotate(360deg); }
         }
 
+        /* 分數圓盤本體：用 conic-gradient 做出四色漸層的甜甜圈外框 */
         .dial {
             position: relative;
             width: 150px;
@@ -414,6 +434,7 @@
             box-shadow: 0 12px 28px -10px rgba(155,111,232,0.55);
         }
 
+            /* 圓盤中間挖空成白色底，蓋住 conic-gradient 中央，只留外圈當彩色框 */
             .dial::after {
                 content: '';
                 position: absolute;
@@ -422,6 +443,7 @@
                 background: radial-gradient(circle at 32% 28%, #ffffff, #fff6fb 70%);
             }
 
+            /* 圓盤正上方掛一個小蝴蝶結裝飾 */
             .dial::before {
                 content: '🎀';
                 position: absolute;
@@ -435,10 +457,13 @@
 
         .dial-inner {
             position: relative;
-            z-index: 2;
+            z-index: 2; /* 蓋在 .dial::after 的白色底之上，讓分數文字看得見 */
             text-align: center;
         }
 
+        /* 註：以下 flash-correct / flash-wrong 這兩個「答對/答錯」的圓盤動畫效果
+           目前 JS 沒有實際套用（因為現在答題後不會揭曉對錯，只會顯示「已送出」），
+           樣式保留著，之後如果想恢復「答對/答錯即時特效」可以直接在 answer() 裡加上對應 class。 */
         .dial.flash-correct {
             animation: pulseGood .7s ease-out;
         }
@@ -491,6 +516,7 @@
         }
 
         .progress-wrap {
+            /* 「第 X/Y 題」文字＋玩家姓名標籤＋下方的進度條，整組置中排列 */
             font-family: 'Baloo 2', sans-serif;
             font-size: 1.2rem;
             color: var(--ink);
@@ -516,16 +542,17 @@
             overflow: hidden;
             margin-top: 8px;
             border: 1.5px solid #fff;
-            box-shadow: inset 0 1px 3px rgba(155,111,232,0.25);
+            box-shadow: inset 0 1px 3px rgba(155,111,232,0.25); /* 內凹陰影，做出溝槽感 */
         }
 
+        /* 進度條填色：寬度由 JS 依 currentIndex 算出的百分比控制（見 render() 的 pct 變數） */
         .progress-bar-fill {
             height: 100%;
             background: linear-gradient(90deg, var(--yellow), var(--pink), var(--lavender));
             background-size: 200% 100%;
             transition: width .35s ease;
             border-radius: 999px;
-            animation: shimmerBar 2.4s linear infinite;
+            animation: shimmerBar 2.4s linear infinite; /* 漸層持續橫向流動，做出「流光」效果 */
             position: relative;
         }
 
@@ -536,6 +563,7 @@
 
         /* ---------- 題目卡 ---------- */
         .qcard {
+            /* 斜紋底紋 + 淺色漸層，搭配虛線邊框，做出「便條紙/糖果紙」的質感 */
             background:
                 repeating-linear-gradient(135deg, rgba(255,126,182,0.05) 0 12px, rgba(201,166,255,0.05) 12px 24px),
                 linear-gradient(180deg, #FFFBFE, #FFF1F8);
@@ -546,6 +574,7 @@
             position: relative;
         }
 
+        /* 「本題配分：X 分」的膠囊型標籤 */
         .qpoints {
             display: inline-block;
             font-family: 'Baloo 2', sans-serif;
@@ -570,6 +599,7 @@
             color: var(--ink);
         }
 
+        /* 是非題的「是/否」兩個大按鈕，左右各半 */
         .answers {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -635,6 +665,8 @@
             color: var(--pink-dark);
         }
 
+            /* 註：.ok / .no 這兩個「答對/答錯提示色」目前 JS 沒有實際套用，
+               因為現在只會顯示中性的「已送出」訊息，不會揭曉對錯。 */
             .feedback.ok {
                 color: var(--green);
             }
@@ -643,191 +675,8 @@
                 color: var(--coral);
             }
 
-        /* ---------- 排行榜 ---------- */
-        .board-head {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 6px;
-        }
-
-        .live-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: var(--pink);
-            box-shadow: 0 0 0 3px rgba(255,126,182,0.28);
-            animation: blink 1.6s infinite;
-        }
-
-        @keyframes blink {
-            0%,100% {
-                opacity: 1;
-            }
-
-            50% {
-                opacity: 0.3;
-            }
-        }
-
-        .board-title {
-            font-family: 'Baloo 2', sans-serif;
-            font-weight: 800;
-            font-size: 1.2rem;
-            color: var(--ink);
-        }
-
-        .board-sub {
-            font-size: 1rem;
-            color: var(--pink-dark);
-            margin: 0 0 16px 17px;
-        }
-
-        .board-total-label {
-            text-align: right;
-            font-family: 'Baloo 2', sans-serif;
-            font-weight: 800;
-            font-size: 1.2rem;
-            color: var(--lavender-dark);
-            margin: -12px 4px 2px 0;
-        }
-
-        .lb-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 11px 10px;
-            border-radius: 16px;
-            margin-bottom: 7px;
-            background: var(--cream);
-            border: 1.5px solid var(--line);
-            transition: transform .12s ease;
-        }
-
-            .lb-row:hover {
-                transform: translateX(2px);
-            }
-
-            .lb-row.me {
-                background: linear-gradient(135deg, rgba(255,126,182,0.14), rgba(201,166,255,0.14));
-                border: 1.5px solid var(--pink);
-            }
-
-            .lb-row.rank-1 {
-                background: linear-gradient(135deg, #FFF3D6, #FFE7B0);
-                border: 1.5px solid var(--yellow);
-                box-shadow: 0 4px 12px -4px rgba(255,217,102,0.6);
-            }
-
-            .lb-row.rank-2 {
-                background: linear-gradient(135deg, #F2F2FF, #E3E3FA);
-                border: 1.5px solid #C7C7EE;
-            }
-
-            .lb-row.rank-3 {
-                background: linear-gradient(135deg, #FFEADD, #FFD9C0);
-                border: 1.5px solid #F0B98A;
-            }
-
-        .lb-rank {
-            font-family: 'Baloo 2', sans-serif;
-            font-weight: 800;
-            color: var(--slate);
-            font-size: 1.2rem;
-            width: 26px;
-            flex-shrink: 0;
-            text-align: center;
-        }
-
-        .lb-name {
-            flex: 1;
-            font-size: 1.2rem;
-            font-weight: 700;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-            color: var(--ink);
-        }
-
-        .lb-correct {
-            font-family: 'Baloo 2', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: #2E8F63;
-            background: rgba(87,208,138,0.18);
-            padding: 3px 9px;
-            border-radius: 20px;
-            flex-shrink: 0;
-        }
-
-        .lb-score {
-            font-family: 'Baloo 2', sans-serif;
-            font-size: 1.2rem;
-            font-weight: 800;
-            width: 46px;
-            text-align: right;
-            flex-shrink: 0;
-            color: var(--pink-dark);
-        }
-
-        .lb-empty {
-            color: var(--slate);
-            font-size: 1.2rem;
-            text-align: center;
-            padding: 20px 0;
-        }
-
-        /* ---------- 排行榜分頁 ---------- */
-        .lb-pagination {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-
-        .lb-page-btn {
-            min-width: 30px;
-            height: 30px;
-            padding: 0 8px;
-            border-radius: 999px;
-            border: 1.5px solid var(--line);
-            background: var(--cream);
-            color: var(--slate);
-            font-family: 'Baloo 2', sans-serif;
-            font-size: 0.78rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background .12s ease, color .12s ease, border-color .12s ease, transform .12s ease;
-        }
-
-            .lb-page-btn:hover:not(:disabled) {
-                border-color: var(--pink);
-                color: var(--pink-dark);
-                transform: translateY(-1px);
-            }
-
-            .lb-page-btn.active {
-                background: linear-gradient(135deg, var(--pink), var(--lavender));
-                border-color: transparent;
-                color: #fff;
-            }
-
-            .lb-page-btn:disabled {
-                opacity: 0.4;
-                cursor: not-allowed;
-            }
-
-        .lb-page-info {
-            width: 100%;
-            text-align: center;
-            font-size: 0.72rem;
-            color: var(--slate);
-            margin-top: 2px;
-        }
-
         /* ---------- 結算畫面 ---------- */
+        /* 總分／答對題數／目前排名，三個統計方塊並排 */
         .end-stats {
             display: grid;
             grid-template-columns: repeat(3,1fr);
@@ -858,6 +707,7 @@
                 font-weight: 600;
             }
 
+        /* 結算畫面上方的皇冠 emoji，會輕輕上下浮動＋搖擺 */
         .trophy {
             font-size: 4rem;
             text-align: center;
@@ -872,6 +722,7 @@
             50% { transform: translateY(-8px) rotate(4deg); }
         }
 
+        /* 主辦人關閉報名時，登入畫面顯示的黃色警示框 */
         .closed-msg {
             background: linear-gradient(180deg, #FFF6E0, #FFEFC9);
             border: 2.5px dashed var(--yellow);
@@ -919,6 +770,8 @@
                 cursor: not-allowed;
             }
 
+            /* 註：.correct / .wrong-selected 這兩個「答對變綠/答錯變紅」樣式目前 JS 沒有套用，
+               現在選錯或選對都只會加上中性的 .selected（見下方），不會揭曉正確答案。 */
             .choice-btn.correct {
                 background: linear-gradient(135deg, #B8F1CE, var(--green));
                 border-color: var(--green);
@@ -931,12 +784,14 @@
                 color: #fff;
             }
 
+            /* 這個才是實際會用到的：標示玩家選了哪一個選項（不透露對錯） */
             .choice-btn.selected {
                 background: #F6F0FF;
                 border-color: var(--lavender-dark);
                 color: var(--ink);
             }
 
+        /* 選項前面的 A/B/C/D 圓形字母標籤 */
         .choice-letter {
             display: inline-flex;
             align-items: center;
@@ -958,7 +813,10 @@
             background: rgba(255,255,255,0.35);
         }
 
-        /* ---------- 答錯率長條圖 ---------- */
+        /* ---------- 答錯率長條圖 ----------
+           以下這組樣式是給「各題答錯率統計」用的長條圖元件，
+           目前畫面上沒有任何地方產生對應的 HTML／呼叫它，屬於保留樣式，
+           如果之後想加一個管理員專用的「各題答對率總覽」畫面可以直接用。 */
         .stat-bar-row {
             display: flex;
             align-items: center;
@@ -1002,6 +860,7 @@
         }
 
         /* ---------- 點擊亮片 / 彩帶特效 ---------- */
+        /* 由 spawnSparkle() 動態產生的亮片元素，由中心點放大並往上飄，同時淡出後自動消失 */
         .tap-sparkle {
             position: fixed;
             pointer-events: none;
@@ -1015,6 +874,7 @@
             100% { transform: translate(-50%,-140%) scale(1.1) rotate(90deg); opacity: 0; }
         }
 
+        /* 由 launchConfetti() 動態產生的彩帶紙片，從頂端落下並旋轉、淡出 */
         .confetti-piece {
             position: fixed;
             top: -20px;
@@ -1030,6 +890,7 @@
             100% { transform: translateY(100vh) rotate(540deg); opacity: 0; }
         }
 
+        /* 手機（寬度 575px 以下）調整：答題按鈕字級縮小、間距縮小，避免小螢幕擠不下 */
         @media(max-width:575px) {
             .answers {
                 gap: 10px;
@@ -1041,20 +902,23 @@
             }
 
             h2 {
-                font-size: 1.35rem; 
+                font-size: 1.35rem;
             }
         }
     </style>
 </head>
 <body>
+    <!-- 由 JS initFloatingBG() 動態塞入飄浮 emoji 的容器，全螢幕固定、蓋在最底層 -->
     <div id="floatyLayer"></div>
     <div class="wrap">
+        <!-- 頂部品牌列：吉祥物 + 標題 + 即時挑戰徽章，固定不變 -->
         <div class="brand">
             <span class="mascot-sparkle">✨</span>
             <span class="mascot">🐰</span>
             <h1>感控問答擂台</h1>
             <span class="badge-live">即時挑戰</span>
         </div>
+        <!-- 主要內容區：login / game / end 三個畫面都是由 JS 的 render() 動態塞進這裡 -->
         <div id="app"></div>
     </div>
     <script>
@@ -1068,15 +932,18 @@
            讓彼此的排行榜互相獨立，不會混在一起。 */
         const ROOM_ID = "default-room";
 
+        // 把玩家名稱轉成安全的 key（拿掉特殊符號），用來當作後端儲存的識別碼
         function sanitizeKey(s) {
             return String(s).replace(/[^a-zA-Z0-9_\u4e00-\u9fff-]/g, '_');
         }
 
+        // 組出呼叫 Apps Script 的完整網址，自動帶入房間代碼
         function apiUrl(params) {
             const usp = new URLSearchParams(Object.assign({ room: ROOM_ID }, params));
             return APPS_SCRIPT_URL + '?' + usp.toString();
         }
 
+        // 題庫：boolean = 是非題（answer 為 true/false），choice = 選擇題（options + correctIndex）
         const QUESTIONS = [
             { id: 'q1', type: 'boolean', text: '戴手套可以取代洗手；只要手套沒有破損，就可以持續戴著照護不同病人或不同照護步驟。', answer: false, points: 10 },
             { id: 'q2', type: 'boolean', text: '本院洗手種類包含一般性洗手、消毒性洗手與外科刷手；一般性洗手可清除大部分暫時性細菌。', answer: true, points: 20 },
@@ -1097,26 +964,28 @@
             { id: 'mc5', type: 'choice', text: '下列何者「不是」正確的醫療廢棄物分類方式？', options: ['尖銳物品丟入利器盒', '被血液污染的紗布視為感染性事業廢棄物', '將針具與一般垃圾混合丟棄', '生物性廢棄物依規定滅菌後處理'], correctIndex: 2, points: 20 }
         ];
 
+        // 前端唯一的狀態物件，畫面完全依據這裡的值來 render()
         let state = {
-            screen: 'login',
-            playerId: '',
-            name: '',
-            questions: [],
-            currentIndex: 0,
-            score: 0,
-            correct: 0,
-            total: 0,
-            feedback: null,
-            locked: false,
-            leaderboard: {},
-            stats: {},
-            registrationOpen: true,
-            lbPage: 1
+            screen: 'login',       // 目前畫面：login / game / end
+            playerId: '',          // 這名玩家的唯一識別碼（登入時產生）
+            name: '',              // 玩家輸入的姓名／職稱
+            questions: [],         // 這場作答要出的題目（依 id 順序，複製自 QUESTIONS）
+            currentIndex: 0,       // 目前作答到第幾題
+            score: 0,              // 目前累積分數（最低 0 分，不會變負數）
+            correct: 0,            // 答對題數
+            total: 0,              // 已作答題數
+            feedback: null,        // （目前未使用，保留欄位）
+            locked: false,         // 是否鎖定作答中的按鈕（送出答案到換下一題之間的過渡期）
+            leaderboard: {},       // 從後端抓回來的排行榜資料（拿來算排名用）
+            stats: {},             // 從後端抓回來的答錯率統計
+            registrationOpen: true // 主辦人是否開放讓新玩家加入作答
         };
 
-        let pollTimer = null;
-        let lastKnownRegOpen = null;
+        let pollTimer = null;       // 輪詢用的計時器 id，換頁或重新排程時要先清掉舊的
+        let lastKnownRegOpen = null; // 上一次輪詢時記錄的開放狀態，用來比對是否有變化
 
+        // 統一的後端呼叫入口：帶著 action（list/update/logAnswer/reset/setRegistration...）
+        // 打去 Apps Script，並把回傳的排行榜/統計/開放狀態同步進 state。失敗時不會拋錯中斷畫面，只印在 console。
         async function fetchState(action, extraParams) {
             try {
                 const res = await fetch(apiUrl(Object.assign({ action: action }, extraParams || {})));
@@ -1132,6 +1001,7 @@
             }
         }
 
+        // 把「我」目前的分數/答對數/是否完成，回報給後端，讓其他人查排名時看得到最新資料
         async function updateMyEntry(finished) {
             if (!state.playerId) return;
             await fetchState('update', {
@@ -1142,16 +1012,17 @@
                 total: state.total,
                 finished: !!finished
             });
-            renderBoardList();
         }
 
+        // 每答一題就順便回報這題的正確率統計（不影響玩家自己的分數）
         function logAnswerStat(questionId, isCorrect) {
             fetchState('logAnswer', { questionId: questionId, correct: !!isCorrect });
         }
 
+        // 輕量輪詢：只用來偵測「開放/關閉作答」的狀態有沒有變化。
+        // 若目前在登入畫面、且開放狀態跟上次不一樣，就自動重新渲染登入畫面。
         async function refreshLeaderboard() {
             await fetchState('list');
-            renderBoardList();
             if (state.screen === 'login' && state.registrationOpen !== lastKnownRegOpen) {
                 lastKnownRegOpen = state.registrationOpen;
                 render();
@@ -1160,98 +1031,36 @@
             }
         }
 
+        // 用遞迴 setTimeout（而非固定的 setInterval）排程下一次輪詢，
+        // 每次間隔都是 30 秒基礎 + 0~15 秒隨機抖動，避免所有玩家同時打 API。
         function startPolling() {
-            if (pollTimer) clearInterval(pollTimer);
-            pollTimer = setInterval(refreshLeaderboard, 2000);
+            if (pollTimer) clearTimeout(pollTimer);
+            const delay = 30000 + Math.random() * 15000; // 30 秒基礎 + 0~15 秒隨機抖動
+            pollTimer = setTimeout(async () => {
+                await refreshLeaderboard();
+                startPolling();
+            }, delay);
         }
 
+        // 把目前抓到的排行榜資料，依「分數」由高到低排序（分數相同再比答對題數）
         function sortedEntries() {
             return Object.entries(state.leaderboard)
                 .sort((a, b) => (b[1].score - a[1].score) || (b[1].correct - a[1].correct));
         }
 
-        function boardHtml() {
-            return `
-                <div class="card">
-                  <span class="ribbon-corner">🎀</span>
-                  <div class="board-head"><div class="live-dot"></div><div class="board-title">🔥 得分排行榜 (即時)</div></div>
-                  <div class="board-sub">依分數排序，每 2 秒自動更新</div>
-                  <div class="board-total-label">總積分</div>
-                  <div id="lb-list"></div>
-                  <div id="lb-pagination"></div>
-                </div>
-            `;
-        }
-
-        const LB_PAGE_SIZE = 20;
-
-        function renderBoardList() {
-            const el = document.getElementById('lb-list');
-            const pagEl = document.getElementById('lb-pagination');
-            if (!el) return;
-            const entries = sortedEntries();
-            if (entries.length === 0) {
-                el.innerHTML = `<div class="lb-empty">🎯 還沒有人開始作答</div>`;
-                if (pagEl) pagEl.innerHTML = '';
-                return;
-            }
-
-            const totalPages = Math.max(1, Math.ceil(entries.length / LB_PAGE_SIZE));
-            if (state.lbPage > totalPages) state.lbPage = totalPages;
-            if (state.lbPage < 1) state.lbPage = 1;
-
-            const startIdx = (state.lbPage - 1) * LB_PAGE_SIZE;
-            const pageEntries = entries.slice(startIdx, startIdx + LB_PAGE_SIZE);
-
-            const medals = ['🥇', '🥈', '🥉'];
-            el.innerHTML = pageEntries.map(([id, e], idx) => {
-                const i = startIdx + idx;
-                const isMe = id === state.playerId;
-                const rankDisplay = medals[i] || (i + 1);
-                const rankClass = i < 3 ? ('rank-' + (i + 1)) : '';
-                return `
-                  <div class="lb-row ${isMe ? 'me' : ''} ${rankClass}">
-                    <div class="lb-rank">${rankDisplay}</div>
-                    <div class="lb-name" title="${escapeHtml(e.name)}">${escapeHtml(e.name)}${isMe ? ' (你)' : ''}</div>
-                    <div class="lb-correct">✓ ${e.correct}/${e.total}</div>
-                    <div class="lb-score">${e.score}</div>
-                  </div>
-                `;
-            }).join('');
-
-            if (pagEl) {
-                if (totalPages <= 1) {
-                    pagEl.innerHTML = '';
-                } else {
-                    let buttons = '';
-                    buttons += `<button class="lb-page-btn" id="lbPrevBtn" ${state.lbPage === 1 ? 'disabled' : ''}>‹</button>`;
-                    for (let p = 1; p <= totalPages; p++) {
-                        buttons += `<button class="lb-page-btn ${p === state.lbPage ? 'active' : ''}" data-page="${p}">${p}</button>`;
-                    }
-                    buttons += `<button class="lb-page-btn" id="lbNextBtn" ${state.lbPage === totalPages ? 'disabled' : ''}>›</button>`;
-                    pagEl.innerHTML = buttons + `<div class="lb-page-info">共 ${entries.length} 人・第 ${state.lbPage}/${totalPages} 頁</div>`;
-
-                    const prevBtn = document.getElementById('lbPrevBtn');
-                    const nextBtn = document.getElementById('lbNextBtn');
-                    if (prevBtn) prevBtn.onclick = () => { state.lbPage -= 1; renderBoardList(); };
-                    if (nextBtn) nextBtn.onclick = () => { state.lbPage += 1; renderBoardList(); };
-                    pagEl.querySelectorAll('.lb-page-btn[data-page]').forEach(btn => {
-                        btn.onclick = () => { state.lbPage = parseInt(btn.dataset.page, 10); renderBoardList(); };
-                    });
-                }
-            }
-        }
-
+        // 簡易的 HTML escape，避免玩家輸入的姓名裡有特殊字元破壞畫面結構
         function escapeHtml(s) {
             return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         }
 
+        // 依照 state.screen 畫出對應畫面（login / game / end），每次呼叫都會整個重畫 #app
         function render() {
             const app = document.getElementById('app');
+            // ---- 登入畫面：輸入姓名並加入作答，若主辦人關閉報名則顯示提示 ----
             if (state.screen === 'login') {
                 app.innerHTML = `
                     <div class="row g-3">
-                      <div class="col-lg-8">
+                      <div class="col-lg-8 mx-auto">
                         <div class="card">
                           <span class="ribbon-corner">🎀</span>
                           <p class="eyebrow">🎮 開始作答</p>
@@ -1265,15 +1074,14 @@
                           `}
                         </div>
                       </div>
-                      <div class="col-lg-4">${boardHtml()}</div>
                     </div>
                 `;
                 if (state.registrationOpen) {
                     document.getElementById('joinBtn').onclick = onJoin;
                     document.getElementById('nameInput').addEventListener('keydown', e => { if (e.key === 'Enter') onJoin(); });
                 }
-                renderBoardList();
             }
+            // ---- 答題畫面：顯示目前分數、題目與答案按鈕（是非題或選擇題） ----
             else if (state.screen === 'game') {
                 const q = state.questions[state.currentIndex];
                 const pct = Math.round((state.currentIndex / state.questions.length) * 100);
@@ -1287,7 +1095,7 @@
                       </div>`;
                 app.innerHTML = `
                     <div class="row g-3">
-                      <div class="col-lg-8">
+                      <div class="col-lg-8 mx-auto">
                         <div class="card">
                           <span class="ribbon-corner">🎀</span>
                           <div class="dial-zone">
@@ -1310,7 +1118,6 @@
                           <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
                         </div>
                       </div>
-                      <div class="col-lg-4">${boardHtml()}</div>
                     </div>
                 `;
                 if (q.type === 'choice') {
@@ -1321,14 +1128,14 @@
                     document.getElementById('btnTrue').onclick = () => answer(true);
                     document.getElementById('btnFalse').onclick = () => answer(false);
                 }
-                renderBoardList();
             }
+            // ---- 結算畫面：顯示總分、答對題數與目前排名，並施放彩帶特效 ----
             else if (state.screen === 'end') {
                 const entries = sortedEntries();
                 const myRank = entries.findIndex(([id]) => id === state.playerId) + 1;
                 app.innerHTML = `
                     <div class="row g-3">
-                      <div class="col-lg-8">
+                      <div class="col-lg-8 mx-auto">
                         <div class="card">
                           <span class="ribbon-corner">🎀</span>
                           <span class="trophy">👑</span>
@@ -1343,24 +1150,23 @@
                           <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
                         </div>
                       </div>
-                      <div class="col-lg-4">${boardHtml()}</div>
                     </div>
                 `;
-                renderBoardList();
                 launchConfetti();
             }
         }
 
+        // 點擊「加入作答」時觸發：驗證姓名、初始化這場作答的狀態，並切換到答題畫面
         function onJoin() {
             const input = document.getElementById('nameInput');
             const name = (input.value || '').trim();
             if (!name) {
                 input.focus();
-                input.style.borderColor = 'var(--coral)';
+                input.style.borderColor = 'var(--coral)'; // 沒填姓名就標紅提示
                 return;
             }
             state.name = name;
-            state.playerId = sanitizeKey(name) + '_' + Math.random().toString(36).slice(2, 6);
+            state.playerId = sanitizeKey(name) + '_' + Math.random().toString(36).slice(2, 6); // 姓名+隨機字串，避免撞名
             state.questions = QUESTIONS.slice(); // 依 id 順序出題，不隨機
             state.currentIndex = 0;
             state.score = 0;
@@ -1369,29 +1175,32 @@
             state.feedback = null;
             state.locked = false;
             state.screen = 'game';
-            updateMyEntry(false);
+            updateMyEntry(false); // 先跟後端登記一筆分數 0 的紀錄，讓排行榜馬上看得到這個人
             render();
         }
 
+        // 玩家送出答案時觸發。selected 是非題傳 true/false，選擇題傳選項索引。
+        // 不會顯示「正確答案是什麼」，只會鎖住按鈕並顯示「已送出」，0.5 秒後自動跳下一題。
         function answer(selected) {
-            if (state.locked) return;
+            if (state.locked) return; // 防止同一題重複送出
             state.locked = true;
             const q = state.questions[state.currentIndex];
             const isCorrect = q.type === 'choice' ? (selected === q.correctIndex) : (selected === q.answer);
-            const delta = isCorrect ? q.points : -0;
-            state.score = Math.max(0, state.score + delta);
+            const delta = isCorrect ? q.points : -0; // 答對加分，答錯不扣分（目前設定）
+            state.score = Math.max(0, state.score + delta); // 分數不會低於 0
             state.total += 1;
             if (isCorrect) state.correct += 1;
 
             const scoreNum = document.getElementById('scoreNum');
-            if (scoreNum) scoreNum.textContent = state.score;
+            if (scoreNum) scoreNum.textContent = state.score; // 直接更新分數圓盤，不用整頁重畫
 
+            // 鎖住這一題的所有按鈕，避免使用者連點
             if (q.type === 'choice') {
                 q.options.forEach((opt, idx) => {
                     const btn = document.getElementById('choiceBtn' + idx);
                     if (!btn) return;
                     btn.disabled = true;
-                    if (idx === selected) btn.classList.add('selected');
+                    if (idx === selected) btn.classList.add('selected'); // 只標示「你選了哪個」，不標示對錯
                 });
             } else {
                 document.getElementById('btnTrue').disabled = true;
@@ -1400,11 +1209,12 @@
             const fz = document.getElementById('feedbackZone');
             if (fz) fz.textContent = '📮 已送出，前往下一題…';
 
-            logAnswerStat(q.id, isCorrect);
+            logAnswerStat(q.id, isCorrect); // 回報這題的答對/答錯率統計
 
             const isLast = (state.currentIndex + 1) >= state.questions.length;
-            updateMyEntry(isLast);
+            updateMyEntry(isLast); // 同步最新分數給後端；如果是最後一題就順便標記完成
 
+            // 停頓 0.5 秒讓玩家看到「已送出」的回饋，再切換到下一題或結算畫面
             setTimeout(() => {
                 state.currentIndex += 1;
                 state.locked = false;
@@ -1415,12 +1225,14 @@
             }, 500);
         }
 
+        // 【主辦人用】清空所有玩家的排行榜與統計資料，會先跳出確認視窗
         async function onResetBoard() {
             if (!confirm('確定要清空所有玩家的排行榜與答錯率統計資料嗎？此動作無法復原。')) return;
             await fetchState('reset');
             render();
         }
 
+        // 【主辦人用】切換「是否開放新玩家加入作答」
         async function onToggleRegistration() {
             const newOpen = !state.registrationOpen;
             await fetchState('setRegistration', { open: newOpen });
@@ -1433,10 +1245,11 @@
            --------------------------------------------------------------- */
         const FLOATY_EMOJI = ['💗', '⭐', '🎀', '✨', '🫧', '🌸'];
 
+        // 在背景產生一批會往上飄的裝飾 emoji（愛心/星星/緞帶等），純視覺、不影響互動
         function initFloatingBG() {
             const layer = document.getElementById('floatyLayer');
             if (!layer) return;
-            const count = window.innerWidth < 600 ? 12 : 20;
+            const count = window.innerWidth < 600 ? 12 : 20; // 手機少放一點，避免太擁擠
             for (let i = 0; i < count; i++) {
                 const span = document.createElement('span');
                 span.className = 'floaty';
@@ -1445,12 +1258,13 @@
                 span.style.fontSize = (0.9 + Math.random() * 1.3) + 'rem';
                 const duration = 9 + Math.random() * 10;
                 span.style.animationDuration = duration + 's';
-                span.style.animationDelay = (Math.random() * duration) + 's';
+                span.style.animationDelay = (Math.random() * duration) + 's'; // 隨機延遲讓每個一開始就錯開
                 layer.appendChild(span);
             }
         }
 
         const SPARKLE_EMOJI = ['✨', '💖', '⭐', '🌟'];
+        // 在指定座標生成一個亮片 emoji，短暫飄一下就自動消失
         function spawnSparkle(x, y) {
             const el = document.createElement('div');
             el.className = 'tap-sparkle';
@@ -1458,9 +1272,10 @@
             el.style.left = x + 'px';
             el.style.top = y + 'px';
             document.body.appendChild(el);
-            setTimeout(() => el.remove(), 720);
+            setTimeout(() => el.remove(), 720); // 動畫播完就從 DOM 移除，避免累積
         }
 
+        // 只要點到按鈕類元素（一般按鈕/選擇題/是非題/分頁按鈕），就在點擊處噴一個亮片
         document.addEventListener('click', (e) => {
             const target = e.target.closest('.btn, .choice-btn, .ans-btn, .lb-page-btn');
             if (!target) return;
@@ -1468,6 +1283,7 @@
         });
 
         const CONFETTI_COLORS = ['#FF7EB6', '#C9A6FF', '#9BE8CC', '#FFD966', '#7FE0E8', '#FF8FA3'];
+        // 結算畫面用的彩帶特效：噴出 60 片會飄落旋轉的彩色紙片
         function launchConfetti() {
             const n = 60;
             for (let i = 0; i < n; i++) {
@@ -1478,15 +1294,20 @@
                 piece.style.width = size + 'px';
                 piece.style.height = (size * 0.4) + 'px';
                 piece.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
-                piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '3px';
+                piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '3px'; // 隨機圓形或方形紙片
                 const duration = 2.4 + Math.random() * 1.8;
                 piece.style.animationDuration = duration + 's';
                 piece.style.animationDelay = (Math.random() * 0.6) + 's';
                 document.body.appendChild(piece);
-                setTimeout(() => piece.remove(), (duration + 1) * 1000);
+                setTimeout(() => piece.remove(), (duration + 1) * 1000); // 落地後清掉，避免 DOM 越堆越多
             }
         }
 
+        // 頁面載入後的初始化流程：
+        // 1) 先鋪好飄浮背景特效
+        // 2) 跟後端要一次目前的排行榜/開放狀態（結算排名跟登入畫面都會用到）
+        // 3) 畫出第一個畫面（登入畫面）
+        // 4) 啟動輕量輪詢，持續偵測開放狀態是否改變
         (async function init() {
             initFloatingBG();
             await fetchState('list');
