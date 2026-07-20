@@ -1152,20 +1152,21 @@
         ];
 
         let state = {
-            screen: 'login',
-            playerId: '',
-            name: '',
-            questions: [],
-            currentIndex: 0,
-            score: 0,
-            correct: 0,
-            total: 0,
-            feedback: null,
-            locked: false,
-            leaderboard: {},
-            stats: {},
-            registrationOpen: true,
-            lbPage: 1
+           screen: 'login',
+    playerId: '',
+    name: '',
+    questions: [],
+    currentIndex: 0,
+    score: 0,
+    correct: 0,
+    total: 0,
+    feedback: null,
+    locked: false,
+    leaderboard: {},
+    stats: {},
+    registrationOpen: true,
+    lbPage: 1,
+    pendingAnswers: [] // 🐾 新增這一行，用來暫存每題的作答紀錄
         };
 
         let pollTimer = null;
@@ -1432,47 +1433,72 @@
         }
 
         function answer(selected) {
-            if (state.locked) return;
-            state.locked = true;
-            const q = state.questions[state.currentIndex];
-            const isCorrect = q.type === 'choice' ? (selected === q.correctIndex) : (selected === q.answer);
-            const delta = isCorrect ? q.points : -0;
-            state.score = Math.max(0, state.score + delta);
-            state.total += 1;
-            if (isCorrect) state.correct += 1;
+          if (state.locked) return;
+    state.locked = true;
+    const q = state.questions[state.currentIndex];
+    const isCorrect = q.type === 'choice' ? (selected === q.correctIndex) : (selected === q.answer);
+    const delta = isCorrect ? q.points : -0;
+    state.score = Math.max(0, state.score + delta);
+    state.total += 1;
+    if (isCorrect) state.correct += 1;
 
-            const scoreNum = document.getElementById('scoreNum');
-            if (scoreNum) scoreNum.textContent = state.score;
+    const scoreNum = document.getElementById('scoreNum');
+    if (scoreNum) scoreNum.textContent = state.score;
 
-            if (q.type === 'choice') {
-                q.options.forEach((opt, idx) => {
-                    const btn = document.getElementById('choiceBtn' + idx);
-                    if (!btn) return;
-                    btn.disabled = true;
-                    if (idx === selected) btn.classList.add('selected');
-                });
-            } else {
-                document.getElementById('btnTrue').disabled = true;
-                document.getElementById('btnFalse').disabled = true;
-            }
-            const fz = document.getElementById('feedbackZone');
-            if (fz) fz.textContent = '📮 已送出，前往下一題…';
+    if (q.type === 'choice') {
+        q.options.forEach((opt, idx) => {
+            const btn = document.getElementById('choiceBtn' + idx);
+            if (!btn) return;
+            btn.disabled = true;
+            if (idx === selected) btn.classList.add('selected');
+        });
+    } else {
+        document.getElementById('btnTrue').disabled = true;
+        document.getElementById('btnFalse').disabled = true;
+    }
+    const fz = document.getElementById('feedbackZone');
+    if (fz) fz.textContent = '📮 已記錄，準備下一題…';
 
-            logAnswerStat(q.id, isCorrect);
+    // 🐾 【優化點 1】不直接對外連線，先把這題的對錯存進陣列裡
+    state.pendingAnswers.push({ questionId: q.id, correct: !!isCorrect });
 
-            const isLast = (state.currentIndex + 1) >= state.questions.length;
-            updateMyEntry(isLast);
+    const isLast = (state.currentIndex + 1) >= state.questions.length;
 
-            setTimeout(() => {
-                state.currentIndex += 1;
-                state.locked = false;
-                if (state.currentIndex >= state.questions.length) {
-                    state.screen = 'end';
-                }
-                render();
-            }, 800);
+    // 🐾 【優化點 2】只有在「最後一題」答完時，才觸發大打包連線
+    if (isLast) {
+        submitAllDataAtEnd();
+    }
+
+    setTimeout(() => {
+        state.currentIndex += 1;
+        state.locked = false;
+        if (state.currentIndex >= state.questions.length) {
+            state.screen = 'end';
         }
+        render();
+    }, 800);
+        }
+// 🐾 【優化點 3】最後大結算，只連線一次！
+async function submitAllDataAtEnd() {
+    if (!state.playerId) return;
+    
+    console.log("正在打包發送所有作答資料...", state.pendingAnswers);
+    
+    // 建立一個包含所有紀錄的參數
+    const finalParams = {
+        playerId: sanitizeKey(state.playerId),
+        name: state.name,
+        score: state.score,
+        correct: state.correct,
+        total: state.total,
+        finished: true,
+        // 將所有題目對錯紀錄轉成 JSON 字串一起帶過去
+        allAnswers: JSON.stringify(state.pendingAnswers) 
+    };
 
+    // 呼叫原本的 update 動作
+    await fetchState('update', finalParams);
+    renderBoardList();
         async function onResetBoard() {
             if (!confirm('確定要清空所有玩家的排行榜與答錯率統計資料嗎？此動作無法復原。')) return;
             await fetchState('reset');
