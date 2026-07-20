@@ -6,31 +6,38 @@
     <title>感控問答擂台(主持人)</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
-
-
+        /* =====================================================================
+           樣式總覽
+           - 使用 Google Fonts：Baloo 2（標題／數字用圓潤字體）+ Noto Sans TC（中文內文）
+           - 以 CSS 自訂變數（:root）集中管理色票，方便日後統一調整配色
+           - 版面採用 Bootstrap 5 的 grid（row/col-lg-8/col-lg-4）搭配自訂卡片樣式
+           ===================================================================== */
 
         @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Noto+Sans+TC:wght@400;500;700;900&display=swap');
 
+        /* ---------- 全站色票變數 ---------- */
         :root {
-            --pink: #FF3D81;
-            --pink-dark: #E01E68;
-            --orange: #FF8C42;
-            --purple: #7C3AED;
-            --purple-dark: #5B21B6;
-            --cyan: #22D3EE;
-            --yellow: #FFD23F;
-            --green: #2ECC71;
-            --coral: #FF5C5C;
-            --ink: #2A1B3D;
-            --slate: #8B7BA8;
-            --card: #FFFFFF;
-            --line: #F0E6FF;
+            --pink: #FF3D81;         /* 主色：品牌粉紅，用於按鈕/強調文字 */
+            --pink-dark: #E01E68;    /* 深粉紅：陰影/邊框加強色 */
+            --orange: #FF8C42;       /* 橘色：分數/警示類強調色 */
+            --purple: #7C3AED;       /* 主色：紫色，用於漸層與強調文字 */
+            --purple-dark: #5B21B6;  /* 深紫：漸層搭配用 */
+            --cyan: #22D3EE;         /* 青色：分數圓盤漸層、是非題型標籤 */
+            --yellow: #FFD23F;       /* 黃色：分數圓盤漸層、進度條 */
+            --green: #2ECC71;        /* 綠色：答對/正確狀態色 */
+            --coral: #FF5C5C;        /* 珊瑚紅：答錯/警示狀態色 */
+            --ink: #2A1B3D;          /* 主要文字顏色（深紫黑） */
+            --slate: #8B7BA8;        /* 次要文字/說明文字顏色 */
+            --card: #FFFFFF;         /* 卡片背景色 */
+            --line: #F0E6FF;         /* 邊框/分隔線淺紫色 */
         }
 
+        /* 全域 box-sizing，讓 padding/border 計入元素寬高，避免版面跑版 */
         * {
             box-sizing: border-box;
         }
 
+        /* 頁面底色：多層放射狀漸層疊加線性漸層，營造夢幻遊戲背景氛圍 */
         body {
             margin: 0;
             min-height: 100vh;
@@ -40,13 +47,14 @@
             background-attachment: fixed;
         }
 
+        /* 內容外層容器：限制最大寬度並置中，維持手機/桌機皆易讀的版面寬度 */
         .wrap {
             max-width: 1120px;
             margin: 0 auto;
             padding: 22px 16px 60px;
         }
 
-        /* ---------- 頂部品牌列 ---------- */
+        /* ---------- 頂部品牌列（Logo emoji + 標題 + 即時徽章） ---------- */
         .brand {
             display: flex;
             align-items: center;
@@ -92,7 +100,7 @@
             box-shadow: 0 4px 10px rgba(255,140,66,0.5);
         }
 
-        /* ---------- 卡片 ---------- */
+        /* ---------- 卡片（所有畫面共用的白底圓角容器） ---------- */
         .card {
             background: var(--card);
             border: none;
@@ -100,9 +108,10 @@
             padding: 28px;
             box-shadow: 0 20px 45px -18px rgba(59,10,99,0.55);
             position: relative;
-            overflow: hidden;
+            overflow: hidden; /* 搭配 ::before 的裝飾圓形，避免溢出卡片邊界 */
         }
 
+            /* 卡片右上角的裝飾性光暈圓形（純美化，不影響版面） */
             .card::before {
                 content: '';
                 position: absolute;
@@ -114,6 +123,7 @@
                 background: radial-gradient(circle, rgba(255,61,129,0.18), transparent 70%);
             }
 
+        /* 小標籤文字（例如「開始作答」），置於標題上方 */
         .eyebrow {
             font-family: 'Baloo 2', sans-serif;
             font-size: 1rem;
@@ -124,6 +134,7 @@
             margin: 0 0 6px;
         }
 
+        /* 各畫面主標題 */
         h2 {
             font-family: 'Baloo 2', sans-serif;
             font-size: 1.6rem;
@@ -132,6 +143,8 @@
             color: var(--ink);
         }
 
+        /* 副標說明文字；color 使用系統關鍵字 Highlight（瀏覽器選取色），
+           會隨作業系統/瀏覽器主題不同而變化，非固定色票 */
         p.sub {
             color: Highlight;
             margin: 0 0 22px;
@@ -139,6 +152,7 @@
             font-size: 1.3rem;
         }
 
+        /* 表單欄位標籤文字 */
         label {
             display: block;
             font-size: 0.85rem;
@@ -147,6 +161,7 @@
             margin-bottom: 6px;
         }
 
+        /* 文字輸入框（例如登入畫面的姓名欄位） */
         input[type=text] {
             width: 100%;
             padding: 15px 18px;
@@ -159,6 +174,7 @@
             transition: border-color .15s ease, box-shadow .15s ease;
         }
 
+            /* 聚焦狀態：邊框變主色 + 外圍光暈提示 */
             input[type=text]:focus {
                 outline: none;
                 border-color: var(--pink);
@@ -166,7 +182,7 @@
                 background: #fff;
             }
 
-        /* ---------- 按鈕 ---------- */
+        /* ---------- 按鈕（基礎樣式，供 .btn-primary / .btn-ghost 等疊加使用） ---------- */
         .btn {
             appearance: none;
             border: none;
@@ -179,10 +195,12 @@
             transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
         }
 
+            /* 按下按鈕時輕微縮小，提供觸覺回饋感 */
             .btn:active {
                 transform: scale(0.96);
             }
 
+        /* 主要行動按鈕（例如「加入作答」） */
         .btn-primary {
             background: linear-gradient(135deg, var(--pink), var(--purple));
             color: #fff;
@@ -193,11 +211,13 @@
                 filter: brightness(1.08);
             }
 
+        /* 滿版寬度按鈕修飾詞 */
         .btn-block {
             width: 100%;
             margin-top: 18px;
         }
 
+        /* 次要／文字型按鈕（例如放棄／取消類操作） */
         .btn-ghost {
             background: transparent;
             color: var(--slate);
@@ -211,6 +231,7 @@
                 color: var(--pink);
             }
 
+        /* 底部輔助連結列（登入卡片下方的小型文字按鈕群） */
         .foot-link {
             margin-top: 18px;
             text-align: center;
@@ -230,6 +251,7 @@
                 font-family: inherit;
             }
 
+        /* ---------- 主持人專用操作按鈕（清空排行榜 / 開關作答） ---------- */
         #resetBoardBtn,
         #toggleRegBtn {
             display: inline-block;
@@ -257,7 +279,7 @@
                 transform: scale(0.96);
             }
 
-        /* ---------- 全部問題列表 ---------- */
+        /* ---------- 全部問題列表（主持人畫面：顯示所有題目與正確答案，供備課／核對用） ---------- */
         .qlist-header-row {
             display: flex;
             align-items: center;
@@ -327,6 +349,7 @@
             font-size: 0.8rem;
         }
 
+        /* 題目內文文字 */
         .qlist-text {
             font-size: 1rem;
             line-height: 1.6;
@@ -334,18 +357,21 @@
             color: #000000;
         }
 
+        /* 是非題的正確答案顯示列（僅主持人畫面可見） */
         .qlist-answer {
             font-size: 0.82rem;
             font-weight: 700;
             color: blue;
         }
 
+        /* 選擇題選項清單容器 */
         .qlist-options {
             display: flex;
             flex-direction: column;
             gap: 4px;
         }
 
+        /* 單一選項列（一般狀態） */
         .qlist-opt {
             font-size: 0.82rem;
             color: var(--slate);
@@ -353,13 +379,14 @@
             border-radius: 8px;
         }
 
+            /* 正確選項：加粗並用淺綠底色標示，方便主持人一眼辨識 */
             .qlist-opt.correct {
                 color: blue;
                 font-weight: 800;
                 background: rgba(46,204,113,0.12);
             }
 
-        /* ---------- 分數圓盤 ---------- */
+        /* ---------- 分數圓盤（遊戲畫面頂部顯示目前分數的圓形儀表） ---------- */
         .dial-zone {
             display: flex;
             flex-direction: column;
@@ -367,6 +394,7 @@
             margin-bottom: 10px;
         }
 
+        /* 圓盤外框：用 conic-gradient 做出彩虹漸層邊框效果 */
         .dial {
             position: relative;
             width: 150px;
@@ -381,6 +409,7 @@
             box-shadow: 0 12px 28px -10px rgba(124,58,237,0.55);
         }
 
+            /* 用白色圓形覆蓋內部，只留外圈漸層作為「甜甜圈」邊框視覺 */
             .dial::after {
                 content: '';
                 position: absolute;
@@ -389,12 +418,14 @@
                 background: #fff;
             }
 
+        /* 圓盤中央的分數文字容器，z-index 確保疊在 ::after 白色圓之上 */
         .dial-inner {
             position: relative;
             z-index: 2;
             text-align: center;
         }
 
+        /* 答對/答錯時分別觸發的漣漪動畫類別（目前程式碼中未實際綁定觸發，保留供未來擴充） */
         .dial.flash-correct {
             animation: pulseGood .7s ease-out;
         }
@@ -403,6 +434,7 @@
             animation: pulseBad .7s ease-out;
         }
 
+        /* 答對漣漪動畫：綠色光暈向外擴散並淡出 */
         @keyframes pulseGood {
             0% {
                 box-shadow: 0 0 0 0 rgba(46,204,113,0.55);
@@ -413,6 +445,7 @@
             }
         }
 
+        /* 答錯漣漪動畫：紅色光暈向外擴散並淡出 */
         @keyframes pulseBad {
             0% {
                 box-shadow: 0 0 0 0 rgba(255,92,92,0.55);
@@ -423,6 +456,7 @@
             }
         }
 
+        /* 圓盤中央的大數字（目前分數） */
         .dial-score {
             font-family: 'Baloo 2', sans-serif;
             font-size: 2.7rem;
@@ -430,6 +464,7 @@
             color: var(--ink);
         }
 
+        /* 分數下方的小標籤文字「目前分數」 */
         .dial-label {
             font-size: 1.3rem;
             letter-spacing: 0.08em;
@@ -438,6 +473,7 @@
             font-weight: 600;
         }
 
+        /* 搭配 .flash-correct/.flash-wrong 時，分數文字同步變色（目前未被觸發，保留擴充用） */
         .flash-correct .dial-score {
             color: var(--green);
         }
@@ -446,6 +482,7 @@
             color: var(--coral);
         }
 
+        /* 題號進度列（第 x / y 題 + 玩家姓名 + 進度條） */
         .progress-wrap {
             font-family: 'Baloo 2', sans-serif;
             font-size: 0.85rem;
@@ -478,7 +515,7 @@
             border-radius: 999px;
         }
 
-        /* ---------- 題目卡 ---------- */
+        /* ---------- 題目卡（顯示題目文字與配分） ---------- */
         .qcard {
             background: linear-gradient(180deg, #FBFAFF, #F3EEFF);
             border: 2px solid var(--line);
@@ -487,6 +524,7 @@
             margin-bottom: 22px;
         }
 
+        /* 配分徽章（例如「⭐ 本題配分：10 分」） */
         .qpoints {
             display: inline-block;
             font-family: 'Baloo 2', sans-serif;
@@ -507,12 +545,14 @@
             color: var(--ink);
         }
 
+        /* 是非題（boolean 題型）的「是/否」兩顆按鈕並排容器 */
         .answers {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 14px;
         }
 
+        /* 是非題按鈕基礎樣式 */
         .ans-btn {
             padding: 22px 10px;
             border-radius: 18px;
@@ -549,6 +589,8 @@
                 transform: none;
             }
 
+        /* 作答送出後顯示的提示文字區（目前僅顯示「已送出，前往下一題…」中性訊息，
+           不會揭露對錯，.ok/.no 兩個修飾類別目前程式碼未實際套用） */
         .feedback {
             text-align: center;
             font-family: 'Baloo 2', sans-serif;
@@ -566,7 +608,7 @@
                 color: var(--coral);
             }
 
-        /* ---------- 排行榜 ---------- */
+        /* ---------- 排行榜（依分數即時排序的玩家清單） ---------- */
         .board-head {
             display: flex;
             align-items: center;
@@ -679,7 +721,7 @@
             padding: 20px 0;
         }
 
-        /* ---------- 排行榜分頁 ---------- */
+        /* ---------- 排行榜分頁（每頁 LB_PAGE_SIZE 筆，資料量大時避免清單過長） ---------- */
         .lb-pagination {
             display: flex;
             align-items: center;
@@ -728,7 +770,7 @@
             margin-top: 2px;
         }
 
-        /* ---------- 結算畫面 ---------- */
+        /* ---------- 結算畫面（作答完所有題目後顯示的總分/排名摘要） ---------- */
         .end-stats {
             display: grid;
             grid-template-columns: repeat(3,1fr);
@@ -766,6 +808,7 @@
             filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
         }
 
+        /* 「尚未開放作答」提示框（當 state.registrationOpen 為 false 時顯示） */
         .closed-msg {
             background: #FFF4E5;
             border: 2px dashed var(--orange);
@@ -778,7 +821,7 @@
             font-family: 'Baloo 2', sans-serif;
         }
 
-        /* ---------- 選擇題按鈕 ---------- */
+        /* ---------- 選擇題按鈕（type: 'choice' 題型專用，垂直排列的選項清單） ---------- */
         .choice-list {
             display: flex;
             flex-direction: column;
@@ -812,6 +855,8 @@
                 cursor: not-allowed;
             }
 
+            /* 下列 .correct / .wrong-selected 兩個修飾類別為預留樣式，
+               目前 answer() 邏輯只會加上 .selected（不會揭露正解），故實際不會套用到 */
             .choice-btn.correct {
                 background: linear-gradient(135deg, #34E89E, var(--green));
                 border-color: var(--green);
@@ -824,6 +869,7 @@
                 color: #fff;
             }
 
+            /* 玩家實際選擇的選項：作答後套用此樣式標示「已選擇」 */
             .choice-btn.selected {
                 background: #F3EEFF;
                 border-color: var(--purple);
@@ -851,7 +897,7 @@
             background: rgba(255,255,255,0.35);
         }
 
-        /* ---------- 答錯率長條圖 ---------- */
+        /* ---------- 答錯率長條圖（主持人畫面：每題的答錯率視覺化，顏色依高低分級） ---------- */
         .stat-bar-row {
             display: flex;
             align-items: center;
@@ -895,6 +941,7 @@
             color: red;
         }
 
+        /* ---------- RWD：手機（寬度 ≤ 575px）縮小部分字級與間距，避免版面擁擠 ---------- */
         @media(max-width:575px) {
             .answers {
                 gap: 10px;
@@ -912,12 +959,14 @@
     </style>
 </head>
 <body>
+    <!-- 頁面主要容器：品牌列 + 動態畫面掛載點 #app（由 render() 依 state.screen 動態產生內容） -->
     <div class="wrap">
         <div class="brand">
             <span class="mascot">🧼</span>
             <h1>感控問答擂台(主持人)</h1>
             <span class="badge-live">即時挑戰</span>
         </div>
+        <!-- render() 會把登入/遊戲/結算三種畫面的 HTML 動態塞進這裡 -->
         <div id="app"></div>
     </div>
     <script>
@@ -931,15 +980,36 @@
            讓彼此的排行榜互相獨立，不會混在一起。 */
         const ROOM_ID = "default-room";
 
+        /**
+         * 將任意字串轉成安全的 key（僅保留英數字、底線、連字號與中文字），
+         * 用於組成 playerId，避免特殊符號造成 URL 參數或資料 key 出錯。
+         * @param {string} s 原始字串（例如玩家姓名）
+         * @returns {string} 過濾後的安全字串
+         */
         function sanitizeKey(s) {
             return String(s).replace(/[^a-zA-Z0-9_\u4e00-\u9fff-]/g, '_');
         }
 
+        /**
+         * 組合呼叫 Apps Script 後端所需的完整 URL，自動帶入房間代碼（room）。
+         * @param {Object} params 要附加在網址上的查詢參數（例如 action、playerId 等）
+         * @returns {string} 完整可 fetch 的 GET 請求網址
+         */
         function apiUrl(params) {
             const usp = new URLSearchParams(Object.assign({ room: ROOM_ID }, params));
             return APPS_SCRIPT_URL + '?' + usp.toString();
         }
 
+        /* ---------- 題庫 ----------
+           每題包含：
+           - id：題目唯一識別碼，也用來對應答錯率統計
+           - type：'boolean'（是非題）或 'choice'（單選題）
+           - text：題目文字
+           - answer（是非題用）/ correctIndex（選擇題用）：正確答案
+           - options（選擇題用）：選項陣列
+           - points：答對可得分數
+           注意：此檔案為「主持人版」，題目列表畫面會直接顯示正確答案，
+           僅供主辦人核對使用，切勿把此版本的連結分享給參賽者。 */
         const QUESTIONS = [
             { id: 'q1', type: 'boolean', text: '戴手套可以取代洗手；只要手套沒有破損，就可以持續戴著照護不同病人或不同照護步驟。', answer: false, points: 10 },
             { id: 'q2', type: 'boolean', text: '本院洗手種類包含一般性洗手、消毒性洗手與外科刷手；一般性洗手可清除大部分暫時性細菌。', answer: true, points: 20 },
@@ -960,6 +1030,17 @@
             { id: 'mc5', type: 'choice', text: '下列何者「不是」正確的醫療廢棄物分類方式？', options: ['尖銳物品丟入利器盒', '被血液污染的紗布視為感染性事業廢棄物', '將針具與一般垃圾混合丟棄', '生物性廢棄物依規定滅菌後處理'], correctIndex: 2, points: 20 }
         ];
 
+        /* ---------- 全域狀態物件（單一資料來源，render() 依此畫出目前畫面） ----------
+           screen           : 目前畫面，'login' | 'game' | 'end'
+           playerId/name    : 目前這位玩家的識別碼與姓名（主持人版此欄位實際上不會被使用到，因登入表單未渲染）
+           questions        : 本次作答的題目陣列（依 QUESTIONS 原始順序，不隨機）
+           currentIndex     : 目前作答到第幾題（0-based）
+           score/correct/total : 累計分數、答對題數、已作答題數
+           feedback/locked  : 作答當下的暫存 UI 狀態
+           leaderboard      : 從後端取得的所有玩家排行榜資料 { playerId: {name, score, correct, total} }
+           stats            : 從後端取得的各題答錯率統計 { questionId: {total, wrong} }
+           registrationOpen : 目前是否開放新玩家加入作答
+           lbPage           : 排行榜目前顯示第幾頁 */
         let state = {
             screen: 'login',
             playerId: '',
@@ -977,9 +1058,16 @@
             lbPage: 1
         };
 
-        let pollTimer = null;
-        let lastKnownRegOpen = null;
+        let pollTimer = null;        // setInterval 的計時器參照，供 startPolling() 重複呼叫前先清除舊的
+        let lastKnownRegOpen = null; // 記錄上一次輪詢時的開放狀態，用來偵測「開關作答」是否有變動
 
+        /**
+         * 呼叫 Apps Script 後端 API 並更新本地狀態（leaderboard / stats / registrationOpen）。
+         * 所有與後端的溝通（讀取、更新分數、記錄答題統計、清空、開關作答）都透過這個函式統一處理。
+         * @param {string} action 後端要執行的動作，例如 'list'/'update'/'reset'/'setRegistration'/'logAnswer'
+         * @param {Object} [extraParams] 額外要附加的查詢參數
+         * @returns {Promise<Object|null>} 後端回傳的 JSON 資料；失敗時回傳 null
+         */
         async function fetchState(action, extraParams) {
             try {
                 const res = await fetch(apiUrl(Object.assign({ action: action }, extraParams || {})));
@@ -995,6 +1083,11 @@
             }
         }
 
+        /**
+         * 將目前玩家的最新分數/答對題數/是否完成，同步寫回後端排行榜，
+         * 並立即重新渲染排行榜與統計區塊以反映最新資料。
+         * @param {boolean} finished 這位玩家是否已完成全部題目
+         */
         async function updateMyEntry(finished) {
             if (!state.playerId) return;
             await fetchState('update', {
@@ -1009,12 +1102,21 @@
             renderStatsList();
         }
 
+        /**
+         * 每次玩家作答後，回報該題的作答結果給後端，用來累計「答錯率」統計。
+         * @param {string} questionId 題目 id
+         * @param {boolean} isCorrect 這次作答是否正確
+         */
         function logAnswerStat(questionId, isCorrect) {
             fetchState('logAnswer', { questionId: questionId, correct: !!isCorrect }).then(() => {
                 renderStatsList();
             });
         }
 
+        /**
+         * 輪詢用：向後端重新拉取最新排行榜與統計資料，並在畫面上更新。
+         * 若目前在登入畫面且「開放作答」狀態有變化，會整頁重新 render() 以顯示/隱藏登入表單。
+         */
         async function refreshLeaderboard() {
             await fetchState('list');
             renderBoardList();
@@ -1027,30 +1129,48 @@
             }
         }
 
+        /**
+         * 啟動每 5 秒一次的自動輪詢，讓所有裝置上的排行榜/統計畫面保持近即時更新。
+         * 重複呼叫時會先清除舊的計時器，避免多個 interval 疊加。
+         */
         function startPolling() {
             if (pollTimer) clearInterval(pollTimer);
-            pollTimer = setInterval(refreshLeaderboard, 2000);
+            pollTimer = setInterval(refreshLeaderboard, 5000);
         }
 
+        /**
+         * 將排行榜資料由「物件」轉成「已排序的 [id, entry] 陣列」。
+         * 排序規則：分數高到低優先，同分則答對題數多者排前面。
+         * @returns {Array<[string, Object]>} 排序後的 [playerId, playerData] 陣列
+         */
         function sortedEntries() {
             return Object.entries(state.leaderboard)
                 .sort((a, b) => (b[1].score - a[1].score) || (b[1].correct - a[1].correct));
         }
 
+        /**
+         * 產生排行榜卡片的 HTML 骨架（標題 + 說明 + 空的清單/分頁容器，
+         * 實際清單內容交由 renderBoardList() 事後填入 #lb-list / #lb-pagination）。
+         * @returns {string} 排行榜卡片 HTML 字串
+         */
         function boardHtml() {
             return `
-                                                    <div class="card">
-                                                      <div class="board-head"><div class="live-dot"></div><div class="board-title">🔥 得分排行榜 (即時)</div></div>
-                                                      <div class="board-sub">依分數排序，每 2 秒自動更新</div>
-                                                      <div class="board-total-label">總積分</div>
-                                                      <div id="lb-list"></div>
-                                                      <div id="lb-pagination"></div>
-                                                    </div>
-                                                  `;
+                                                        <div class="card">
+                                                          <div class="board-head"><div class="live-dot"></div><div class="board-title">🔥 得分排行榜 (即時)</div></div>
+                                                          <div class="board-sub">依分數排序，每 2 秒自動更新</div>
+                                                          <div class="board-total-label">總積分</div>
+                                                          <div id="lb-list"></div>
+                                                          <div id="lb-pagination"></div>
+                                                        </div>
+                                                      `;
         }
 
-        const LB_PAGE_SIZE = 20;
+        const LB_PAGE_SIZE = 20; // 排行榜每頁顯示筆數
 
+        /**
+         * 實際將排行榜資料渲染進 #lb-list（清單）與 #lb-pagination（分頁按鈕），
+         * 並綁定分頁按鈕的點擊事件。此函式在資料更新或換頁時會被重複呼叫。
+         */
         function renderBoardList() {
             const el = document.getElementById('lb-list');
             const pagEl = document.getElementById('lb-pagination');
@@ -1062,6 +1182,7 @@
                 return;
             }
 
+            // 依總筆數計算總頁數，並確保目前頁碼落在合法範圍內（防止資料變少時頁碼溢出）
             const totalPages = Math.max(1, Math.ceil(entries.length / LB_PAGE_SIZE));
             if (state.lbPage > totalPages) state.lbPage = totalPages;
             if (state.lbPage < 1) state.lbPage = 1;
@@ -1069,21 +1190,22 @@
             const startIdx = (state.lbPage - 1) * LB_PAGE_SIZE;
             const pageEntries = entries.slice(startIdx, startIdx + LB_PAGE_SIZE);
 
-            const medals = ['🥇', '🥈', '🥉'];
+            const medals = ['🥇', '🥈', '🥉']; // 前三名顯示獎牌 emoji，其餘顯示數字名次
             el.innerHTML = pageEntries.map(([id, e], idx) => {
                 const i = startIdx + idx;
                 const isMe = id === state.playerId;
                 const rankDisplay = medals[i] || (i + 1);
                 return `
-                                                      <div class="lb-row ${isMe ? 'me' : ''}">
-                                                        <div class="lb-rank">${rankDisplay}</div>
-                                                        <div class="lb-name">${escapeHtml(e.name)}${isMe ? ' (你)' : ''}</div>
-                                                        <div class="lb-correct">✓ ${e.correct}/${e.total}</div>
-                                                        <div class="lb-score">${e.score}</div>
-                                                      </div>
-                                                    `;
+                                                          <div class="lb-row ${isMe ? 'me' : ''}">
+                                                            <div class="lb-rank">${rankDisplay}</div>
+                                                            <div class="lb-name">${escapeHtml(e.name)}${isMe ? ' (你)' : ''}</div>
+                                                            <div class="lb-correct">✓ ${e.correct}/${e.total}</div>
+                                                            <div class="lb-score">${e.score}</div>
+                                                          </div>
+                                                        `;
             }).join('');
 
+            // 只有超過一頁時才需要顯示分頁按鈕（上一頁／頁碼／下一頁）
             if (pagEl) {
                 if (totalPages <= 1) {
                     pagEl.innerHTML = '';
@@ -1107,20 +1229,35 @@
             }
         }
 
+        /**
+         * HTML 轉義工具，避免玩家輸入的姓名或題目文字中含有 <, >, & 等符號時
+         * 被瀏覽器誤判為 HTML 標籤，造成版面錯亂或 XSS 風險。
+         * @param {*} s 任意輸入值（會先轉成字串）
+         * @returns {string} 轉義後可安全插入 innerHTML 的字串
+         */
         function escapeHtml(s) {
             return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         }
 
+        /**
+         * 產生「題目答錯率排行」卡片的 HTML 骨架，實際內容由 renderStatsList() 填入 #stats-list。
+         * @returns {string} 統計卡片 HTML 字串
+         */
         function statsHtml() {
             return `
-                                                    <div class="card mt-3">
-                                                      <div class="board-head"><div class="live-dot" style="background:var(--coral)"></div><div class="board-title">📊 題目答錯率排行 (即時)</div></div>
-                                                      <div class="board-sub">依答錯率高到低排序，每 2 秒自動更新</div>
-                                                      <div id="stats-list"></div>
-                                                    </div>
-                                                  `;
+                                                        <div class="card mt-3">
+                                                          <div class="board-head"><div class="live-dot" style="background:var(--coral)"></div><div class="board-title">📊 題目答錯率排行 (即時)</div></div>
+                                                          <div class="board-sub">依答錯率高到低排序，每 2 秒自動更新</div>
+                                                          <div id="stats-list"></div>
+                                                        </div>
+                                                      `;
         }
 
+        /**
+         * 依 state.stats（後端統計的各題作答次數與答錯次數）計算答錯率，
+         * 由高到低排序後畫成長條圖列表，並同步呼叫 updateQlistWrongRates()
+         * 更新題目列表畫面上每一題旁邊顯示的答錯率文字。
+         */
         function renderStatsList() {
             const el = document.getElementById('stats-list');
             if (!el) return;
@@ -1138,20 +1275,26 @@
                 el.innerHTML = `<div class="lb-empty">📭 還沒有作答資料</div>`;
             } else {
                 el.innerHTML = entries.map(e => {
+                    // 題目文字過長時截斷加上刪節號，避免長條圖標籤破版；完整文字保留在 title 提示中
                     const shortText = e.text.length > 15 ? e.text.slice(0, 15) + '…' : e.text;
+                    // 依答錯率分三個等級上色：≥50% 紅色警示、≥25% 橘色提醒、其餘綠色安全
                     const barColor = e.wrongRate >= 50 ? 'var(--coral)' : (e.wrongRate >= 25 ? 'var(--orange)' : 'var(--green)');
                     return `
-                                                      <div class="stat-bar-row" title="${escapeHtml(e.text)}（共 ${e.total} 人次作答）">
-                                                        <div class="stat-bar-label">${escapeHtml(shortText)}</div>
-                                                        <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${e.wrongRate}%; background:${barColor};"></div></div>
-                                                        <div class="stat-bar-pct">${e.wrongRate}%</div>
-                                                      </div>
-                                                    `;
+                                                          <div class="stat-bar-row" title="${escapeHtml(e.text)}（共 ${e.total} 人次作答）">
+                                                            <div class="stat-bar-label">${escapeHtml(shortText)}</div>
+                                                            <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${e.wrongRate}%; background:${barColor};"></div></div>
+                                                            <div class="stat-bar-pct">${e.wrongRate}%</div>
+                                                          </div>
+                                                        `;
                 }).join('');
             }
             updateQlistWrongRates();
         }
 
+        /**
+         * 將每一題最新的答錯率文字，直接更新到「題目列表」畫面中對應的
+         * #qlist-pct-{題目id} 元素上（登入畫面顯示的題目總覽用）。
+         */
         function updateQlistWrongRates() {
             QUESTIONS.forEach(q => {
                 const el = document.getElementById('qlist-pct-' + q.id);
@@ -1162,45 +1305,54 @@
             });
         }
 
+        /**
+         * 主要渲染函式：依 state.screen 的值，將對應畫面的 HTML 寫入 #app。
+         * - 'login'：主持人畫面顯示「題目總覽列表」（含正確答案）與主持人操作按鈕
+         * - 'game' ：作答畫面（是非題／選擇題），本檔案實際上不會有玩家走到這個畫面
+         * - 'end'  ：作答完成後的結算畫面
+         * 每次呼叫都會整段覆寫 #app 的 innerHTML，因此畫面切換後也需要重新綁定事件監聽器。
+         */
         function render() {
             const app = document.getElementById('app');
             if (state.screen === 'login') {
                 app.innerHTML = `
-                                                      <div class="row g-3">
-                                                        <div class="col-lg-8">
-                                                          <div class="card">
-                                                            <div class="qlist-header-row">
-                                                              <h2>題目列表</h2>
-                                                              <div class="qlist-header-actions">
-                                                                <button id="resetBoardBtn">主持人選項：清空排行榜與統計</button>
-                                                                <button id="toggleRegBtn">主持人選項：${state.registrationOpen ? '🔒 關閉作答' : '🔓 開啟作答'}</button>
-                                                              </div>
-                                                            </div>
-                                                            <div class="qlist-wrap">
-                                                              ${QUESTIONS.map((q, i) => {
+                                                          <div class="row g-3">
+                                                            <div class="col-lg-8">
+                                                              <div class="card">
+                                                                <div class="qlist-header-row">
+                                                                  <h2>題目列表</h2>
+                                                                  <div class="qlist-header-actions">
+                                                                    <button id="resetBoardBtn">主持人選項：清空排行榜與統計</button>
+                                                                    <button id="toggleRegBtn">主持人選項：${state.registrationOpen ? '🔒 關閉作答' : '🔓 開啟作答'}</button>
+                                                                  </div>
+                                                                </div>
+                                                                <div class="qlist-wrap">
+                                                                  <!-- 逐題列出：題號/題型/配分/答錯率、題目內容、正確答案（是非題）或選項清單（選擇題，正解會標註 ✓） -->
+                                                                  ${QUESTIONS.map((q, i) => {
                         const s = (state.stats && state.stats[q.id]) || {};
                         const wrongRate = s.total > 0 ? Math.round((s.wrong / s.total) * 100) : 0;
                         return `
-                                                                <div class="qlist-row">
-                                                                  <div class="qlist-top">
-                                                                    <span class="qlist-idx">#${i + 1}　${q.id.toUpperCase()}</span>
-                                                                    <span class="qlist-type ${q.type === 'choice' ? 'choice' : ''}">${q.type === 'choice' ? '選擇題' : '是非題'}</span>
-                                                                    <div class="stat-bar-pct" id="qlist-pct-${q.id}">答錯率 : ${wrongRate}%</div>
-                                                                  </div>
-                                                                  <div class="qlist-text">${escapeHtml(q.text)}</div>
-                                                                  ${q.type === 'choice'
+                                                                    <div class="qlist-row">
+                                                                      <div class="qlist-top">
+                                                                        <span class="qlist-idx">#${i + 1}　${q.id.toUpperCase()}</span>
+                                                                        <span class="qlist-type ${q.type === 'choice' ? 'choice' : ''}">${q.type === 'choice' ? '選擇題' : '是非題'}</span>
+                                                                        <div class="stat-bar-pct" id="qlist-pct-${q.id}">答錯率 : ${wrongRate}%</div>
+                                                                      </div>
+                                                                      <div class="qlist-text">${escapeHtml(q.text)}</div>
+                                                                      ${q.type === 'choice'
                                 ? `<div class="qlist-options">${q.options.map((opt, idx) => `<div class="qlist-opt ${idx === q.correctIndex ? 'correct' : ''}">${String.fromCharCode(65 + idx)}. ${escapeHtml(opt)}${idx === q.correctIndex ? ' ✓ 正解' : ''}</div>`).join('')}</div>`
                                 : `<div class="qlist-answer">✓ 正確答案：${q.answer ? '是 / 正確' : '否 / 錯誤'}</div>`
                             }
-                                                                </div>
-                                                              `;
+                                                                    </div>
+                                                                  `;
                     }).join('')}
+                                                                </div>
+                                                              </div>
                                                             </div>
+                                                            <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
                                                           </div>
-                                                        </div>
-                                                        <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
-                                                      </div>
-                                                    `;
+                                                        `;
+                // 綁定主持人操作按鈕：清空排行榜/統計、開關作答
                 document.getElementById('resetBoardBtn').onclick = onResetBoard;
                 document.getElementById('toggleRegBtn').onclick = onToggleRegistration;
                 renderBoardList();
@@ -1209,41 +1361,43 @@
             else if (state.screen === 'game') {
                 const q = state.questions[state.currentIndex];
                 const pct = Math.round((state.currentIndex / state.questions.length) * 100);
+                // 依題型（是非題／選擇題）產生對應的作答按鈕 HTML
                 const answersHtml = q.type === 'choice'
                     ? `<div class="choice-list">${q.options.map((opt, idx) => `
-                                                              <button class="choice-btn" id="choiceBtn${idx}" ${state.locked ? 'disabled' : ''}><span class="choice-letter">${String.fromCharCode(65 + idx)}</span>${escapeHtml(opt)}</button>
-                                                            `).join('')}</div>`
+                                                                  <button class="choice-btn" id="choiceBtn${idx}" ${state.locked ? 'disabled' : ''}><span class="choice-letter">${String.fromCharCode(65 + idx)}</span>${escapeHtml(opt)}</button>
+                                                                `).join('')}</div>`
                     : `<div class="answers">
-                                                              <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
-                                                              <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
-                                                            </div>`;
+                                                                  <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
+                                                                  <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
+                                                                </div>`;
                 app.innerHTML = `
-                                                      <div class="row g-3">
-                                                        <div class="col-lg-8">
-                                                          <div class="card">
-                                                            <div class="dial-zone">
-                                                              <div class="dial" id="dial">
-                                                                <div class="dial-inner">
-                                                                  <div class="dial-score" id="scoreNum">${state.score}</div>
-                                                                  <div class="dial-label">目前分數</div>
+                                                          <div class="row g-3">
+                                                            <div class="col-lg-8">
+                                                              <div class="card">
+                                                                <div class="dial-zone">
+                                                                  <div class="dial" id="dial">
+                                                                    <div class="dial-inner">
+                                                                      <div class="dial-score" id="scoreNum">${state.score}</div>
+                                                                      <div class="dial-label">目前分數</div>
+                                                                    </div>
+                                                                  </div>
                                                                 </div>
+                                                                <div class="progress-wrap">
+                                                                  第 ${state.currentIndex + 1} / ${state.questions.length} 題　<span class="name-chip">👤 ${escapeHtml(state.name)}</span>
+                                                                  <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+                                                                </div>
+                                                                <div class="qcard">
+                                                                  <div class="qpoints">⭐ 本題配分：${q.points} 分　${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
+                                                                  <div class="qtext">${escapeHtml(q.text)}</div>
+                                                                </div>
+                                                                ${answersHtml}
+                                                                <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
                                                               </div>
                                                             </div>
-                                                            <div class="progress-wrap">
-                                                              第 ${state.currentIndex + 1} / ${state.questions.length} 題　<span class="name-chip">👤 ${escapeHtml(state.name)}</span>
-                                                              <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-                                                            </div>
-                                                            <div class="qcard">
-                                                              <div class="qpoints">⭐ 本題配分：${q.points} 分　${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
-                                                              <div class="qtext">${escapeHtml(q.text)}</div>
-                                                            </div>
-                                                            ${answersHtml}
-                                                            <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
+                                                            <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
                                                           </div>
-                                                        </div>
-                                                        <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
-                                                      </div>
-                                                    `;
+                                                        `;
+                // 依題型綁定作答事件：選擇題傳入選項索引，是非題傳入布林值
                 if (q.type === 'choice') {
                     q.options.forEach((opt, idx) => {
                         document.getElementById('choiceBtn' + idx).onclick = () => answer(idx);
@@ -1259,38 +1413,45 @@
                 const entries = sortedEntries();
                 const myRank = entries.findIndex(([id]) => id === state.playerId) + 1;
                 app.innerHTML = `
-                                                      <div class="row g-3">
-                                                        <div class="col-lg-8">
-                                                          <div class="card">
-                                                            <span class="trophy">🏆</span>
-                                                            <p class="eyebrow text-center">作答完成</p>
-                                                            <h2 class="text-center">${escapeHtml(state.name)}，你的結果出爐了！</h2>
-                                                            <p class="sub text-center">${myRank > 0 ? `目前排名第 ${myRank} 名` : ''}</p>
-                                                            <div class="end-stats">
-                                                              <div class="stat"><div class="num">${state.score}</div><div class="lbl">總分</div></div>
-                                                              <div class="stat"><div class="num">${state.correct}/${state.total}</div><div class="lbl">答對題數</div></div>
-                                                              <div class="stat"><div class="num">${myRank > 0 ? ('#' + myRank) : '-'}</div><div class="lbl">目前排名</div></div>
+                                                          <div class="row g-3">
+                                                            <div class="col-lg-8">
+                                                              <div class="card">
+                                                                <span class="trophy">🏆</span>
+                                                                <p class="eyebrow text-center">作答完成</p>
+                                                                <h2 class="text-center">${escapeHtml(state.name)}，你的結果出爐了！</h2>
+                                                                <p class="sub text-center">${myRank > 0 ? `目前排名第 ${myRank} 名` : ''}</p>
+                                                                <div class="end-stats">
+                                                                  <div class="stat"><div class="num">${state.score}</div><div class="lbl">總分</div></div>
+                                                                  <div class="stat"><div class="num">${state.correct}/${state.total}</div><div class="lbl">答對題數</div></div>
+                                                                  <div class="stat"><div class="num">${myRank > 0 ? ('#' + myRank) : '-'}</div><div class="lbl">目前排名</div></div>
+                                                                </div>
+                                                                <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
+                                                              </div>
                                                             </div>
-                                                            <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
+                                                            <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
                                                           </div>
-                                                        </div>
-                                                        <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
-                                                      </div>
-                                                    `;
+                                                        `;
                 renderBoardList();
                 renderStatsList();
             }
         }
 
+        /**
+         * 玩家點擊「加入作答」的處理函式：驗證姓名輸入、初始化本局作答狀態，
+         * 產生一組唯一 playerId，並切換畫面到 'game' 開始作答。
+         * 注意：此主持人版檔案的登入畫面實際上不會渲染姓名輸入框，
+         * 此函式主要為與玩家版共用同一份程式碼骨架而保留。
+         */
         function onJoin() {
             const input = document.getElementById('nameInput');
             const name = (input.value || '').trim();
             if (!name) {
                 input.focus();
-                input.style.borderColor = 'var(--coral)';
+                input.style.borderColor = 'var(--coral)'; // 未填姓名時邊框變紅提示
                 return;
             }
             state.name = name;
+            // playerId = 姓名(去除特殊字元) + 隨機亂碼，避免不同玩家同名時互相覆蓋彼此紀錄
             state.playerId = sanitizeKey(name) + '_' + Math.random().toString(36).slice(2, 6);
             state.questions = QUESTIONS.slice(); // 依 id 順序出題，不隨機
             state.currentIndex = 0;
@@ -1300,15 +1461,22 @@
             state.feedback = null;
             state.locked = false;
             state.screen = 'game';
-            updateMyEntry(false);
+            updateMyEntry(false); // 先以「尚未完成」狀態寫入一筆排行榜紀錄
             render();
         }
 
+        /**
+         * 處理玩家對目前題目的作答：計算對錯與加減分、鎖定按鈕避免重複作答、
+         * 回報統計資料給後端，並在短暫延遲後自動前進到下一題（或進入結算畫面）。
+         * 全程不會在畫面上顯示「這題到底對不對」，只顯示中性的送出提示文字。
+         * @param {boolean|number} selected 是非題傳入 true/false；選擇題傳入選項索引（0-based）
+         */
         function answer(selected) {
-            if (state.locked) return;
+            if (state.locked) return; // 防止同一題被重複觸發作答（例如快速連點）
             state.locked = true;
             const q = state.questions[state.currentIndex];
             const isCorrect = q.type === 'choice' ? (selected === q.correctIndex) : (selected === q.answer);
+            // 計分規則：答對加該題配分，答錯扣同分值；且分數不會低於 0（Math.max(0, ...)）
             const delta = isCorrect ? q.points : -q.points;
             state.score = Math.max(0, state.score + delta);
             state.total += 1;
@@ -1317,6 +1485,7 @@
             const scoreNum = document.getElementById('scoreNum');
             if (scoreNum) scoreNum.textContent = state.score;
 
+            // 依題型鎖定作答按鈕，並在選擇題中標示玩家實際選了哪個選項（不揭露正解）
             if (q.type === 'choice') {
                 q.options.forEach((opt, idx) => {
                     const btn = document.getElementById('choiceBtn' + idx);
@@ -1329,13 +1498,14 @@
                 document.getElementById('btnFalse').disabled = true;
             }
             const fz = document.getElementById('feedbackZone');
-            if (fz) fz.textContent = '📮 已送出，前往下一題…';
+            if (fz) fz.textContent = '📮 已送出，前往下一題…'; // 中性訊息，不透露對錯
 
-            logAnswerStat(q.id, isCorrect);
+            logAnswerStat(q.id, isCorrect); // 回報這題的作答結果，用於後端答錯率統計
 
             const isLast = (state.currentIndex + 1) >= state.questions.length;
-            updateMyEntry(isLast);
+            updateMyEntry(isLast); // 同步最新分數到排行榜（若是最後一題則標記為已完成）
 
+            // 停留 0.5 秒讓玩家看到「已送出」提示後，才自動跳到下一題或結算畫面
             setTimeout(() => {
                 state.currentIndex += 1;
                 state.locked = false;
@@ -1346,18 +1516,34 @@
             }, 500);
         }
 
+        /**
+         * 主持人操作：清空所有玩家的排行榜與答錯率統計資料。
+         * 會先跳出瀏覽器原生確認對話框，避免誤觸造成資料遺失。
+         */
         async function onResetBoard() {
             if (!confirm('確定要清空所有玩家的排行榜與答錯率統計資料嗎？此動作無法復原。')) return;
             await fetchState('reset');
             render();
         }
 
+        /**
+         * 主持人操作：切換「是否開放新玩家加入作答」。
+         * 關閉後，尚未加入的玩家在登入畫面會看到「尚未開放作答」提示，
+         * 已在作答中的玩家不受影響。
+         */
         async function onToggleRegistration() {
             const newOpen = !state.registrationOpen;
             await fetchState('setRegistration', { open: newOpen });
             render();
         }
 
+        /**
+         * 頁面進入點（立即執行的非同步函式）：
+         * 1. 先向後端拉取一次最新的排行榜/統計/開放狀態
+         * 2. 記錄目前的開放狀態供後續輪詢比對變化
+         * 3. 渲染畫面
+         * 4. 啟動每 5 秒一次的自動輪詢
+         */
         (async function init() {
             await fetchState('list');
             lastKnownRegOpen = state.registrationOpen;
