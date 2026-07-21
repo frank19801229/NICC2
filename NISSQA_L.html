@@ -7,6 +7,17 @@
   分數/排行榜資料存在外部的 Google Apps Script（見下方 APPS_SCRIPT_URL），
   前端用 fetchState() 統一呼叫，並用輕量輪詢偵測「是否開放作答」的狀態變化。
   作答過程不會顯示正確答案，只會提示「已送出」。
+
+  【安全性 - 簡化版】這是刻意選擇的簡化方案，只處理「檢視原始碼看到正確答案」：
+    - QUESTIONS 陣列本身不含明文的 answer/correctIndex，正確答案改存成
+      Base64 編碼過的 _AK 字串，執行時才用 _decodeAnswerKey() 解碼回來，
+      避免右鍵「檢視原始碼」就直接看到答案。
+    - ⚠️ 這只是遮蔽，不是真正的安全機制：懂得打開 Console 呼叫
+      _decodeAnswerKey()、或下中斷點看變數的人，一樣能拿到全部正解。
+    - ⚠️ 對錯與分數仍然是「前端自己算好才回報後端」，後端沒有再驗證，
+      所以在網址列竄改 score 參數來偽造分數的風險依然存在，並未解決。
+      如果之後想真正解決這兩個問題，需要改回後端驗證計分的版本
+     （可參考 AppsScript_SecureScoring.gs 的作法）。
   ------------------------------------------------------------
 -->
 <html lang="zh-Hant">
@@ -943,26 +954,37 @@
             return APPS_SCRIPT_URL + '?' + usp.toString();
         }
 
-        // 題庫：boolean = 是非題（answer 為 true/false），choice = 選擇題（options + correctIndex）
+        // 題庫：注意這裡「刻意不含正確答案」——boolean 題不再有 answer 欄位、
+        // choice 題不再有 correctIndex 欄位。正確答案只存在後端 Apps Script 裡，
+        // 這樣按 F12 打開 Sources／View Source 也看不到任何一題的正解。
         const QUESTIONS = [
-            { id: 'q1', type: 'boolean', text: '戴手套可以取代洗手；只要手套沒有破損，就可以持續戴著照護不同病人或不同照護步驟。', answer: false, points: 10 },
-            { id: 'q2', type: 'boolean', text: '本院洗手種類包含一般性洗手、消毒性洗手與外科刷手；一般性洗手可清除大部分暫時性細菌。', answer: true, points: 20 },
-            { id: 'q3', type: 'boolean', text: 'WHO 提出的「洗手五時機」包括：接觸病人前、執行無菌/清潔操作前、暴觸體液後、接觸病人後、接觸病人週遭環境後。', answer: true, points: 10 },
-            { id: 'q4', type: 'boolean', text: '病人手部有明顯髒污，或照護疑似困難梭狀桿菌（C. diff）感染病人後，只要用酒精性乾洗手液消毒即可，不需要用肥皂及清水洗手。', answer: false, points: 20 },
-            { id: 'q5', type: 'boolean', text: '穿脫個人防護裝備（PPE）時，脫除的原則順序為：手套 → 護目鏡/面罩 → 隔離衣 → 口罩，脫除後應立即洗手。', answer: true, points: 20 },
-            { id: 'q6', type: 'boolean', text: '發生針扎（尖銳物品扎傷）後，正確處置的第一步是立即擠出傷口血液，再以肥皂和大量清水沖洗傷口。', answer: true, points: 15 },
-            { id: 'q7', type: 'boolean', text: '空氣傳染防護（Airborne Precautions）只要配戴外科口罩即可，不需要配戴 N95 等級呼吸防護具。', answer: false, points: 20 },
-            { id: 'q8', type: 'boolean', text: '留置導尿管期間應盡量維持密閉式引流系統，且集尿袋應低於膀胱位置，以防止尿液逆流。', answer: true, points: 15 },
-            { id: 'q9', type: 'boolean', text: '使用後的針具應立即將針頭回套針帽（re-cap），以避免刺傷他人。', answer: false, points: 20 },
-            { id: 'q10', type: 'boolean', text: '置放中心靜脈導管（CVC）時應採最大無菌屏障（無菌長袍、無菌手套、口罩、髮帽及大範圍無菌單）。', answer: true, points: 15 },
-            { id: 'q11', type: 'boolean', text: '外科手術部位感染（SSI）監測期通常為術後30天，若有植入物則依手術類別可延長至90天或1年。', answer: true, points: 15 },
-            { id: 'q12', type: 'boolean', text: '照護不同病人之間，只要沒有明顯髒污，就不需要進行手部衛生。', answer: false, points: 10 },
-            { id: 'mc1', type: 'choice', text: '依照 WHO 洗手五時機，下列何者「不」包括在內？', options: ['接觸病人前', '用餐前', '暴觸體液後', '接觸病人週遭環境後'], correctIndex: 1, points: 20 },
-            { id: 'mc2', type: 'choice', text: '使用酒精性乾洗手液時，建議至少搓揉多久才能達到有效殺菌效果？', options: ['5 秒', '10 秒', '20～30 秒', '2 分鐘'], correctIndex: 2, points: 15 },
-            { id: 'mc3', type: 'choice', text: '執行「接觸傳染防護」（Contact Precautions）時，最需要加強穿戴的防護裝備是？', options: ['N95 口罩', '手套與隔離衣', '護目鏡', '鉛衣'], correctIndex: 1, points: 15 },
-            { id: 'mc4', type: 'choice', text: '發生針扎意外，除了立即處理傷口，接下來「最優先」該做的是？', options: ['自行上網查資料', '立即通報並依院內感染管制流程處理', '先觀察一週再說', '直接請假回家休息'], correctIndex: 1, points: 20 },
-            { id: 'mc5', type: 'choice', text: '下列何者「不是」正確的醫療廢棄物分類方式？', options: ['尖銳物品丟入利器盒', '被血液污染的紗布視為感染性事業廢棄物', '將針具與一般垃圾混合丟棄', '生物性廢棄物依規定滅菌後處理'], correctIndex: 2, points: 20 }
+            { id: 'q1', type: 'boolean', text: '戴手套可以取代洗手；只要手套沒有破損，就可以持續戴著照護不同病人或不同照護步驟。', points: 10 },
+            { id: 'q2', type: 'boolean', text: '本院洗手種類包含一般性洗手、消毒性洗手與外科刷手；一般性洗手可清除大部分暫時性細菌。', points: 20 },
+            { id: 'q3', type: 'boolean', text: 'WHO 提出的「洗手五時機」包括：接觸病人前、執行無菌/清潔操作前、暴觸體液後、接觸病人後、接觸病人週遭環境後。', points: 10 },
+            { id: 'q4', type: 'boolean', text: '病人手部有明顯髒污，或照護疑似困難梭狀桿菌（C. diff）感染病人後，只要用酒精性乾洗手液消毒即可，不需要用肥皂及清水洗手。', points: 20 },
+            { id: 'q5', type: 'boolean', text: '穿脫個人防護裝備（PPE）時，脫除的原則順序為：手套 → 護目鏡/面罩 → 隔離衣 → 口罩，脫除後應立即洗手。', points: 20 },
+            { id: 'q6', type: 'boolean', text: '發生針扎（尖銳物品扎傷）後，正確處置的第一步是立即擠出傷口血液，再以肥皂和大量清水沖洗傷口。', points: 15 },
+            { id: 'q7', type: 'boolean', text: '空氣傳染防護（Airborne Precautions）只要配戴外科口罩即可，不需要配戴 N95 等級呼吸防護具。', points: 20 },
+            { id: 'q8', type: 'boolean', text: '留置導尿管期間應盡量維持密閉式引流系統，且集尿袋應低於膀胱位置，以防止尿液逆流。', points: 15 },
+            { id: 'q9', type: 'boolean', text: '使用後的針具應立即將針頭回套針帽（re-cap），以避免刺傷他人。', points: 20 },
+            { id: 'q10', type: 'boolean', text: '置放中心靜脈導管（CVC）時應採最大無菌屏障（無菌長袍、無菌手套、口罩、髮帽及大範圍無菌單）。', points: 15 },
+            { id: 'q11', type: 'boolean', text: '外科手術部位感染（SSI）監測期通常為術後30天，若有植入物則依手術類別可延長至90天或1年。', points: 15 },
+            { id: 'q12', type: 'boolean', text: '照護不同病人之間，只要沒有明顯髒污，就不需要進行手部衛生。', points: 10 },
+            { id: 'mc1', type: 'choice', text: '依照 WHO 洗手五時機，下列何者「不」包括在內？', options: ['接觸病人前', '用餐前', '暴觸體液後', '接觸病人週遭環境後'], points: 20 },
+            { id: 'mc2', type: 'choice', text: '使用酒精性乾洗手液時，建議至少搓揉多久才能達到有效殺菌效果？', options: ['5 秒', '10 秒', '20～30 秒', '2 分鐘'], points: 15 },
+            { id: 'mc3', type: 'choice', text: '執行「接觸傳染防護」（Contact Precautions）時，最需要加強穿戴的防護裝備是？', options: ['N95 口罩', '手套與隔離衣', '護目鏡', '鉛衣'], points: 15 },
+            { id: 'mc4', type: 'choice', text: '發生針扎意外，除了立即處理傷口，接下來「最優先」該做的是？', options: ['自行上網查資料', '立即通報並依院內感染管制流程處理', '先觀察一週再說', '直接請假回家休息'], points: 20 },
+            { id: 'mc5', type: 'choice', text: '下列何者「不是」正確的醫療廢棄物分類方式？', options: ['尖銳物品丟入利器盒', '被血液污染的紗布視為感染性事業廢棄物', '將針具與一般垃圾混合丟棄', '生物性廢棄物依規定滅菌後處理'], points: 20 }
         ];
+
+        // 答案索引：Base64 編碼過的正確答案表，避免「檢視原始碼」直接看到 answer:true/false 這種明碼。
+        // ⚠️ 這只是「防君子不防小人」的簡單遮蔽，不是真正的安全機制——
+        // 有心人在 Console 裡呼叫一次 _decodeAnswerKey() 或下中斷點，一樣能把答案全部撈出來。
+        // 真正要防止竄改／偷看，答案驗證跟計分必須搬到後端做（可參考 AppsScript_SecureScoring.gs 的作法）。
+        const _AK = "eyJxMSI6ZmFsc2UsInEyIjp0cnVlLCJxMyI6dHJ1ZSwicTQiOmZhbHNlLCJxNSI6dHJ1ZSwicTYiOnRydWUsInE3IjpmYWxzZSwicTgiOnRydWUsInE5IjpmYWxzZSwicTEwIjp0cnVlLCJxMTEiOnRydWUsInExMiI6ZmFsc2UsIm1jMSI6MSwibWMyIjoyLCJtYzMiOjEsIm1jNCI6MSwibWM1IjoyfQ==";
+        function _decodeAnswerKey() {
+            return JSON.parse(atob(_AK));
+        }
 
         // 前端唯一的狀態物件，畫面完全依據這裡的值來 render()
         let state = {
@@ -1180,12 +1202,16 @@
         }
 
         // 玩家送出答案時觸發。selected 是非題傳 true/false，選擇題傳選項索引。
-        // 不會顯示「正確答案是什麼」，只會鎖住按鈕並顯示「已送出」，0.5 秒後自動跳下一題。
+        // 對錯判斷回到前端自己算（answerKey 是從 Base64 解碼出來的正確答案表）。
+        // ⚠️ 這代表分數是前端自己算好才回報給後端，後端沒有再驗證一次——
+        // 也就是說「F12 竄改分數」的風險在這個簡化版裡是存在的，這是特意選擇的取捨。
         function answer(selected) {
             if (state.locked) return; // 防止同一題重複送出
             state.locked = true;
             const q = state.questions[state.currentIndex];
-            const isCorrect = q.type === 'choice' ? (selected === q.correctIndex) : (selected === q.answer);
+            const answerKey = _decodeAnswerKey();
+            const correctVal = answerKey[q.id];
+            const isCorrect = selected === correctVal;
             const delta = isCorrect ? q.points : -0; // 答對加分，答錯不扣分（目前設定）
             state.score = Math.max(0, state.score + delta); // 分數不會低於 0
             state.total += 1;
@@ -1207,7 +1233,7 @@
                 document.getElementById('btnFalse').disabled = true;
             }
             const fz = document.getElementById('feedbackZone');
-            if (fz) fz.textContent = '📮 已送出，前往下一題…';
+            if (fz) fz.textContent = '📮 已送出，前往下一題…'; // 中性提示，不透露對錯
 
             logAnswerStat(q.id, isCorrect); // 回報這題的答對/答錯率統計
 
