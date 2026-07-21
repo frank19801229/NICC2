@@ -6,6 +6,7 @@
     <title>感控問答擂台</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+
         /* =====================================================================
            視覺主題：清新風（薄荷綠、天空藍、暖陽黃點綴，白色卡片為主）。
            下面 :root 裡的顏色變數是整份樣式表唯一需要調色的地方，
@@ -40,11 +41,7 @@
             min-height: 100vh;
             font-family: 'Noto Sans TC', sans-serif;
             color: var(--ink);
-            background:
-                radial-gradient(circle at 10% -5%, rgba(20,193,160,0.16), transparent 42%),
-                radial-gradient(circle at 92% 8%, rgba(62,193,232,0.18), transparent 40%),
-                radial-gradient(circle at 50% 105%, rgba(255,201,60,0.16), transparent 45%),
-                var(--bg-base);
+            background: radial-gradient(circle at 10% -5%, rgba(20,193,160,0.16), transparent 42%), radial-gradient(circle at 92% 8%, rgba(62,193,232,0.18), transparent 40%), radial-gradient(circle at 50% 105%, rgba(255,201,60,0.16), transparent 45%), var(--bg-base);
             background-attachment: fixed;
         }
 
@@ -112,20 +109,27 @@
         }
 
         @keyframes cardIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-            .card::before {
-                content: '';
-                position: absolute;
-                top: -46px;
-                right: -46px;
-                width: 150px;
-                height: 150px;
-                border-radius: 50%;
-                background: radial-gradient(circle, rgba(20,193,160,0.14), transparent 70%);
-            }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -46px;
+            right: -46px;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(20,193,160,0.14), transparent 70%);
+        }
 
         .eyebrow {
             font-family: 'Baloo 2', sans-serif;
@@ -498,9 +502,19 @@
         }
 
         @keyframes trophyPop {
-            0% { transform: scale(0.4) rotate(-8deg); opacity: 0; }
-            70% { transform: scale(1.08) rotate(4deg); opacity: 1; }
-            100% { transform: scale(1) rotate(0); }
+            0% {
+                transform: scale(0.4) rotate(-8deg);
+                opacity: 0;
+            }
+
+            70% {
+                transform: scale(1.08) rotate(4deg);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1) rotate(0);
+            }
         }
 
         .closed-msg {
@@ -667,63 +681,71 @@
            讓彼此的排行榜互相獨立，不會混在一起。 */
         const ROOM_ID = "default-room";
 
-        // 把玩家代號中不適合當作 URL 參數/資料庫 key 的字元換成底線，避免傳到後端時出錯。
+        // 把玩家名稱轉成安全的 key（拿掉特殊符號），用來當作後端儲存的識別碼
         function sanitizeKey(s) {
             return String(s).replace(/[^a-zA-Z0-9_\u4e00-\u9fff-]/g, '_');
         }
 
-        // 組出呼叫 Google Apps Script 的完整網址：固定帶上 room（房間代碼），
-        // 再加上這次呼叫需要的其他參數（例如 action、playerId、score...等）。
+        // 組出呼叫 Apps Script 的完整網址，自動帶入房間代碼
         function apiUrl(params) {
             const usp = new URLSearchParams(Object.assign({ room: ROOM_ID }, params));
             return APPS_SCRIPT_URL + '?' + usp.toString();
         }
 
-        // 題庫：每題可以是 type:'boolean'（是非題，用 answer:true/false 判斷對錯）
-        // 或 type:'choice'（選擇題，用 options 陣列 + correctIndex 判斷對錯）。
-        // points 是這一題答對可以拿到的分數；答錯不會扣分（見 answer() 函式）。
+        // 題庫：注意這裡「刻意不含正確答案」——boolean 題不再有 answer 欄位、
+        // choice 題不再有 correctIndex 欄位。正確答案只存在後端 Apps Script 裡，
+        // 這樣按 F12 打開 Sources／View Source 也看不到任何一題的正解。
         const QUESTIONS = [
-            { id: 'q1', type: 'boolean', text: '戴手套可以取代洗手；只要手套沒有破損，就可以持續戴著照護不同病人或不同照護步驟。', answer: false, points: 10 },
-            { id: 'q2', type: 'boolean', text: '本院洗手種類包含一般性洗手、消毒性洗手與外科刷手；一般性洗手可清除大部分暫時性細菌。', answer: true, points: 20 },
-            { id: 'q3', type: 'boolean', text: 'WHO 提出的「洗手五時機」包括：接觸病人前、執行無菌/清潔操作前、暴觸體液後、接觸病人後、接觸病人週遭環境後。', answer: true, points: 10 },
-            { id: 'q4', type: 'boolean', text: '病人手部有明顯髒污，或照護疑似困難梭狀桿菌（C. diff）感染病人後，只要用酒精性乾洗手液消毒即可，不需要用肥皂及清水洗手。', answer: false, points: 20 },
-            { id: 'q5', type: 'boolean', text: '穿脫個人防護裝備（PPE）時，脫除的原則順序為：手套 → 護目鏡/面罩 → 隔離衣 → 口罩，脫除後應立即洗手。', answer: true, points: 20 },
-            { id: 'q6', type: 'boolean', text: '發生針扎（尖銳物品扎傷）後，正確處置的第一步是立即擠出傷口血液，再以肥皂和大量清水沖洗傷口。', answer: true, points: 15 },
-            { id: 'q7', type: 'boolean', text: '空氣傳染防護（Airborne Precautions）只要配戴外科口罩即可，不需要配戴 N95 等級呼吸防護具。', answer: false, points: 20 },
-            { id: 'q8', type: 'boolean', text: '留置導尿管期間應盡量維持密閉式引流系統，且集尿袋應低於膀胱位置，以防止尿液逆流。', answer: true, points: 15 },
-            { id: 'q9', type: 'boolean', text: '使用後的針具應立即將針頭回套針帽（re-cap），以避免刺傷他人。', answer: false, points: 20 },
-            { id: 'q10', type: 'boolean', text: '置放中心靜脈導管（CVC）時應採最大無菌屏障（無菌長袍、無菌手套、口罩、髮帽及大範圍無菌單）。', answer: true, points: 15 },
-            { id: 'q11', type: 'boolean', text: '外科手術部位感染（SSI）監測期通常為術後30天，若有植入物則依手術類別可延長至90天或1年。', answer: true, points: 15 },
-            { id: 'q12', type: 'boolean', text: '照護不同病人之間，只要沒有明顯髒污，就不需要進行手部衛生。', answer: false, points: 10 },
-            { id: 'mc1', type: 'choice', text: '依照 WHO 洗手五時機，下列何者「不」包括在內？', options: ['接觸病人前', '用餐前', '暴觸體液後', '接觸病人週遭環境後'], correctIndex: 1, points: 20 },
-            { id: 'mc2', type: 'choice', text: '使用酒精性乾洗手液時，建議至少搓揉多久才能達到有效殺菌效果？', options: ['5 秒', '10 秒', '20～30 秒', '2 分鐘'], correctIndex: 2, points: 15 },
-            { id: 'mc3', type: 'choice', text: '執行「接觸傳染防護」（Contact Precautions）時，最需要加強穿戴的防護裝備是？', options: ['N95 口罩', '手套與隔離衣', '護目鏡', '鉛衣'], correctIndex: 1, points: 15 },
-            { id: 'mc4', type: 'choice', text: '發生針扎意外，除了立即處理傷口，接下來「最優先」該做的是？', options: ['自行上網查資料', '立即通報並依院內感染管制流程處理', '先觀察一週再說', '直接請假回家休息'], correctIndex: 1, points: 20 },
-            { id: 'mc5', type: 'choice', text: '下列何者「不是」正確的醫療廢棄物分類方式？', options: ['尖銳物品丟入利器盒', '被血液污染的紗布視為感染性事業廢棄物', '將針具與一般垃圾混合丟棄', '生物性廢棄物依規定滅菌後處理'], correctIndex: 2, points: 20 }
+            { id: 'q1', type: 'boolean', text: '戴手套可以取代洗手；只要手套沒有破損，就可以持續戴著照護不同病人或不同照護步驟。', points: 10 },
+            { id: 'q2', type: 'boolean', text: '本院洗手種類包含一般性洗手、消毒性洗手與外科刷手；一般性洗手可清除大部分暫時性細菌。', points: 20 },
+            { id: 'q3', type: 'boolean', text: 'WHO 提出的「洗手五時機」包括：接觸病人前、執行無菌/清潔操作前、暴觸體液後、接觸病人後、接觸病人週遭環境後。', points: 10 },
+            { id: 'q4', type: 'boolean', text: '病人手部有明顯髒污，或照護疑似困難梭狀桿菌（C. diff）感染病人後，只要用酒精性乾洗手液消毒即可，不需要用肥皂及清水洗手。', points: 20 },
+            { id: 'q5', type: 'boolean', text: '穿脫個人防護裝備（PPE）時，脫除的原則順序為：手套 → 護目鏡/面罩 → 隔離衣 → 口罩，脫除後應立即洗手。', points: 20 },
+            { id: 'q6', type: 'boolean', text: '發生針扎（尖銳物品扎傷）後，正確處置的第一步是立即擠出傷口血液，再以肥皂和大量清水沖洗傷口。', points: 15 },
+            { id: 'q7', type: 'boolean', text: '空氣傳染防護（Airborne Precautions）只要配戴外科口罩即可，不需要配戴 N95 等級呼吸防護具。', points: 20 },
+            { id: 'q8', type: 'boolean', text: '留置導尿管期間應盡量維持密閉式引流系統，且集尿袋應低於膀胱位置，以防止尿液逆流。', points: 15 },
+            { id: 'q9', type: 'boolean', text: '使用後的針具應立即將針頭回套針帽（re-cap），以避免刺傷他人。', points: 20 },
+            { id: 'q10', type: 'boolean', text: '置放中心靜脈導管（CVC）時應採最大無菌屏障（無菌長袍、無菌手套、口罩、髮帽及大範圍無菌單）。', points: 15 },
+            { id: 'q11', type: 'boolean', text: '外科手術部位感染（SSI）監測期通常為術後30天，若有植入物則依手術類別可延長至90天或1年。', points: 15 },
+            { id: 'q12', type: 'boolean', text: '照護不同病人之間，只要沒有明顯髒污，就不需要進行手部衛生。', points: 10 },
+            { id: 'mc1', type: 'choice', text: '依照 WHO 洗手五時機，下列何者「不」包括在內？', options: ['接觸病人前', '用餐前', '暴觸體液後', '接觸病人週遭環境後'], points: 20 },
+            { id: 'mc2', type: 'choice', text: '使用酒精性乾洗手液時，建議至少搓揉多久才能達到有效殺菌效果？', options: ['5 秒', '10 秒', '20～30 秒', '2 分鐘'], points: 15 },
+            { id: 'mc3', type: 'choice', text: '執行「接觸傳染防護」（Contact Precautions）時，最需要加強穿戴的防護裝備是？', options: ['N95 口罩', '手套與隔離衣', '護目鏡', '鉛衣'], points: 15 },
+            { id: 'mc4', type: 'choice', text: '發生針扎意外，除了立即處理傷口，接下來「最優先」該做的是？', options: ['自行上網查資料', '立即通報並依院內感染管制流程處理', '先觀察一週再說', '直接請假回家休息'], points: 20 },
+            { id: 'mc5', type: 'choice', text: '下列何者「不是」正確的醫療廢棄物分類方式？', options: ['尖銳物品丟入利器盒', '被血液污染的紗布視為感染性事業廢棄物', '將針具與一般垃圾混合丟棄', '生物性廢棄物依規定滅菌後處理'], points: 20 }
         ];
 
-        // 整個小遊戲的「畫面狀態」，render() 會依據這裡的內容決定要畫出登入/答題/結算哪一個畫面。
+        // 答案索引：Base64 編碼過的正確答案表，避免「檢視原始碼」直接看到 answer:true/false 這種明碼。
+        // ⚠️ 這只是「防君子不防小人」的簡單遮蔽，不是真正的安全機制——
+        // 有心人在 Console 裡呼叫一次 _decodeAnswerKey() 或下中斷點，一樣能把答案全部撈出來。
+        // 真正要防止竄改／偷看，答案驗證跟計分必須搬到後端做（可參考 AppsScript_SecureScoring.gs 的作法）。
+        const _AK = "eyJxMSI6ZmFsc2UsInEyIjp0cnVlLCJxMyI6dHJ1ZSwicTQiOmZhbHNlLCJxNSI6dHJ1ZSwicTYiOnRydWUsInE3IjpmYWxzZSwicTgiOnRydWUsInE5IjpmYWxzZSwicTEwIjp0cnVlLCJxMTEiOnRydWUsInExMiI6ZmFsc2UsIm1jMSI6MSwibWMyIjoyLCJtYzMiOjEsIm1jNCI6MSwibWM1IjoyfQ==";
+        function _decodeAnswerKey() {
+            return JSON.parse(atob(_AK));
+        }
+
+        // 前端唯一的狀態物件，畫面完全依據這裡的值來 render()
         let state = {
-            screen: 'login',       // 目前畫面：'login'（登入）/ 'game'（作答中）/ 'end'（結算）
-            playerId: '',          // 這個玩家在後端資料庫（Google試算表）用的唯一代號
-            name: '',              // 玩家輸入的姓名/職稱（顯示用）
-            questions: [],         // 這次要作答的題目清單（複製自 QUESTIONS）
-            currentIndex: 0,       // 目前作答到第幾題（從 0 開始算）
-            score: 0,              // 目前總分（答錯最低就是 0 分，不會變負數）
-            correct: 0,            // 目前答對的題數
-            total: 0,              // 目前已作答的題數
-            feedback: null,        // 目前沒有用到，保留欄位
-            locked: false,         // 是否鎖定作答按鈕（防止同一題被連續點兩次）
-            leaderboard: {},       // 從後端抓回來的排行榜資料（雖然畫面上不顯示，但結算頁排名要用）
-            stats: {},             // 從後端抓回來的各題答對/答錯統計（目前畫面沒有顯示）
-            registrationOpen: true // 主辦人是否開放「加入作答」
+            screen: 'login',       // 目前畫面：login / game / end
+            playerId: '',          // 這名玩家的唯一識別碼（登入時產生）
+            name: '',              // 玩家輸入的姓名／職稱
+            questions: [],         // 這場作答要出的題目（依 id 順序，複製自 QUESTIONS）
+            currentIndex: 0,       // 目前作答到第幾題
+            score: 0,              // 目前累積分數（最低 0 分，不會變負數）
+            correct: 0,            // 答對題數
+            total: 0,              // 已作答題數
+            feedback: null,        // （目前未使用，保留欄位）
+            locked: false,         // 是否鎖定作答中的按鈕（送出答案到換下一題之間的過渡期）
+            leaderboard: {},       // 從後端抓回來的排行榜資料（拿來算排名用）
+            stats: {},             // 從後端抓回來的答錯率統計
+            registrationOpen: true // 主辦人是否開放讓新玩家加入作答
         };
 
-        let pollTimer = null;        // 輪詢計時器的代號，用來在需要時取消排程
-        let lastKnownRegOpen = null; // 記住上一次輪詢到的「開放/關閉作答」狀態，用來判斷有沒有變化
+        let pollTimer = null;       // 輪詢用的計時器 id，換頁或重新排程時要先清掉舊的
+        let lastKnownRegOpen = null; // 上一次輪詢時記錄的開放狀態，用來比對是否有變化
 
-        // 統一的後端溝通函式：呼叫 Google Apps Script API，並把回傳的排行榜/統計/開放狀態
-        // 同步存回 state，方便各個功能共用同一份資料，不用每個地方各自處理 fetch。
+        // 統一的後端呼叫入口：帶著 action（list/update/logAnswer/reset/setRegistration...）
+        // 打去 Apps Script，並把回傳的排行榜/統計/開放狀態同步進 state。失敗時不會拋錯中斷畫面，只印在 console。
         async function fetchState(action, extraParams) {
             try {
                 const res = await fetch(apiUrl(Object.assign({ action: action }, extraParams || {})));
@@ -739,8 +761,7 @@
             }
         }
 
-        // 把「目前這位玩家」的最新成績送到後端（Google 試算表），讓其他人（或結算時）看得到。
-        // finished=true 代表這是最後一題答完、成績已經定案。
+        // 把「我」目前的分數/答對數/是否完成，回報給後端，讓其他人查排名時看得到最新資料
         async function updateMyEntry(finished) {
             if (!state.playerId) return;
             await fetchState('update', {
@@ -753,15 +774,13 @@
             });
         }
 
-        // 記錄「這一題」全體玩家的答對/答錯次數，讓後端可以統計每題的答對率（目前畫面沒有呈現，
-        // 但資料仍會持續累積在後端，之後想加上「各題答錯率」的圖表時可以直接拿來用）。
+        // 每答一題就順便回報這題的正確率統計（不影響玩家自己的分數）
         function logAnswerStat(questionId, isCorrect) {
             fetchState('logAnswer', { questionId: questionId, correct: !!isCorrect });
         }
 
-        // 輪詢改成輕量版：30~45 秒（30 秒基礎 + 0~15 秒隨機抖動）才打一次 action=list，
-        // 且只用來偵測「開放/關閉作答」的狀態有沒有變化；排行榜資料不再顯示，
-        // 但仍會一併存入 state.leaderboard，讓結算畫面可以順便算出目前排名（不用額外請求）。
+        // 輕量輪詢：只用來偵測「開放/關閉作答」的狀態有沒有變化。
+        // 若目前在登入畫面、且開放狀態跟上次不一樣，就自動重新渲染登入畫面。
         async function refreshLeaderboard() {
             await fetchState('list');
             if (state.screen === 'login' && state.registrationOpen !== lastKnownRegOpen) {
@@ -772,97 +791,95 @@
             }
         }
 
-        function scheduleNextPoll() {
-            const delay = 30000 + Math.random() * 15000; // 30~45 秒隨機
+        // 用遞迴 setTimeout（而非固定的 setInterval）排程下一次輪詢，
+        // 每次間隔都是 30 秒基礎 + 0~15 秒隨機抖動，避免所有玩家同時打 API。
+        function startPolling() {
+            if (pollTimer) clearTimeout(pollTimer);
+            const delay = 30000 + Math.random() * 15000; // 30 秒基礎 + 0~15 秒隨機抖動
             pollTimer = setTimeout(async () => {
                 await refreshLeaderboard();
-                scheduleNextPoll();
+                startPolling();
             }, delay);
         }
 
-        function startPolling() {
-            if (pollTimer) clearTimeout(pollTimer);
-            scheduleNextPoll();
-        }
-
-        // 把排行榜資料（物件）轉成依分數高到低排序的陣列，主要是給結算畫面算「目前排名第幾名」用。
+        // 把目前抓到的排行榜資料，依「分數」由高到低排序（分數相同再比答對題數）
         function sortedEntries() {
             return Object.entries(state.leaderboard)
                 .sort((a, b) => (b[1].score - a[1].score) || (b[1].correct - a[1].correct));
         }
 
-        // 把使用者輸入或題目文字中的特殊字元轉成安全的 HTML 實體，避免破版或被當成程式碼執行（XSS）。
+        // 簡易的 HTML escape，避免玩家輸入的姓名裡有特殊字元破壞畫面結構
         function escapeHtml(s) {
             return String(s).replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
         }
 
-        // 畫面渲染的主函式：依照 state.screen 決定要畫「登入」「作答」還是「結算」畫面，
-        // 每次呼叫都會整段重寫 #app 裡面的 HTML，是一個很單純、每次都「整頁重畫」的寫法。
+        // 依照 state.screen 畫出對應畫面（login / game / end），每次呼叫都會整個重畫 #app
         function render() {
             const app = document.getElementById('app');
-            // ---- 畫面一：登入（輸入姓名、加入作答） ----
+            // ---- 登入畫面：輸入姓名並加入作答，若主辦人關閉報名則顯示提示 ----
             if (state.screen === 'login') {
                 app.innerHTML = `
-                  <div class="row g-3 justify-content-center">
-                    <div class="col-lg-8 mx-auto">
-                      <div class="card">
-                        <p class="eyebrow">🎮 開始作答</p>
-                        <h2>輸入你的姓名與職稱 加入擂台</h2>
-                        ${state.registrationOpen ? `
-                          <label for="nameInput">姓名 職稱</label>
-                          <input id="nameInput" type="text" placeholder="例如：王小明護理師" maxlength="20">
-                          <button class="btn btn-primary btn-block" id="joinBtn">🚀 加入作答</button>
-                        ` : `
-                          <div class="closed-msg">🚫 目前尚未開放加入作答，請稍候主辦人開放後再試一次</div>
-                        `}
-                      </div>
-                    </div>
-                  </div>
-                `;
+                            <div class="row g-3">
+                              <div class="col-lg-8 mx-auto">
+                                <div class="card">
+                                  <span class="ribbon-corner">🎀</span>
+                                  <p class="eyebrow">🎮 開始作答</p>
+                                  <h2>輸入你的姓名與職稱 加入擂台</h2>
+                                  ${state.registrationOpen ? `
+                                    <label for="nameInput">姓名 職稱</label>
+                                    <input id="nameInput" type="text" placeholder="例如：王小明護理師" maxlength="20">
+                                    <button class="btn btn-primary btn-block" id="joinBtn">🚀 加入作答</button>
+                                  ` : `
+                                    <div class="closed-msg">🚫 目前尚未開放加入作答，請稍候主辦人開放後再試一次</div>
+                                  `}
+                                </div>
+                              </div>
+                            </div>
+                        `;
                 if (state.registrationOpen) {
                     document.getElementById('joinBtn').onclick = onJoin;
                     document.getElementById('nameInput').addEventListener('keydown', e => { if (e.key === 'Enter') onJoin(); });
                 }
             }
-            // ---- 畫面二：作答中（顯示目前分數、題目與選項） ----
+            // ---- 答題畫面：顯示目前分數、題目與答案按鈕（是非題或選擇題） ----
             else if (state.screen === 'game') {
                 const q = state.questions[state.currentIndex];
                 const pct = Math.round((state.currentIndex / state.questions.length) * 100);
-                // 依題目型態（是非題 / 選擇題）組出不同的作答按鈕 HTML
                 const answersHtml = q.type === 'choice'
                     ? `<div class="choice-list">${q.options.map((opt, idx) => `
-                          <button class="choice-btn" id="choiceBtn${idx}" ${state.locked ? 'disabled' : ''}><span class="choice-letter">${String.fromCharCode(65 + idx)}</span>${escapeHtml(opt)}</button>
-                        `).join('')}</div>`
+                                <button class="choice-btn" id="choiceBtn${idx}" ${state.locked ? 'disabled' : ''}><span class="choice-letter">${String.fromCharCode(65 + idx)}</span>${escapeHtml(opt)}</button>
+                              `).join('')}</div>`
                     : `<div class="answers">
-                          <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
-                          <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
-                        </div>`;
+                                <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
+                                <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
+                              </div>`;
                 app.innerHTML = `
-                  <div class="row g-3 justify-content-center">
-                    <div class="col-lg-8 mx-auto">
-                      <div class="card">
-                        <div class="dial-zone">
-                          <div class="dial" id="dial">
-                            <div class="dial-inner">
-                              <div class="dial-score" id="scoreNum">${state.score}</div>
-                              <div class="dial-label">目前分數</div>
+                            <div class="row g-3">
+                              <div class="col-lg-8 mx-auto">
+                                <div class="card">
+                                  <span class="ribbon-corner">🎀</span>
+                                  <div class="dial-zone">
+                                    <div class="dial" id="dial">
+                                      <div class="dial-inner">
+                                        <div class="dial-score" id="scoreNum">${state.score}</div>
+                                        <div class="dial-label">目前分數</div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="progress-wrap">
+                                    第 ${state.currentIndex + 1} / ${state.questions.length} 題　<span class="name-chip">👤 ${escapeHtml(state.name)}</span>
+                                    <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+                                  </div>
+                                  <div class="qcard">
+                                    <div class="qpoints">本題配分：${q.points} 分　${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
+                                    <div class="qtext">${escapeHtml(q.text)}</div>
+                                  </div>
+                                  ${answersHtml}
+                                  <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
+                                </div>
+                              </div>
                             </div>
-                          </div>
-                        </div>
-                        <div class="progress-wrap">
-                          第 ${state.currentIndex + 1} / ${state.questions.length} 題　<span class="name-chip">👤 ${escapeHtml(state.name)}</span>
-                          <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-                        </div>
-                        <div class="qcard">
-                          <div class="qpoints">⭐ 本題配分：${q.points} 分　${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
-                          <div class="qtext">${escapeHtml(q.text)}</div>
-                        </div>
-                        ${answersHtml}
-                        <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
-                      </div>
-                    </div>
-                  </div>
-                `;
+                        `;
                 if (q.type === 'choice') {
                     q.options.forEach((opt, idx) => {
                         document.getElementById('choiceBtn' + idx).onclick = () => answer(idx);
@@ -872,44 +889,44 @@
                     document.getElementById('btnFalse').onclick = () => answer(false);
                 }
             }
-            // ---- 畫面三：結算（顯示總分、答對題數、目前排名） ----
+            // ---- 結算畫面：顯示總分、答對題數與目前排名，並施放彩帶特效 ----
             else if (state.screen === 'end') {
                 const entries = sortedEntries();
-                // 用最後一次拿到的排行榜資料算出自己排第幾名（0 代表還抓不到排名資料）
                 const myRank = entries.findIndex(([id]) => id === state.playerId) + 1;
                 app.innerHTML = `
-                  <div class="row g-3 justify-content-center">
-                    <div class="col-lg-8 mx-auto">
-                      <div class="card">
-                        <span class="trophy">🏆</span>
-                        <p class="eyebrow text-center">作答完成</p>
-                        <h2 class="text-center">${escapeHtml(state.name)}，你的結果出爐了！</h2>
-                        <p class="sub text-center">${myRank > 0 ? `目前排名第 ${myRank} 名` : ''}</p>
-                        <div class="end-stats">
-                          <div class="stat"><div class="num">${state.score}</div><div class="lbl">總分</div></div>
-                          <div class="stat"><div class="num">${state.correct}/${state.total}</div><div class="lbl">答對題數</div></div>
-                          <div class="stat"><div class="num">${myRank > 0 ? ('#' + myRank) : '-'}</div><div class="lbl">目前排名</div></div>
-                        </div>
-                        <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
-                      </div>
-                    </div>
-                  </div>
-                `;
+                            <div class="row g-3">
+                              <div class="col-lg-8 mx-auto">
+                                <div class="card">
+                                  <span class="ribbon-corner">🎀</span>
+                                  <span class="trophy">👑</span>
+                                  <p class="eyebrow text-center">作答完成</p>
+                                  <h2 class="text-center">${escapeHtml(state.name)}，你的結果出爐了！</h2>
+                                  <p class="sub text-center">${myRank > 0 ? `目前排名第 ${myRank} 名` : ''}</p>
+                                  <div class="end-stats">
+                                    <div class="stat"><div class="num">${state.score}</div><div class="lbl">總分</div></div>
+                                    <div class="stat"><div class="num">${state.correct}/${state.total}</div><div class="lbl">答對題數</div></div>
+                                    <div class="stat"><div class="num">${myRank > 0 ? ('#' + myRank) : '-'}</div><div class="lbl">目前排名</div></div>
+                                  </div>
+                                  <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
+                                </div>
+                              </div>
+                            </div>
+                        `;
+                launchConfetti();
             }
         }
 
-        // 「加入作答」按鈕的處理函式：驗證姓名有填寫、初始化這位玩家的作答狀態，
-        // 然後把畫面切到「作答中」，並先送一筆 0 分的紀錄到後端（讓後端知道這個人開始玩了）。
+        // 點擊「加入作答」時觸發：驗證姓名、初始化這場作答的狀態，並切換到答題畫面
         function onJoin() {
             const input = document.getElementById('nameInput');
             const name = (input.value || '').trim();
             if (!name) {
                 input.focus();
-                input.style.borderColor = 'var(--coral)';
+                input.style.borderColor = 'var(--coral)'; // 沒填姓名就標紅提示
                 return;
             }
             state.name = name;
-            state.playerId = sanitizeKey(name) + '_' + Math.random().toString(36).slice(2, 6);
+            state.playerId = sanitizeKey(name) + '_' + Math.random().toString(36).slice(2, 6); // 姓名+隨機字串，避免撞名
             state.questions = QUESTIONS.slice(); // 依 id 順序出題，不隨機
             state.currentIndex = 0;
             state.score = 0;
@@ -918,59 +935,50 @@
             state.feedback = null;
             state.locked = false;
             state.screen = 'game';
-            updateMyEntry(false);
+            updateMyEntry(false); // 先跟後端登記一筆分數 0 的紀錄，讓排行榜馬上看得到這個人
             render();
         }
 
-        // 使用者點擊答案時執行：
-        // selected 是非題時是 true/false，選擇題時是選項的 index（0=A、1=B...）。
+        // 玩家送出答案時觸發。selected 是非題傳 true/false，選擇題傳選項索引。
+        // 對錯判斷回到前端自己算（answerKey 是從 Base64 解碼出來的正確答案表）。
+        // ⚠️ 這代表分數是前端自己算好才回報給後端，後端沒有再驗證一次——
+        // 也就是說「F12 竄改分數」的風險在這個簡化版裡是存在的，這是特意選擇的取捨。
         function answer(selected) {
-            if (state.locked) return; // 避免同一題被連續點兩下
+            if (state.locked) return; // 防止同一題重複送出
             state.locked = true;
             const q = state.questions[state.currentIndex];
-            const isCorrect = q.type === 'choice' ? (selected === q.correctIndex) : (selected === q.answer);
-
-            // 計分規則：答對加該題配分，答錯不加不扣（Math.max(0, ...) 同時確保分數不會變負數）
-            const delta = isCorrect ? q.points : -0;
-            state.score = Math.max(0, state.score + delta);
+            const answerKey = _decodeAnswerKey();
+            const correctVal = answerKey[q.id];
+            const isCorrect = selected === correctVal;
+            const delta = isCorrect ? q.points : -0; // 答對加分，答錯不扣分（目前設定）
+            state.score = Math.max(0, state.score + delta); // 分數不會低於 0
             state.total += 1;
             if (isCorrect) state.correct += 1;
 
-            // 更新畫面上的分數數字
             const scoreNum = document.getElementById('scoreNum');
-            if (scoreNum) scoreNum.textContent = state.score;
+            if (scoreNum) scoreNum.textContent = state.score; // 直接更新分數圓盤，不用整頁重畫
 
-            // 互動回饋：僅針對自己這次的作答給予圓盤脈動效果，不揭露正確答案
-            const dialEl = document.getElementById('dial');
-            if (dialEl) {
-                dialEl.classList.add(isCorrect ? 'flash-correct' : 'flash-wrong');
-                setTimeout(() => dialEl.classList.remove('flash-correct', 'flash-wrong'), 700);
-            }
-
-            // 鎖住這一題的按鈕，避免重複作答；選擇題只會把「使用者點的那個選項」標成
-            // 中性的已選取樣式，不會標示正確答案是哪一個。
+            // 鎖住這一題的所有按鈕，避免使用者連點
             if (q.type === 'choice') {
                 q.options.forEach((opt, idx) => {
                     const btn = document.getElementById('choiceBtn' + idx);
                     if (!btn) return;
                     btn.disabled = true;
-                    if (idx === selected) btn.classList.add('selected');
+                    if (idx === selected) btn.classList.add('selected'); // 只標示「你選了哪個」，不標示對錯
                 });
             } else {
                 document.getElementById('btnTrue').disabled = true;
                 document.getElementById('btnFalse').disabled = true;
             }
             const fz = document.getElementById('feedbackZone');
-            if (fz) fz.textContent = '📮 已送出，前往下一題…';
+            if (fz) fz.textContent = '📮 已送出，前往下一題…'; // 中性提示，不透露對錯
 
-            // 把這一題的作答結果記錄到後端統計（供之後分析各題答對率用）
-            logAnswerStat(q.id, isCorrect);
+            logAnswerStat(q.id, isCorrect); // 回報這題的答對/答錯率統計
 
-            // 判斷是不是最後一題，把目前成績送到後端（每一題都會送一次，讓其他人能即時看到最新分數）
             const isLast = (state.currentIndex + 1) >= state.questions.length;
-            updateMyEntry(isLast);
+            updateMyEntry(isLast); // 同步最新分數給後端；如果是最後一題就順便標記完成
 
-            // 停頓 0.5 秒讓玩家看到剛剛送出的畫面回饋，再切到下一題（或切到結算畫面）
+            // 停頓 0.5 秒讓玩家看到「已送出」的回饋，再切換到下一題或結算畫面
             setTimeout(() => {
                 state.currentIndex += 1;
                 state.locked = false;
@@ -981,26 +989,91 @@
             }, 500);
         }
 
-        // 主辦人功能：清空後端的排行榜與答錯率統計資料（目前沒有按鈕呼叫這個函式，
-        // 保留起來是為了之後如果要加「清空」按鈕時可以直接用）。
+        // 【主辦人用】清空所有玩家的排行榜與統計資料，會先跳出確認視窗
         async function onResetBoard() {
             if (!confirm('確定要清空所有玩家的排行榜與答錯率統計資料嗎？此動作無法復原。')) return;
             await fetchState('reset');
             render();
         }
 
-        // 主辦人功能：開啟/關閉「加入作答」（目前沒有按鈕呼叫這個函式，原因同上）。
+        // 【主辦人用】切換「是否開放新玩家加入作答」
         async function onToggleRegistration() {
             const newOpen = !state.registrationOpen;
             await fetchState('setRegistration', { open: newOpen });
             render();
         }
 
-        // 進入頁面時的初始化流程：
-        // 1. 先跟後端要一次最新狀態（主要是為了拿到目前「開放/關閉作答」的狀態）
-        // 2. 畫出第一個畫面（登入畫面）
-        // 3. 開始輕量輪詢，之後每 30~45 秒自動確認一次開放狀態有沒有變化
+        /* ---------------------------------------------------------------
+           ✨ 蘿莉風視覺特效：飄浮裝飾 / 點擊亮片 / 結算彩帶
+           （純視覺效果，不影響任何題目邏輯與正確答案顯示）
+           --------------------------------------------------------------- */
+        const FLOATY_EMOJI = ['💗', '⭐', '🎀', '✨', '🫧', '🌸'];
+
+        // 在背景產生一批會往上飄的裝飾 emoji（愛心/星星/緞帶等），純視覺、不影響互動
+        function initFloatingBG() {
+            const layer = document.getElementById('floatyLayer');
+            if (!layer) return;
+            const count = window.innerWidth < 600 ? 12 : 20; // 手機少放一點，避免太擁擠
+            for (let i = 0; i < count; i++) {
+                const span = document.createElement('span');
+                span.className = 'floaty';
+                span.textContent = FLOATY_EMOJI[Math.floor(Math.random() * FLOATY_EMOJI.length)];
+                span.style.left = Math.random() * 100 + 'vw';
+                span.style.fontSize = (0.9 + Math.random() * 1.3) + 'rem';
+                const duration = 9 + Math.random() * 10;
+                span.style.animationDuration = duration + 's';
+                span.style.animationDelay = (Math.random() * duration) + 's'; // 隨機延遲讓每個一開始就錯開
+                layer.appendChild(span);
+            }
+        }
+
+        const SPARKLE_EMOJI = ['✨', '💖', '⭐', '🌟'];
+        // 在指定座標生成一個亮片 emoji，短暫飄一下就自動消失
+        function spawnSparkle(x, y) {
+            const el = document.createElement('div');
+            el.className = 'tap-sparkle';
+            el.textContent = SPARKLE_EMOJI[Math.floor(Math.random() * SPARKLE_EMOJI.length)];
+            el.style.left = x + 'px';
+            el.style.top = y + 'px';
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 720); // 動畫播完就從 DOM 移除，避免累積
+        }
+
+        // 只要點到按鈕類元素（一般按鈕/選擇題/是非題/分頁按鈕），就在點擊處噴一個亮片
+        document.addEventListener('click', (e) => {
+            const target = e.target.closest('.btn, .choice-btn, .ans-btn, .lb-page-btn');
+            if (!target) return;
+            spawnSparkle(e.clientX, e.clientY);
+        });
+
+        const CONFETTI_COLORS = ['#FF7EB6', '#C9A6FF', '#9BE8CC', '#FFD966', '#7FE0E8', '#FF8FA3'];
+        // 結算畫面用的彩帶特效：噴出 60 片會飄落旋轉的彩色紙片
+        function launchConfetti() {
+            const n = 60;
+            for (let i = 0; i < n; i++) {
+                const piece = document.createElement('div');
+                piece.className = 'confetti-piece';
+                const size = 6 + Math.random() * 8;
+                piece.style.left = Math.random() * 100 + 'vw';
+                piece.style.width = size + 'px';
+                piece.style.height = (size * 0.4) + 'px';
+                piece.style.background = CONFETTI_COLORS[Math.floor(Math.random() * CONFETTI_COLORS.length)];
+                piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '3px'; // 隨機圓形或方形紙片
+                const duration = 2.4 + Math.random() * 1.8;
+                piece.style.animationDuration = duration + 's';
+                piece.style.animationDelay = (Math.random() * 0.6) + 's';
+                document.body.appendChild(piece);
+                setTimeout(() => piece.remove(), (duration + 1) * 1000); // 落地後清掉，避免 DOM 越堆越多
+            }
+        }
+
+        // 頁面載入後的初始化流程：
+        // 1) 先鋪好飄浮背景特效
+        // 2) 跟後端要一次目前的排行榜/開放狀態（結算排名跟登入畫面都會用到）
+        // 3) 畫出第一個畫面（登入畫面）
+        // 4) 啟動輕量輪詢，持續偵測開放狀態是否改變
         (async function init() {
+            initFloatingBG();
             await fetchState('list');
             lastKnownRegOpen = state.registrationOpen;
             render();
