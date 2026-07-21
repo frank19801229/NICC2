@@ -6,6 +6,7 @@
     <title>感控問答擂台(主持人)</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
+
         /* =====================================================================
            樣式總覽
            - 使用 Google Fonts：Baloo 2（標題／數字用圓潤字體）+ Noto Sans TC（中文內文）
@@ -17,19 +18,19 @@
 
         /* ---------- 全站色票變數 ---------- */
         :root {
-            --pink: #FF3D81;         /* 主色：品牌粉紅，用於按鈕/強調文字 */
-            --pink-dark: #E01E68;    /* 深粉紅：陰影/邊框加強色 */
-            --orange: #FF8C42;       /* 橘色：分數/警示類強調色 */
-            --purple: #7C3AED;       /* 主色：紫色，用於漸層與強調文字 */
-            --purple-dark: #5B21B6;  /* 深紫：漸層搭配用 */
-            --cyan: #22D3EE;         /* 青色：分數圓盤漸層、是非題型標籤 */
-            --yellow: #FFD23F;       /* 黃色：分數圓盤漸層、進度條 */
-            --green: #2ECC71;        /* 綠色：答對/正確狀態色 */
-            --coral: #FF5C5C;        /* 珊瑚紅：答錯/警示狀態色 */
-            --ink: #2A1B3D;          /* 主要文字顏色（深紫黑） */
-            --slate:#007799;        /* 次要文字/說明文字顏色 */
-            --card: #FFFFFF;         /* 卡片背景色 */
-            --line: #F0E6FF;         /* 邊框/分隔線淺紫色 */
+            --pink: #FF3D81; /* 主色：品牌粉紅，用於按鈕/強調文字 */
+            --pink-dark: #E01E68; /* 深粉紅：陰影/邊框加強色 */
+            --orange: #FF8C42; /* 橘色：分數/警示類強調色 */
+            --purple: #7C3AED; /* 主色：紫色，用於漸層與強調文字 */
+            --purple-dark: #5B21B6; /* 深紫：漸層搭配用 */
+            --cyan: #22D3EE; /* 青色：分數圓盤漸層、是非題型標籤 */
+            --yellow: #FFD23F; /* 黃色：分數圓盤漸層、進度條 */
+            --green: #2ECC71; /* 綠色：答對/正確狀態色 */
+            --coral: #FF5C5C; /* 珊瑚紅：答錯/警示狀態色 */
+            --ink: #2A1B3D; /* 主要文字顏色（深紫黑） */
+            --slate: #007799; /* 次要文字/說明文字顏色 */
+            --card: #FFFFFF; /* 卡片背景色 */
+            --line: #F0E6FF; /* 邊框/分隔線淺紫色 */
         }
 
         /* 全域 box-sizing，讓 padding/border 計入元素寬高，避免版面跑版 */
@@ -182,75 +183,6 @@
                 background: #fff;
             }
 
-        /* ---------- 按鈕（基礎樣式，供 .btn-primary / .btn-ghost 等疊加使用） ---------- */
-        .btn {
-            appearance: none;
-            border: none;
-            cursor: pointer;
-            font-family: 'Baloo 2', sans-serif;
-            font-weight: 700;
-            font-size: 1.05rem;
-            border-radius: 16px;
-            padding: 15px 22px;
-            transition: transform .12s ease, box-shadow .12s ease, filter .12s ease;
-        }
-
-            /* 按下按鈕時輕微縮小，提供觸覺回饋感 */
-            .btn:active {
-                transform: scale(0.96);
-            }
-
-        /* 主要行動按鈕（例如「加入作答」） */
-        .btn-primary {
-            background: linear-gradient(135deg, var(--pink), var(--purple));
-            color: #fff;
-            box-shadow: 0 10px 24px -8px rgba(255,61,129,0.65);
-        }
-
-            .btn-primary:hover {
-                filter: brightness(1.08);
-            }
-
-        /* 滿版寬度按鈕修飾詞 */
-        .btn-block {
-            width: 100%;
-            margin-top: 18px;
-        }
-
-        /* 次要／文字型按鈕（例如放棄／取消類操作） */
-        .btn-ghost {
-            background: transparent;
-            color: var(--slate);
-            border: 2px solid var(--line);
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-            .btn-ghost:hover {
-                border-color: var(--pink);
-                color: var(--pink);
-            }
-
-        /* 底部輔助連結列（登入卡片下方的小型文字按鈕群） */
-        .foot-link {
-            margin-top: 18px;
-            text-align: center;
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 8px 16px;
-        }
-
-            .foot-link button {
-                background: none;
-                border: none;
-                color: var(--slate);
-                font-size: 0.75rem;
-                text-decoration: underline;
-                cursor: pointer;
-                font-family: inherit;
-            }
-
         /* ---------- 主持人專用操作按鈕（清空排行榜 / 開關作答） ---------- */
         #resetBoardBtn,
         #toggleRegBtn {
@@ -341,14 +273,6 @@
                 background: var(--pink);
             }
 
-        .qlist-points {
-            margin-left: auto;
-            font-family: 'Baloo 2', sans-serif;
-            font-weight: 800;
-            color: var(--orange);
-            font-size: 0.8rem;
-        }
-
         /* 題目內文文字 */
         .qlist-text {
             font-size: 1rem;
@@ -384,7 +308,7 @@
                 color: blue;
                 font-weight: 800;
                 background: rgba(46,204,113,0.12);
-                 font-size: 1rem;
+                font-size: 1rem;
             }
 
         /* ---------- 分數圓盤（遊戲畫面頂部顯示目前分數的圓形儀表） ---------- */
@@ -426,37 +350,6 @@
             text-align: center;
         }
 
-        /* 答對/答錯時分別觸發的漣漪動畫類別（目前程式碼中未實際綁定觸發，保留供未來擴充） */
-        .dial.flash-correct {
-            animation: pulseGood .7s ease-out;
-        }
-
-        .dial.flash-wrong {
-            animation: pulseBad .7s ease-out;
-        }
-
-        /* 答對漣漪動畫：綠色光暈向外擴散並淡出 */
-        @keyframes pulseGood {
-            0% {
-                box-shadow: 0 0 0 0 rgba(46,204,113,0.55);
-            }
-
-            100% {
-                box-shadow: 0 0 0 30px rgba(46,204,113,0);
-            }
-        }
-
-        /* 答錯漣漪動畫：紅色光暈向外擴散並淡出 */
-        @keyframes pulseBad {
-            0% {
-                box-shadow: 0 0 0 0 rgba(255,92,92,0.55);
-            }
-
-            100% {
-                box-shadow: 0 0 0 30px rgba(255,92,92,0);
-            }
-        }
-
         /* 圓盤中央的大數字（目前分數） */
         .dial-score {
             font-family: 'Baloo 2', sans-serif;
@@ -472,15 +365,6 @@
             text-transform: uppercase;
             color: darkslateblue;
             font-weight: 600;
-        }
-
-        /* 搭配 .flash-correct/.flash-wrong 時，分數文字同步變色（目前未被觸發，保留擴充用） */
-        .flash-correct .dial-score {
-            color: var(--green);
-        }
-
-        .flash-wrong .dial-score {
-            color: var(--coral);
         }
 
         /* 題號進度列（第 x / y 題 + 玩家姓名 + 進度條） */
@@ -590,8 +474,7 @@
                 transform: none;
             }
 
-        /* 作答送出後顯示的提示文字區（目前僅顯示「已送出，前往下一題…」中性訊息，
-           不會揭露對錯，.ok/.no 兩個修飾類別目前程式碼未實際套用） */
+        /* 作答送出後顯示的提示文字區（目前僅顯示「已送出，前往下一題…」中性訊息，不會揭露對錯） */
         .feedback {
             text-align: center;
             font-family: 'Baloo 2', sans-serif;
@@ -600,14 +483,6 @@
             margin-top: 16px;
             font-weight: 700;
         }
-
-            .feedback.ok {
-                color: var(--green);
-            }
-
-            .feedback.no {
-                color: var(--coral);
-            }
 
         /* ---------- 排行榜（依分數即時排序的玩家清單） ---------- */
         .board-head {
@@ -723,15 +598,6 @@
         }
 
         /* ---------- 排行榜分頁（每頁 LB_PAGE_SIZE 筆，資料量大時避免清單過長） ---------- */
-        .lb-pagination {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            margin-top: 12px;
-            flex-wrap: wrap;
-        }
-
         .lb-page-btn {
             min-width: 30px;
             height: 30px;
@@ -809,19 +675,6 @@
             filter: drop-shadow(0 6px 12px rgba(0,0,0,0.25));
         }
 
-        /* 「尚未開放作答」提示框（當 state.registrationOpen 為 false 時顯示） */
-        .closed-msg {
-            background: #FFF4E5;
-            border: 2px dashed var(--orange);
-            border-radius: 16px;
-            padding: 18px;
-            text-align: center;
-            font-weight: 700;
-            color: #9A5B00;
-            margin-bottom: 6px;
-            font-family: 'Baloo 2', sans-serif;
-        }
-
         /* ---------- 選擇題按鈕（type: 'choice' 題型專用，垂直排列的選項清單） ---------- */
         .choice-list {
             display: flex;
@@ -856,21 +709,7 @@
                 cursor: not-allowed;
             }
 
-            /* 下列 .correct / .wrong-selected 兩個修飾類別為預留樣式，
-               目前 answer() 邏輯只會加上 .selected（不會揭露正解），故實際不會套用到 */
-            .choice-btn.correct {
-                background: linear-gradient(135deg, #34E89E, var(--green));
-                border-color: var(--green);
-                color: #fff;
-            }
-
-            .choice-btn.wrong-selected {
-                background: linear-gradient(135deg, #FF7A7A, var(--coral));
-                border-color: var(--coral);
-                color: #fff;
-            }
-
-            /* 玩家實際選擇的選項：作答後套用此樣式標示「已選擇」 */
+            /* 玩家實際選擇的選項：作答後套用此樣式標示「已選擇」（不會揭露正確答案） */
             .choice-btn.selected {
                 background: #F3EEFF;
                 border-color: var(--purple);
@@ -891,11 +730,6 @@
             font-size: 0.78rem;
             margin-right: 12px;
             flex-shrink: 0;
-        }
-
-        .choice-btn.correct .choice-letter,
-        .choice-btn.wrong-selected .choice-letter {
-            background: rgba(255,255,255,0.35);
         }
 
         /* ---------- 答錯率長條圖（主持人畫面：每題的答錯率視覺化，顏色依高低分級） ---------- */
@@ -1131,12 +965,12 @@
         }
 
         /**
-         * 啟動每 5 秒一次的自動輪詢，讓所有裝置上的排行榜/統計畫面保持近即時更新。
+         * 啟動每 3 秒一次的自動輪詢，讓所有裝置上的排行榜/統計畫面保持近即時更新。
          * 重複呼叫時會先清除舊的計時器，避免多個 interval 疊加。
          */
         function startPolling() {
             if (pollTimer) clearInterval(pollTimer);
-            pollTimer = setInterval(refreshLeaderboard, 5000);
+            pollTimer = setInterval(refreshLeaderboard, 3000);
         }
 
         /**
@@ -1156,14 +990,14 @@
          */
         function boardHtml() {
             return `
-                                                        <div class="card">
-                                                          <div class="board-head"><div class="live-dot"></div><div class="board-title">🔥 得分排行榜 (即時)</div></div>
-                                                          <div class="board-sub">依分數排序，每 5 秒自動更新</div>
-                                                          <div class="board-total-label">總積分</div>
-                                                          <div id="lb-list"></div>
-                                                          <div id="lb-pagination"></div>
-                                                        </div>
-                                                      `;
+                                                            <div class="card">
+                                                              <div class="board-head"><div class="live-dot"></div><div class="board-title">🔥 得分排行榜 (即時)</div></div>
+                                                              <div class="board-sub">依分數排序，每 5 秒自動更新</div>
+                                                              <div class="board-total-label">總積分</div>
+                                                              <div id="lb-list"></div>
+                                                              <div id="lb-pagination"></div>
+                                                            </div>
+                                                          `;
         }
 
         const LB_PAGE_SIZE = 20; // 排行榜每頁顯示筆數
@@ -1197,13 +1031,13 @@
                 const isMe = id === state.playerId;
                 const rankDisplay = medals[i] || (i + 1);
                 return `
-                                                          <div class="lb-row ${isMe ? 'me' : ''}">
-                                                            <div class="lb-rank">${rankDisplay}</div>
-                                                            <div class="lb-name">${escapeHtml(e.name)}${isMe ? ' (你)' : ''}</div>
-                                                            <div class="lb-correct">✓ ${e.correct}/${e.total}</div>
-                                                            <div class="lb-score">${e.score}</div>
-                                                          </div>
-                                                        `;
+                                                              <div class="lb-row ${isMe ? 'me' : ''}">
+                                                                <div class="lb-rank">${rankDisplay}</div>
+                                                                <div class="lb-name">${escapeHtml(e.name)}${isMe ? ' (你)' : ''}</div>
+                                                                <div class="lb-correct">✓ ${e.correct}/${e.total}</div>
+                                                                <div class="lb-score">${e.score}</div>
+                                                              </div>
+                                                            `;
             }).join('');
 
             // 只有超過一頁時才需要顯示分頁按鈕（上一頁／頁碼／下一頁）
@@ -1246,12 +1080,12 @@
          */
         function statsHtml() {
             return `
-                                                        <div class="card mt-3">
-                                                          <div class="board-head"><div class="live-dot" style="background:var(--coral)"></div><div class="board-title">📊 題目答錯率排行 (即時)</div></div>
-                                                          <div class="board-sub">依答錯率高到低排序，每 5 秒自動更新</div>
-                                                          <div id="stats-list"></div>
-                                                        </div>
-                                                      `;
+                                                            <div class="card mt-3">
+                                                              <div class="board-head"><div class="live-dot" style="background:var(--coral)"></div><div class="board-title">📊 題目答錯率排行 (即時)</div></div>
+                                                              <div class="board-sub">依答錯率高到低排序，每 5 秒自動更新</div>
+                                                              <div id="stats-list"></div>
+                                                            </div>
+                                                          `;
         }
 
         /**
@@ -1281,12 +1115,12 @@
                     // 依答錯率分三個等級上色：≥50% 紅色警示、≥25% 橘色提醒、其餘綠色安全
                     const barColor = e.wrongRate >= 50 ? 'var(--coral)' : (e.wrongRate >= 25 ? 'var(--orange)' : 'var(--green)');
                     return `
-                                                          <div class="stat-bar-row" title="${escapeHtml(e.text)}（共 ${e.total} 人次作答）">
-                                                            <div class="stat-bar-label">${escapeHtml(shortText)}</div>
-                                                            <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${e.wrongRate}%; background:${barColor};"></div></div>
-                                                            <div class="stat-bar-pct">${e.wrongRate}%</div>
-                                                          </div>
-                                                        `;
+                                                              <div class="stat-bar-row" title="${escapeHtml(e.text)}（共 ${e.total} 人次作答）">
+                                                                <div class="stat-bar-label">${escapeHtml(shortText)}</div>
+                                                                <div class="stat-bar-track"><div class="stat-bar-fill" style="width:${e.wrongRate}%; background:${barColor};"></div></div>
+                                                                <div class="stat-bar-pct">${e.wrongRate}%</div>
+                                                              </div>
+                                                            `;
                 }).join('');
             }
             updateQlistWrongRates();
@@ -1317,42 +1151,42 @@
             const app = document.getElementById('app');
             if (state.screen === 'login') {
                 app.innerHTML = `
-                                                          <div class="row g-3">
-                                                            <div class="col-lg-8">
-                                                              <div class="card">
-                                                                <div class="qlist-header-row">
-                                                                  <h2>題目列表</h2>
-                                                                  <div class="qlist-header-actions">
-                                                                    <button id="resetBoardBtn">主持人選項：清空排行榜與統計</button>
-                                                                    <button id="toggleRegBtn">主持人選項：${state.registrationOpen ? '🔒 關閉作答' : '🔓 開啟作答'}</button>
-                                                                  </div>
-                                                                </div>
-                                                                <div class="qlist-wrap">
-                                                                  <!-- 逐題列出：題號/題型/配分/答錯率、題目內容、正確答案（是非題）或選項清單（選擇題，正解會標註 ✓） -->
-                                                                  ${QUESTIONS.map((q, i) => {
+                                                              <div class="row g-3">
+                                                                <div class="col-lg-8">
+                                                                  <div class="card">
+                                                                    <div class="qlist-header-row">
+                                                                      <h2>題目列表</h2>
+                                                                      <div class="qlist-header-actions">
+                                                                        <button id="resetBoardBtn">主持人選項：清空排行榜與統計</button>
+                                                                        <button id="toggleRegBtn">主持人選項：${state.registrationOpen ? '🔒 關閉作答' : '🔓 開啟作答'}</button>
+                                                                      </div>
+                                                                    </div>
+                                                                    <div class="qlist-wrap">
+                                                                      <!-- 逐題列出：題號/題型/配分/答錯率、題目內容、正確答案（是非題）或選項清單（選擇題，正解會標註 ✓） -->
+                                                                      ${QUESTIONS.map((q, i) => {
                         const s = (state.stats && state.stats[q.id]) || {};
                         const wrongRate = s.total > 0 ? Math.round((s.wrong / s.total) * 100) : 0;
                         return `
-                                                                    <div class="qlist-row">
-                                                                      <div class="qlist-top">
-                                                                        <span class="qlist-idx">#${i + 1}　${q.id.toUpperCase()}</span>
-                                                                        <span class="qlist-type ${q.type === 'choice' ? 'choice' : ''}">${q.type === 'choice' ? '選擇題' : '是非題'}</span>
-                                                                        <div class="stat-bar-pct" id="qlist-pct-${q.id}">答錯率 : ${wrongRate}%</div>
-                                                                      </div>
-                                                                      <div class="qlist-text">${escapeHtml(q.text)}</div>
-                                                                      ${q.type === 'choice'
+                                                                        <div class="qlist-row">
+                                                                          <div class="qlist-top">
+                                                                            <span class="qlist-idx">#${i + 1}　${q.id.toUpperCase()}</span>
+                                                                            <span class="qlist-type ${q.type === 'choice' ? 'choice' : ''}">${q.type === 'choice' ? '選擇題' : '是非題'}</span>
+                                                                            <div class="stat-bar-pct" id="qlist-pct-${q.id}">答錯率 : ${wrongRate}%</div>
+                                                                          </div>
+                                                                          <div class="qlist-text">${escapeHtml(q.text)}</div>
+                                                                          ${q.type === 'choice'
                                 ? `<div class="qlist-options">${q.options.map((opt, idx) => `<div class="qlist-opt ${idx === q.correctIndex ? 'correct' : ''}">${String.fromCharCode(65 + idx)}. ${escapeHtml(opt)}${idx === q.correctIndex ? ' ✓ 正解' : ''}</div>`).join('')}</div>`
                                 : `<div class="qlist-answer">✓ 正確答案：${q.answer ? '是 / 正確' : '否 / 錯誤'}</div>`
                             }
-                                                                    </div>
-                                                                  `;
+                                                                        </div>
+                                                                      `;
                     }).join('')}
+                                                                    </div>
+                                                                  </div>
                                                                 </div>
+                                                                <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
                                                               </div>
-                                                            </div>
-                                                            <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
-                                                          </div>
-                                                        `;
+                                                            `;
                 // 綁定主持人操作按鈕：清空排行榜/統計、開關作答
                 document.getElementById('resetBoardBtn').onclick = onResetBoard;
                 document.getElementById('toggleRegBtn').onclick = onToggleRegistration;
@@ -1365,39 +1199,39 @@
                 // 依題型（是非題／選擇題）產生對應的作答按鈕 HTML
                 const answersHtml = q.type === 'choice'
                     ? `<div class="choice-list">${q.options.map((opt, idx) => `
-                                                                  <button class="choice-btn" id="choiceBtn${idx}" ${state.locked ? 'disabled' : ''}><span class="choice-letter">${String.fromCharCode(65 + idx)}</span>${escapeHtml(opt)}</button>
-                                                                `).join('')}</div>`
+                                                                      <button class="choice-btn" id="choiceBtn${idx}" ${state.locked ? 'disabled' : ''}><span class="choice-letter">${String.fromCharCode(65 + idx)}</span>${escapeHtml(opt)}</button>
+                                                                    `).join('')}</div>`
                     : `<div class="answers">
-                                                                  <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
-                                                                  <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
-                                                                </div>`;
+                                                                      <button class="ans-btn true" id="btnTrue" ${state.locked ? 'disabled' : ''}>⭕ 是 / 正確</button>
+                                                                      <button class="ans-btn false" id="btnFalse" ${state.locked ? 'disabled' : ''}>❌ 否 / 錯誤</button>
+                                                                    </div>`;
                 app.innerHTML = `
-                                                          <div class="row g-3">
-                                                            <div class="col-lg-8">
-                                                              <div class="card">
-                                                                <div class="dial-zone">
-                                                                  <div class="dial" id="dial">
-                                                                    <div class="dial-inner">
-                                                                      <div class="dial-score" id="scoreNum">${state.score}</div>
-                                                                      <div class="dial-label">目前分數</div>
+                                                              <div class="row g-3">
+                                                                <div class="col-lg-8">
+                                                                  <div class="card">
+                                                                    <div class="dial-zone">
+                                                                      <div class="dial" id="dial">
+                                                                        <div class="dial-inner">
+                                                                          <div class="dial-score" id="scoreNum">${state.score}</div>
+                                                                          <div class="dial-label">目前分數</div>
+                                                                        </div>
+                                                                      </div>
                                                                     </div>
+                                                                    <div class="progress-wrap">
+                                                                      第 ${state.currentIndex + 1} / ${state.questions.length} 題　<span class="name-chip">👤 ${escapeHtml(state.name)}</span>
+                                                                      <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+                                                                    </div>
+                                                                    <div class="qcard">
+                                                                      <div class="qpoints">⭐ 本題配分：${q.points} 分　${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
+                                                                      <div class="qtext">${escapeHtml(q.text)}</div>
+                                                                    </div>
+                                                                    ${answersHtml}
+                                                                    <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
                                                                   </div>
                                                                 </div>
-                                                                <div class="progress-wrap">
-                                                                  第 ${state.currentIndex + 1} / ${state.questions.length} 題　<span class="name-chip">👤 ${escapeHtml(state.name)}</span>
-                                                                  <div class="progress-bar-track"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-                                                                </div>
-                                                                <div class="qcard">
-                                                                  <div class="qpoints">⭐ 本題配分：${q.points} 分　${q.type === 'choice' ? '· 選擇題' : '· 是非題'}</div>
-                                                                  <div class="qtext">${escapeHtml(q.text)}</div>
-                                                                </div>
-                                                                ${answersHtml}
-                                                                <div class="feedback" id="feedbackZone">${state.locked ? '📮 已送出，前往下一題…' : ''}</div>
+                                                                <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
                                                               </div>
-                                                            </div>
-                                                            <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
-                                                          </div>
-                                                        `;
+                                                            `;
                 // 依題型綁定作答事件：選擇題傳入選項索引，是非題傳入布林值
                 if (q.type === 'choice') {
                     q.options.forEach((opt, idx) => {
@@ -1414,24 +1248,24 @@
                 const entries = sortedEntries();
                 const myRank = entries.findIndex(([id]) => id === state.playerId) + 1;
                 app.innerHTML = `
-                                                          <div class="row g-3">
-                                                            <div class="col-lg-8">
-                                                              <div class="card">
-                                                                <span class="trophy">🏆</span>
-                                                                <p class="eyebrow text-center">作答完成</p>
-                                                                <h2 class="text-center">${escapeHtml(state.name)}，你的結果出爐了！</h2>
-                                                                <p class="sub text-center">${myRank > 0 ? `目前排名第 ${myRank} 名` : ''}</p>
-                                                                <div class="end-stats">
-                                                                  <div class="stat"><div class="num">${state.score}</div><div class="lbl">總分</div></div>
-                                                                  <div class="stat"><div class="num">${state.correct}/${state.total}</div><div class="lbl">答對題數</div></div>
-                                                                  <div class="stat"><div class="num">${myRank > 0 ? ('#' + myRank) : '-'}</div><div class="lbl">目前排名</div></div>
+                                                              <div class="row g-3">
+                                                                <div class="col-lg-8">
+                                                                  <div class="card">
+                                                                    <span class="trophy">🏆</span>
+                                                                    <p class="eyebrow text-center">作答完成</p>
+                                                                    <h2 class="text-center">${escapeHtml(state.name)}，你的結果出爐了！</h2>
+                                                                    <p class="sub text-center">${myRank > 0 ? `目前排名第 ${myRank} 名` : ''}</p>
+                                                                    <div class="end-stats">
+                                                                      <div class="stat"><div class="num">${state.score}</div><div class="lbl">總分</div></div>
+                                                                      <div class="stat"><div class="num">${state.correct}/${state.total}</div><div class="lbl">答對題數</div></div>
+                                                                      <div class="stat"><div class="num">${myRank > 0 ? ('#' + myRank) : '-'}</div><div class="lbl">目前排名</div></div>
+                                                                    </div>
+                                                                    <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
+                                                                  </div>
                                                                 </div>
-                                                                <p class="sub text-center" style="margin:0;">🎉 感謝作答，本次題組已全部完成！</p>
+                                                                <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
                                                               </div>
-                                                            </div>
-                                                            <div class="col-lg-4">${boardHtml()}${statsHtml()}</div>
-                                                          </div>
-                                                        `;
+                                                            `;
                 renderBoardList();
                 renderStatsList();
             }
@@ -1506,7 +1340,7 @@
             const isLast = (state.currentIndex + 1) >= state.questions.length;
             updateMyEntry(isLast); // 同步最新分數到排行榜（若是最後一題則標記為已完成）
 
-            // 停留 0.5 秒讓玩家看到「已送出」提示後，才自動跳到下一題或結算畫面
+            // 停留 0.3 秒讓玩家看到「已送出」提示後，才自動跳到下一題或結算畫面
             setTimeout(() => {
                 state.currentIndex += 1;
                 state.locked = false;
@@ -1514,7 +1348,7 @@
                     state.screen = 'end';
                 }
                 render();
-            }, 500);
+            }, 300);
         }
 
         /**
